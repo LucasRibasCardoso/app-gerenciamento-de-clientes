@@ -60,7 +60,7 @@ class UserJpaRepositoryImpTest {
     User user = creteUserDomain();
     UserModel userModel = createUserModel();
 
-    when(userJpaRepository.findByUserName(user.getUsername())).thenReturn(Optional.of(userModel));
+    when(userJpaRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(userModel));
     when(userMapper.toDomain(userModel)).thenReturn(user);
 
     // Act
@@ -73,7 +73,7 @@ class UserJpaRepositoryImpTest {
             () -> assertEquals(user.getPassword(), result.get().getPassword()),
             () -> assertEquals(user.getRoles(), result.get().getRoles())
     );
-    verify(userJpaRepository).findByUserName(user.getUsername());
+    verify(userJpaRepository).findByUsername(user.getUsername());
     verify(userMapper).toDomain(userModel);
   }
 
@@ -82,7 +82,7 @@ class UserJpaRepositoryImpTest {
     // Arrange
     String username = "userCommon";
 
-    when(userJpaRepository.findByUserName(username)).thenReturn(Optional.empty());
+    when(userJpaRepository.findByUsername(username)).thenReturn(Optional.empty());
 
     // Act
     Optional<User> result = userJpaRepositoryImp.findByUsername(username);
@@ -171,7 +171,7 @@ class UserJpaRepositoryImpTest {
     User user = creteUserDomain();
     UserModel userModel = createUserModel();
 
-    when(userJpaRepository.existsByUserName(user.getUsername())).thenReturn(true);
+    when(userJpaRepository.existsByUsername(user.getUsername())).thenReturn(true);
 
     // Act
     boolean result = userJpaRepositoryImp.existsByUsername(user.getUsername());
@@ -184,7 +184,7 @@ class UserJpaRepositoryImpTest {
   void ShouldReturnFalse_WhenUserDoesNotExistByUsername() {
     // Arrange
     String username = "userCommon";
-    when(userJpaRepository.existsByUserName(username)).thenReturn(false);
+    when(userJpaRepository.existsByUsername(username)).thenReturn(false);
 
     // Act
     boolean result = userJpaRepositoryImp.existsByUsername(username);

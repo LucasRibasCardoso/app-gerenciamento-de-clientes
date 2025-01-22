@@ -23,7 +23,7 @@ public class UserJpaRepositoryImp implements UserRepository {
 
   @Override
   public Optional<User> findByUsername(String userName) {
-    return userJpaRepository.findByUserName(userName).map(userMapper::toDomain);
+    return userJpaRepository.findByUsername(userName).map(userMapper::toDomain);
   }
 
   @Override
@@ -44,12 +44,13 @@ public class UserJpaRepositoryImp implements UserRepository {
   @Override
   public User save(User user) {
     UserModel userModel = userMapper.toModel(user);
-    return userMapper.toDomain(userJpaRepository.save(userModel));
+    UserModel userSaved = userJpaRepository.save(userModel);
+    return userMapper.toDomain(userSaved);
   }
 
   @Override
   public boolean existsByUsername(String username) {
-    return userJpaRepository.existsByUserName(username);
+    return userJpaRepository.existsByUsername(username);
   }
 
 }

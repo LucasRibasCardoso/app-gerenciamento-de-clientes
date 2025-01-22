@@ -34,7 +34,7 @@ public class AuthEntryPointJwtImp implements AuthenticationEntryPoint {
 
     // Criando o corpo da resposta JSON
     GenericError responseError = new GenericError(
-        "Falha ao efetuar login. Tente novamente.",
+        "Falha na autenticação. Você precisa realizar o login para acessar este recurso.",
         HttpStatus.UNAUTHORIZED.value()
     );
 
