@@ -14,6 +14,9 @@ const LightTheme = createTheme({
       dark: '#455a64', // A700
       contrastText: '#000000', // texto em botões ou sobre o secundário
     },
+    error: {
+      main: '#b00020'
+    },
     background: {
       default: '#eceff1', // 50
       paper: '#ffffff', // cor do papel (cards, etc.)

@@ -1,12 +1,12 @@
 import { BrowserRouter } from 'react-router-dom'
 import { AppRoutes } from './routes'
 import { ThemeProvider } from '@mui/material';
-import mainTheme  from './shared/themes/mainTheme';
+import  LigthTheme   from './shared/themes/light';
 
 export const App = () => {
 
   return (
-    <ThemeProvider theme={mainTheme}>
+    <ThemeProvider theme={LigthTheme}>
       <BrowserRouter>
           <AppRoutes></AppRoutes>
       </BrowserRouter>
