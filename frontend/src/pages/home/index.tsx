@@ -1,10 +1,9 @@
-import Button from '@mui/material/Button';
+import NavigationBar from '../../shared/components/navigation-bar/NavigationBar';
 
 export default function Home() {
     return(
         <>
-            <h1>Home Page</h1>
-            <Button variant="contained" color='primary'>Outlined</Button>
+           <NavigationBar/>
         </>
     );
 }

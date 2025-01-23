@@ -4,7 +4,7 @@ const LightTheme = createTheme({
   palette: {
     primary: {
       light: '#eceff1', // 50
-      main: '#607d8b', // 500
+      main: '#0D1F23', // 500
       dark: '#455a64', // 700
       contrastText: '#ffffff', // texto em botões ou sobre o primário
     },
@@ -23,7 +23,7 @@ const LightTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Lato, MontSerrat, Nunito, sans-serif',
+    fontFamily: 'Lato, Nunito, sans-serif',
   },
 });
 
