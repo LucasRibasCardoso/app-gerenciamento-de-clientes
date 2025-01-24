@@ -6,7 +6,6 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
@@ -36,12 +35,11 @@ interface NavButtonProps {
 export default function NavigationBar() {
     const navItems = [
         { label: 'HOME', href: '/login', icon: <HomeOutlinedIcon /> },
-        { label: 'CLIENTES', href: '#pagina-tabela-clientes', icon: <GroupsOutlinedIcon /> },
-        { label: 'NOVO CLIENTE', href: '#pagina-cadastro-cliente', icon: <PersonAddAltOutlinedIcon /> },
+        { label: 'CLIENTES', href: '/clientes', icon: <GroupsOutlinedIcon /> },
     ];
 
     return (
-        <AppBar position="static" color="primary">
+        <AppBar position="static" sx={{background: '#0D1F23'}}>
             <Container maxWidth={false} >
                 <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     {/* Logo e título */}

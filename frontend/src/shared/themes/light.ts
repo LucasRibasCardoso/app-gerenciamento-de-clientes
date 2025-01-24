@@ -4,7 +4,7 @@ const LightTheme = createTheme({
   palette: {
     primary: {
       light: '#eceff1', // 50
-      main: '#0D1F23', // 500
+      main: '#404040', // 500
       dark: '#455a64', // 700
       contrastText: '#ffffff', // texto em botões ou sobre o primário
     },
@@ -12,7 +12,7 @@ const LightTheme = createTheme({
       light: '#cfd8dc', // A100
       main: '#78909c', // A400
       dark: '#455a64', // A700
-      contrastText: '#000000', // texto em botões ou sobre o secundário
+      contrastText: '#404040', // texto em botões ou sobre o secundário
     },
     error: {
       main: '#b00020'
