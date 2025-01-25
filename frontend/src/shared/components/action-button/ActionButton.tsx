@@ -1,5 +1,5 @@
-import { Button, ButtonProps } from '@mui/material';
-import { ReactNode } from 'react';
+import { Button, ButtonProps } from "@mui/material";
+import { ReactNode } from "react";
 
 interface ActionButtonProps extends ButtonProps {
   icon: ReactNode;
@@ -17,9 +17,9 @@ const ActionButton: React.FC<ActionButtonProps> = ({ icon, text, hoverColor, bor
       ":hover": {
         background: hoverColor,
         borderColor: hoverColor,
-        color: "#fff",
+        color: "primary.contrastText",
         "& .MuiSvgIcon-root": {
-          color: "#fff",
+          color: "primary.contrastText",
         },
       },
     }}

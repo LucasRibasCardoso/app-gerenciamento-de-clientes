@@ -1,10 +1,11 @@
-import { Box, Button, Container } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import NavigationBar from "../../shared/components/navigation-bar/NavigationBar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import SearchBar from "../../shared/components/search-bar/SearchBar";
 import ActionButton from "../../shared/components/action-button/ActionButton";
+
 
 export default function Clients() {
 
@@ -14,20 +15,37 @@ export default function Clients() {
       };
 
     return (
-        <Container maxWidth={false} disableGutters>
+        <Box 
+            sx={{
+                bgcolor: "background.default",
+                width: "100vw",
+                height: "100vh"
+            }}
+        >
             <NavigationBar />
 
-            <Box display={"flex"} justifyContent={"space-between"} m={2}>
-                <Box display={"flex"} gap={2}>
+            <Box 
+                sx={{
+                    display: "flex",
+                    justifyContent:"space-between",
+                    margin: "15px"
+                }}
+            >
+                <Box 
+                    sx={{
+                        display: "flex",
+                        gap: "15px"
+                    }}
+                >
                 
                     <SearchBar onSearch={handleSearch} />
 
                     <ActionButton
                         icon={<DeleteIcon sx={{ mr: 1 }} />}
                         text="DELETAR"
-                        hoverColor="#FA2A3A"
-                        borderColor="#404040"
-                        iconColor="primary"
+                        hoverColor="#b00020"
+                        borderColor="primary.main"
+                        iconColor="primary.main"
                     />
 
                     <ActionButton
@@ -47,6 +65,6 @@ export default function Clients() {
                 CADASTRAR CLIENTE
                 </Button>
             </Box>
-        </Container>
+        </Box>
     );
 }

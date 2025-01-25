@@ -1,21 +1,7 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { IconButton, InputBase, Divider, Box } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import { IconButton, InputBase, Divider, Box } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
-// Estilos centralizados
-const styles = {
-    form: {
-        p: '2px 4px',
-        display: 'flex',
-        alignItems: 'center',
-        border: 1,
-        borderColor: '#404040',
-        borderRadius: 1,
-    },
-    input: { ml: 1, flex: 1 },
-    divider: { height: 28, m: 0.5, backgroundColor: '#404040' },
-    iconButton: { p: '10px' },
-};
 
 // Define o tipo das props do componente
 interface SearchBarProps {
@@ -23,8 +9,8 @@ interface SearchBarProps {
   onSearch?: (query: string) => void; 
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({placeholder = 'Buscar cliente...',  onSearch}) => {
-    const [query, setQuery] = useState<string>(''); // Estado para controlar o texto digitado
+const SearchBar: React.FC<SearchBarProps> = ({placeholder = "Buscar cliente...",  onSearch}) => {
+    const [query, setQuery] = useState<string>(""); // Estado para controlar o texto digitado
 
     // Lida com o envio do formulário
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -40,23 +26,29 @@ const SearchBar: React.FC<SearchBarProps> = ({placeholder = 'Buscar cliente...',
     return (
         <Box
             component="form"
-            sx={styles.form}
+            sx={{
+                display: "flex",
+                alignItems: "center",
+                border: "1px, solid, #404040",
+                pl: "5px",
+                borderRadius: "5px"
+            }}
             onSubmit={handleSubmit} // Chama handleSubmit ao enviar o formulário
-            >
+        >
             {/* Input search */}
             <InputBase
-                sx={styles.input}
+                sx={{ display: "flex" }}
                 placeholder={placeholder}
                 value={query}
-                onChange={handleChange} // Atualiza o texto no estado
-                inputProps={{ 'aria-label': placeholder }}
+                onChange={handleChange} 
+                inputProps={{ "aria-label": placeholder }}
             />
 
-            <Divider sx={styles.divider} orientation="vertical" />
+            <Divider sx={{ height: "30px", backgroundColor: "primary.main"}} orientation="vertical" />
             
              {/* Botão para envio do forms */}
-            <IconButton type="submit" sx={styles.iconButton} aria-label="Pesquisar">
-                <SearchIcon color="primary" />
+            <IconButton type="submit" aria-label="Pesquisar">
+                <SearchIcon sx={{ color: "primary.main" }} />
             </IconButton>
         </Box>
     );

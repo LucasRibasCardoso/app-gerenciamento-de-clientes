@@ -1,13 +1,13 @@
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
+import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
 // Tipagem para as props do NavButton
 interface NavButtonProps {
@@ -19,9 +19,9 @@ interface NavButtonProps {
   // Componente reutilizável para os botões
   const NavButton: React.FC<NavButtonProps> = ({ href, icon, label }) => (
     <Button
-         sx={{ my: 2, color: 'white', fontWeight: 600 ,
-             '&:hover': {
-                 backgroundColor: 'rgba(255, 255, 255, 0.2)', // Cor de fundo ao passar o mouse
+         sx={{ my: 2, color: "white", fontWeight: 600 ,
+             "&:hover": {
+                backgroundColor: "background.buttonHover",
              },
          }}
          startIcon={icon}
@@ -34,41 +34,51 @@ interface NavButtonProps {
 
 export default function NavigationBar() {
     const navItems = [
-        { label: 'HOME', href: '/login', icon: <HomeOutlinedIcon /> },
-        { label: 'CLIENTES', href: '/clientes', icon: <GroupsOutlinedIcon /> },
+        { label: "HOME", href: "/home", icon: <HomeOutlinedIcon /> },
+        { label: "CLIENTES", href: "/clientes", icon: <GroupsOutlinedIcon /> },
     ];
 
     return (
-        <AppBar position="static" sx={{background: '#0D1F23'}}>
-            <Container maxWidth={false} >
-                <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <AppBar 
+            sx={{
+                backgroundColor: "background.darkGreen",
+                position: "static",
+            }}
+        >
+            <Container disableGutters maxWidth={false}>
+                <Toolbar 
+                    sx={{ 
+                        display: "flex", 
+                        justifyContent: "space-between",
+                        width: "100%"
+                    }}
+                >
                     {/* Logo e título */}
-                    <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: 'center' } }}>
+                    <Box 
+                        sx={{ 
+                            display: "flex", 
+                            alignItems: "center"
+                        }}>
                         <AirplanemodeActiveIcon sx={{ mr: 1 }} />
                         <Typography
                             variant="h6"
                             noWrap
                             sx={{
-                                mr: 2,
-                                fontFamily: 'Lato',
-                                fontWeight: 700,
-                                letterSpacing: '.2rem',
-                                color: 'inherit',
-                                textDecoration: 'none',
+                                letterSpacing: "0.2rem",
                             }}>
                             CR VIAGENS E TURISMO
                         </Typography>
                     </Box>
 
                     {/* Navegação */}
-                    <Box sx={{ display: 'flex', gap: 5 }}>
+                    <Box sx={{ display: "flex", gap: "15px" }}>
                         {navItems.map((item, index) => (
                         <NavButton key={index} href={item.href} icon={item.icon} label={item.label} />
                         ))}
                     </Box>
 
                     {/* Logout */}
-                    <NavButton href="#logout" icon={<LogoutOutlinedIcon />} label="LOGOUT" />
+                    <NavButton href="/login" icon={<LogoutOutlinedIcon />} label="LOGOUT" />
                 </Toolbar>
             </Container>
         </AppBar>
