@@ -8,7 +8,7 @@ export const App = () => {
   return (
     <ThemeProvider theme={LigthTheme}>
       <BrowserRouter>
-          <AppRoutes></AppRoutes>
+        <AppRoutes></AppRoutes>
       </BrowserRouter>
     </ThemeProvider>
   )

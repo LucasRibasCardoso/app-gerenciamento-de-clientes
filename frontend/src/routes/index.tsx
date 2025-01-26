@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Home  from '../pages/home';
-import Login from '../pages/login';
-import Clients from '../pages/clients';
+import Home  from '../pages/home/HomePage';
+import Login from '../pages/login/LoginPage';
+import Clients from '../pages/clients/ClientPage';
 
 export const AppRoutes = () => {
     

@@ -21,7 +21,7 @@ interface FormData {
   password: string;
 }
 
-function SignIn() {
+export default function FormLogin() {
   // Configuração do React Hook Form com validação do Yup
   const {
     control,
@@ -107,5 +107,3 @@ function SignIn() {
     </Box>
   );
 }
-
-export default SignIn;
