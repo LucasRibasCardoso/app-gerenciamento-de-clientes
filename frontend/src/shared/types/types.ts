@@ -30,3 +30,23 @@ export type ValidationErrorsResponse = {
     statusCode: number;
     errors: Set<ValidationError>;
 };
+
+// Type guards para verificar os tipos de erro
+export function isValidationError(error: unknown): error is ValidationErrorsResponse {
+    return (
+        error !== null &&
+        typeof error === "object" &&
+        "errors" in error &&
+        "statusCode" in error
+    );
+  }
+
+export function isGenericError(error: unknown): error is GenericError {
+    return (
+        error !== null &&
+        typeof error === "object" &&
+        "statusCode" in error &&
+        "message" in error &&
+        !("errors" in error)
+    );
+}

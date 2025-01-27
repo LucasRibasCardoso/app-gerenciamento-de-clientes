@@ -1,7 +1,12 @@
 import { useForm, Controller } from "react-hook-form";
-import { TextField, Button, Box, Typography } from "@mui/material";
+import { useState } from "react";
+import { TextField, Button, Box, Typography, Snackbar, Alert  } from "@mui/material";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
+
+import { useLogin } from "../../hooks/login/LoginHook";
+import { isValidationError, isGenericError } from "../../types/types";
 
 // Definição do esquema de validação com Yup
 const schema = yup.object({
@@ -22,20 +27,44 @@ interface FormData {
 }
 
 export default function FormLogin() {
+  const navigate = useNavigate();
+  const login = useLogin();
+  const [openAlert, setOpenAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
   // Configuração do React Hook Form com validação do Yup
   const {
     control,
     handleSubmit,
     formState: { errors },
+    setError
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
   // Função chamada ao enviar o formulário
-  const onSubmit = (data: FormData) => {
-    // Enviar requisição para o backend e salvar o token no Local Storage
-    console.log("Username: ", data.username);
-    console.log("Password: ", data.password);
+  const onSubmit = async (data: FormData) => {
+    try {
+      await login.mutateAsync({
+        username: data.username,
+        password: data.password
+      });
+      navigate("/home");
+    }
+    catch (error) {
+      // Para cada erro de validação, define o erro no campo correspondente
+      if (isValidationError(error)) {
+        error.errors.forEach((erro) => {
+          setError(erro.field as keyof FormData, {
+            message: erro.message
+          });
+        });
+      }
+      else if (isGenericError(error)) {
+        setErrorMessage(error.message);
+        setOpenAlert(true);
+      }
+    }
   };
 
   return (
@@ -97,6 +126,8 @@ export default function FormLogin() {
       <Button
         type="submit"
         variant="contained"
+        loading={login.isPending}
+        loadingPosition="start"
         sx={{
           width: "100%",
           backgroundColor: "background.darkGreen",
@@ -104,6 +135,21 @@ export default function FormLogin() {
       >
         Entrar
       </Button>
+
+      {/* PopUp em caso de erro */}
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={5000} // O alerta será fechado após 5 segundos
+        onClose={() => setOpenAlert(false)}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <Alert severity="error" onClose={() => setOpenAlert(false)}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

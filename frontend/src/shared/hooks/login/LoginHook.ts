@@ -6,11 +6,11 @@ const useLogin = () => {
     return useMutation<LoginResponse, GenericError | ValidationErrorsResponse, { username: string; password: string }>({
         mutationFn: async ({ username, password }) => {
             const result = await login(username, password);
-
+            
             if ("statusCode" in result) {
-                // Lança o erro caso seja um GenericError ou ValidationErrorsResponse
                 throw result;
             }
+
             return result;
         },
         onSuccess: (data) => {
@@ -18,5 +18,4 @@ const useLogin = () => {
         },
     });
 };
-
 export { useLogin };
