@@ -3,7 +3,7 @@ import {errorInterceptor} from "./interceptors/ErrorInterceptor";
 
 
 const Api = axios.create({
-    baseURL: "http://localhost8080"
+    baseURL: "http://localhost:8080"
 });
 
 // Interceptor de requisição: adiciona o token ao cabeçalho

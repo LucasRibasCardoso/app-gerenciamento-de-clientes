@@ -8,7 +8,7 @@ const login = async (
     password: string
 ): Promise<LoginResponse | GenericError | ValidationErrorsResponse> => {
     try {
-        const { data } = await Api.post<LoginResponse>("auth/login", { username, password });
+        const { data } = await Api.post<LoginResponse>("/auth/login", { username, password });
         return data; 
     } catch (error: any) {
         // Captura o erro e verifica o formato
@@ -48,7 +48,7 @@ const login = async (
 };
 
 const logout = () => {
-    const [token, setToken] = useState(localStorage.getItem("token"));
+    const [, setToken] = useState(localStorage.getItem("token"));
     localStorage.removeItem("token");
     setToken(null);
   };
