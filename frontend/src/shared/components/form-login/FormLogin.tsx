@@ -1,6 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
-import { useState } from "react";
-import { TextField, Button, Box, Typography, Snackbar, Alert  } from "@mui/material";
+import { TextField, Button, Box, Typography } from "@mui/material";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
@@ -26,43 +25,39 @@ interface FormData {
   password: string;
 }
 
-export default function FormLogin() {
+interface LoginFormProps {
+  onError: (message: string) => void; // Callback para enviar mensagens de erro ao componente pai
+}
+
+export default function FormLogin({ onError }: LoginFormProps) {
   const navigate = useNavigate();
   const login = useLogin();
-  const [openAlert, setOpenAlert] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
 
-  // Configuração do React Hook Form com validação do Yup
   const {
     control,
     handleSubmit,
     formState: { errors },
-    setError
+    setError,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
-  // Função chamada ao enviar o formulário
   const onSubmit = async (data: FormData) => {
     try {
       await login.mutateAsync({
         username: data.username,
-        password: data.password
+        password: data.password,
       });
       navigate("/home");
-    }
-    catch (error) {
-      // Para cada erro de validação, define o erro no campo correspondente
+    } catch (error) {
       if (isValidationError(error)) {
         error.errors.forEach((erro) => {
           setError(erro.field as keyof FormData, {
-            message: erro.message
+            message: erro.message,
           });
         });
-      }
-      else if (isGenericError(error)) {
-        setErrorMessage(error.message);
-        setOpenAlert(true);
+      } else if (isGenericError(error)) {
+        onError(error.message); // Envia o erro genérico para o componente pai
       }
     }
   };
@@ -87,7 +82,6 @@ export default function FormLogin() {
         LOGIN
       </Typography>
 
-      {/* Campo de Username */}
       <Controller
         name="username"
         control={control}
@@ -104,7 +98,6 @@ export default function FormLogin() {
         )}
       />
 
-      {/* Campo de Password */}
       <Controller
         name="password"
         control={control}
@@ -122,7 +115,6 @@ export default function FormLogin() {
         )}
       />
 
-      {/* Botão de Login */}
       <Button
         type="submit"
         variant="contained"
@@ -135,21 +127,6 @@ export default function FormLogin() {
       >
         Entrar
       </Button>
-
-      {/* PopUp em caso de erro */}
-      <Snackbar
-        open={openAlert}
-        autoHideDuration={5000} // O alerta será fechado após 5 segundos
-        onClose={() => setOpenAlert(false)}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      >
-        <Alert severity="error" onClose={() => setOpenAlert(false)}>
-          {errorMessage}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }
