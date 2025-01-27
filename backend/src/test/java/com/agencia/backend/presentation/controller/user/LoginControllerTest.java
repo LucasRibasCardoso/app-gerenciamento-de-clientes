@@ -93,7 +93,7 @@ public class LoginControllerTest {
     LoginRequestDTO loginRequestDTO = new LoginRequestDTO("userCommon", "wrongPassword");
 
     when(authenticationManager.authenticate(any(Authentication.class)))
-        .thenThrow(new BadCredentialsException("Username ou senha inválidos."));
+        .thenThrow(new BadCredentialsException("Usuário ou senha inválidos."));
 
     String requestBody = objectMapper.writeValueAsString(loginRequestDTO);
 
@@ -102,7 +102,7 @@ public class LoginControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestBody))
         .andExpect(status().isUnauthorized())
-        .andExpect(jsonPath("$.message").value("Username ou senha inválidos."))
+        .andExpect(jsonPath("$.message").value("Usuário ou senha inválidos."))
         .andExpect(jsonPath("$.statusCode").value("401"));
   }
 

@@ -130,7 +130,7 @@ public class UserExceptionHandlerTest {
         () -> assertNotNull(response.getBody()),
         () -> assertEquals(401, response.getStatusCode().value()),
         () -> assertEquals(401, response.getBody().statusCode()),
-        () -> assertEquals("Username ou senha inválidos.", response.getBody().message())
+        () -> assertEquals("Usuário ou senha inválidos.", response.getBody().message())
     );
   }
 }

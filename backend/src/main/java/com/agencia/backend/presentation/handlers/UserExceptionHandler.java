@@ -38,7 +38,7 @@ public class UserExceptionHandler {
 
   @ExceptionHandler(BadCredentialsException.class)
   public ResponseEntity<GenericError> handleBadCredentialsException() {
-    GenericError error = new GenericError("Username ou senha inválidos.", HttpStatus.UNAUTHORIZED.value());
+    GenericError error = new GenericError("Usuário ou senha inválidos.", HttpStatus.UNAUTHORIZED.value());
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
   }
 

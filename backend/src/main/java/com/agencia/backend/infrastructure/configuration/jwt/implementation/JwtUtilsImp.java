@@ -35,7 +35,7 @@ public class JwtUtilsImp implements JwtUtils {
     String username = userDetails.getUsername();
 
     Instant now = Instant.now();
-    Instant expirationTime = now.plus(1, ChronoUnit.HOURS); // 1 hora
+    Instant expirationTime = now.plus(1, ChronoUnit.DAYS); // 1 dia de validade
 
     return Jwts.builder()
         .subject(username)

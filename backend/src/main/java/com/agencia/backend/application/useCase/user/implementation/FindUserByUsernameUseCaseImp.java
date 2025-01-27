@@ -16,7 +16,7 @@ public class FindUserByUsernameUseCaseImp implements FindUserByUsernameUseCase {
   @Override
   public User getUser(String username) {
     return userRepository.findByUsername(username).orElseThrow(
-        () -> new UserNotFoundException("Nenhum usuário encontrado com o nome de usuário: " + username)
+        () -> new UserNotFoundException("Esse usuário não esta cadastrado no sistema.")
     );
   }
 

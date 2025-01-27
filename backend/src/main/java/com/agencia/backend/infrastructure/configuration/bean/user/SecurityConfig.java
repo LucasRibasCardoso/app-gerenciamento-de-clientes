@@ -1,6 +1,7 @@
 package com.agencia.backend.infrastructure.configuration.bean.user;
 
 import com.agencia.backend.infrastructure.configuration.jwt.AuthTokenFilter;
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -17,6 +18,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -31,7 +34,6 @@ public class SecurityConfig {
     this.authTokenFilter = authTokenFilter;
   }
 
-
   @Bean
   public RoleHierarchy roleHierarchy() {
     RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
@@ -41,6 +43,17 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    // Configuração de CORS
+    http.cors(cors -> cors.configurationSource(request -> {
+      var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
+      corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
+      corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT"));
+      corsConfiguration.setAllowedHeaders(List.of("*"));
+      corsConfiguration.setExposedHeaders(List.of("Authorization", "Content-Type"));
+      corsConfiguration.setAllowCredentials(true);
+      return corsConfiguration;
+    }));
+
     // Habilita o CSRF para o formulário de login
     http.csrf(csrf -> csrf.disable());
 

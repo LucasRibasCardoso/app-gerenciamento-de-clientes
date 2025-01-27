@@ -71,7 +71,7 @@ class FindUserByUsernameUseCaseImpTest {
         UserNotFoundException.class, () -> findUserByUsernameUseCaseImp.getUser(username));
 
     // Assert
-    assertEquals("Nenhum usuário encontrado com o nome de usuário: " + username, exception.getMessage());
+    assertEquals("Esse usuário não esta cadastrado no sistema.", exception.getMessage());
 
     verify(userRepository).findByUsername(username);
   }

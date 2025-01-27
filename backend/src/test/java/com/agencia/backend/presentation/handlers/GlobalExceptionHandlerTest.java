@@ -46,18 +46,15 @@ class GlobalExceptionHandlerTest {
 
   @Test
   void handleException() {
-    // Arrange
-    Exception exception = new Exception("test erro inesperado");
-
     // Act
-    ResponseEntity<GenericError> response = handler.handleGenericException(exception);
+    ResponseEntity<GenericError> response = handler.handleGenericException();
 
     // Assert
     assertAll(
         () -> assertNotNull(response.getBody()),
         () -> assertEquals(500, response.getStatusCode().value()),
         () -> assertEquals(500, response.getBody().statusCode()),
-        () -> assertEquals("Ocorreu um erro inesperado: " + exception.getMessage(), response.getBody().message())
+        () -> assertEquals("Ocorreu um erro inesperado. Se persistir, reinicie o sistema.", response.getBody().message())
     );
   }
 
