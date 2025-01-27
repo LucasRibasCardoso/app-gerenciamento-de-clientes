@@ -7,7 +7,8 @@ import Button from "@mui/material/Button";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+
+import LogoutButton from "../action-button/LogoutButton";
 
 // Tipagem para as props do NavButton
 interface NavButtonProps {
@@ -78,7 +79,7 @@ export default function NavigationBar() {
                     </Box>
 
                     {/* Logout */}
-                    <NavButton href="/login" icon={<LogoutOutlinedIcon />} label="LOGOUT" />
+                    <LogoutButton/>
                 </Toolbar>
             </Container>
         </AppBar>

@@ -1,5 +1,5 @@
 import Api from "../axios-config/AxiosConfig";
-import { useState } from "react";
+
 import { LoginResponse, GenericError, ValidationErrorsResponse } from "../../../types/types";
 
 // Função para efetuar login
@@ -47,9 +47,4 @@ const login = async (
     }
 };
 
-const logout = () => {
-    const [, setToken] = useState(localStorage.getItem("token"));
-    localStorage.removeItem("token");
-    setToken(null);
-  };
-export { login, logout };
+export { login };
