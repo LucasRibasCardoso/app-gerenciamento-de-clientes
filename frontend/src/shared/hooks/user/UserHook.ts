@@ -8,14 +8,12 @@ const useDeleteUser = () => {
 
   return useMutation<void, GenericError, string>({
       mutationFn: async (userId) => {
-          const result = await deleteUser(userId);
+          const response = await deleteUser(userId);
 
           // Se `result` for um erro (GenericError), lança-o
-          if (result && "statusCode" in result) {
-              throw result;
+          if (response && "statusCode" in response) {
+              throw response;
           }
-
-          // Caso contrário, o resultado é `void`, e a execução continua normalmente
       },
       onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -31,14 +29,14 @@ const useAllUsers = () => {
   return useQuery<ListOfUser, GenericError>({
       queryKey: ["users"], // Chave única para cache
       queryFn: async () => {
-          const result = await findAllUsers();
+          const response = await findAllUsers();
 
           // Lida com o possível retorno de erro do serviço
-          if ("statusCode" in result) {
-              throw result; // O React Query trata o erro lançado
+          if ("statusCode" in response) {
+              throw response; // O React Query trata o erro lançado
           }
 
-          return result; // Retorna a lista de " em caso de sucesso
+          return response; // Retorna a lista de " em caso de sucesso
       },
       initialData: [],
   });

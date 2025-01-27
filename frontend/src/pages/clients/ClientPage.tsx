@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material";
 import NavigationBar from "../../shared/components/navigation-bar/NavigationBar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import SearchBar from "../../shared/components/search-bar/SearchBar";
 import ActionButton from "../../shared/components/action-button/ActionButton";
 
@@ -10,9 +10,9 @@ import ActionButton from "../../shared/components/action-button/ActionButton";
 export default function Clients() {
 
     const handleSearch = (query: string) => {
-        console.log('Buscando por:', query);
+        console.log("Buscando por:", query);
         // Adicione lógica de busca (ex.: chamada de API ou filtragem de dados)
-      };
+    };
 
     return (
         <Box 

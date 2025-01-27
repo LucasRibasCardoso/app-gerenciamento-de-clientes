@@ -5,13 +5,13 @@ import { LoginResponse, GenericError, ValidationErrorsResponse } from "../../typ
 const useLogin = () => {
     return useMutation<LoginResponse, GenericError | ValidationErrorsResponse, { username: string; password: string }>({
         mutationFn: async ({ username, password }) => {
-            const result = await login(username, password);
+            const response = await login(username, password);
             
-            if ("statusCode" in result) {
-                throw result;
+            if ("statusCode" in response) {
+                throw response;
             }
 
-            return result;
+            return response;
         },
         onSuccess: (data) => {
             localStorage.setItem("token", data.token);

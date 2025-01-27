@@ -9,7 +9,8 @@ interface ActionButtonProps extends ButtonProps {
   iconColor: string;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = ({ icon, text, hoverColor, borderColor, iconColor, ...props }) => (
+const ActionButton: React.FC<ActionButtonProps> = 
+  ({ icon, text, hoverColor, borderColor, iconColor, ...props }) => (
   <Button
     variant="outlined"
     sx={{
