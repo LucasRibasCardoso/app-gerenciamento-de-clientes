@@ -1,16 +1,27 @@
-import { Button, ButtonProps } from "@mui/material";
-import { ReactNode } from "react";
+import { Button } from "@mui/material";
 
-interface ActionButtonProps extends ButtonProps {
-  icon: ReactNode;
+interface ActionButtonProps {
+  icon: React.ReactNode;
   text: string;
   hoverColor: string;
   borderColor: string;
   iconColor: string;
+  id: string; 
+  onClick: (id: string) => void; 
+}
+
+interface ActionButtonProps {
+  icon: React.ReactNode;
+  text: string;
+  hoverColor: string;
+  borderColor: string;
+  iconColor: string;
+  id: string;
+  onClick: (id: string) => void; 
 }
 
 const ActionButton: React.FC<ActionButtonProps> = 
-  ({ icon, text, hoverColor, borderColor, iconColor, ...props }) => (
+  ({ icon, text, hoverColor, borderColor, iconColor, id, onClick, ...props }) => (
   <Button
     variant="outlined"
     sx={{
@@ -24,11 +35,13 @@ const ActionButton: React.FC<ActionButtonProps> =
         },
       },
     }}
+    onClick={() => onClick(id)}  // Passa o id para a função onClick
     {...props}
   >
     {icon}
     {text}
   </Button>
 );
+
 
 export default ActionButton;

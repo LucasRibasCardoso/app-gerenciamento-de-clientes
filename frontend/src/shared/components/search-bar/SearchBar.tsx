@@ -15,8 +15,7 @@ const SearchBar: React.FC<SearchBarProps> = ({placeholder = "Buscar cliente...",
     // Lida com o envio do formulário
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault(); 
-        if (onSearch) onSearch(search); // Chama a função passada via props
-        console.log("Termo para pesquisar: " + search);
+        if (onSearch) onSearch(search);
     };
 
     // Atualiza o estado quando o valor do input muda
