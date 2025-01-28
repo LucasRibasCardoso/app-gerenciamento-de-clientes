@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GenericError, ListOfClient } from "../../types/types";
 import { findAllClients } from "../../services/api/client/ClientService";
 
+
 // Hook para buscar todos os clientes
 const useGetAllClients = (filters?: { searchQuery?: string; orderBy?: string; orderDirection?: string }) => {
     return useQuery<ListOfClient, GenericError>({
@@ -18,4 +19,4 @@ const useGetAllClients = (filters?: { searchQuery?: string; orderBy?: string; or
     });
 };
 
-export { useGetAllClients };
+export { useGetAllClients }

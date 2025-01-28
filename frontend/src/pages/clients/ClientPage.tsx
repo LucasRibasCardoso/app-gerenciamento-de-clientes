@@ -60,7 +60,7 @@ export default function Clients() {
                         label="Ordenar"
                         value={orderBy}
                         options={[
-                            { value: "id", label: "ID" },
+                            { value: "id", label: "Recente Adicionado" },
                             { value: "completeName", label: "Nome" },
                         ]}
                         onChange={(value) => setOrderBy(value)}

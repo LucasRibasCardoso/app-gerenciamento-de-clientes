@@ -11,7 +11,6 @@ import {
   IconButton,
   Typography,
   Box,
-  Checkbox
 } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { ListOfClient } from "../../types/types";
@@ -29,16 +28,15 @@ const ClientsTable: React.FC<Props> = ({ clients }) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
+      <Table size="small">
+        <TableHead sx={{ backgroundColor: "#616161" }}>
           <TableRow>
             <TableCell />
-            <TableCell />
-            <TableCell>Nome</TableCell>
-            <TableCell>CPF</TableCell>
-            <TableCell>Telefone</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Data de Nascimento</TableCell>
+            <TableCell sx={{ color: "background.default", fontWeight: "bold"}}>Nome</TableCell>
+            <TableCell sx={{ color: "background.default", fontWeight: "bold"}} >CPF</TableCell>
+            <TableCell sx={{ color: "background.default", fontWeight: "bold"}} >Telefone</TableCell>
+            <TableCell sx={{ color: "background.default", fontWeight: "bold"}} >Email</TableCell>
+            <TableCell sx={{ color: "background.default", fontWeight: "bold"}} >Data de Nascimento</TableCell>
           </TableRow>
         </TableHead>
         
@@ -46,8 +44,12 @@ const ClientsTable: React.FC<Props> = ({ clients }) => {
           {clients.map((client) => (
             <React.Fragment key={client.id}>
               {/* Linha Principal */}
-              <TableRow>
-                <TableCell><Checkbox value={client.id}/></TableCell>
+              <TableRow 
+                sx={{
+                  backgroundColor: openRows[client.id] ? "#BFBFBF" : "inherit",
+                  ":hover": { backgroundColor: "#BFBFBF" },
+                }}
+              >
                 <TableCell>
                   <IconButton
                     onClick={() => toggleRow(client.id)}
@@ -70,70 +72,74 @@ const ClientsTable: React.FC<Props> = ({ clients }) => {
 
               {/* Linha Expandida */}
               <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <TableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                   <Collapse in={openRows[client.id]} timeout="auto" unmountOnExit>
-                    <Box margin={2}>
-                      {/* Passaporte */}
-                      <Typography variant="subtitle1" gutterBottom component="div">
-                        Passaporte
-                      </Typography>
-                      <Table size="small" aria-label="passport">
-                        <TableBody>
-                          <TableRow>
-                            <TableCell>Número</TableCell>
-                            <TableCell>{client.passport?.number ?? "-"}</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Data de Emissão</TableCell>
-                            <TableCell>{client.passport?.emissionDate || "-"}</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Data de Vencimento</TableCell>
-                            <TableCell>{client.passport?.expirationDate || "-"}</TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-
+                    <Box margin={1} display={"flex"} gap={"150px"}>
                       {/* Endereço */}
-                      <Typography variant="subtitle1" gutterBottom component="div" style={{ marginTop: "16px" }}>
-                        Endereço
-                      </Typography>
-                      <Table size="small" aria-label="address">
-                        <TableBody>
-                          <TableRow>
-                            <TableCell>CEP</TableCell>
-                            <TableCell>{client.address?.zipCode || "-"}</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>País</TableCell>
-                            <TableCell>{client.address?.country || "-"}</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Estado</TableCell>
-                            <TableCell>{client.address?.state || "-"}</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Cidade</TableCell>
-                            <TableCell>{client.address?.city || "-"}</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Bairro</TableCell>
-                            <TableCell>{client.address?.neighborhood || "-"}</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Rua</TableCell>
-                            <TableCell>{client.address?.street || "-"}</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Complemento</TableCell>
-                            <TableCell>{client.address?.complement || "-"}</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Número Residencial</TableCell>
-                            <TableCell>{client.address?.residentialNumber || "-"}</TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
+                      <Box>
+                        <Table size="small" aria-label="address">
+                          <Typography variant="subtitle1" component="div">
+                            Endereço
+                          </Typography>
+                          <TableBody>
+                            <TableRow>
+                              <TableCell>CEP</TableCell>
+                              <TableCell sx={{ textAlign: "end" }} >{client.address?.zipCode || "-"}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>País</TableCell>
+                              <TableCell sx={{ textAlign: "end" }} >{client.address?.country || "-"}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>Estado</TableCell>
+                              <TableCell sx={{ textAlign: "end" }} >{client.address?.state || "-"}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>Cidade</TableCell>
+                              <TableCell sx={{ textAlign: "end" }} >{client.address?.city || "-"}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>Bairro</TableCell>
+                              <TableCell sx={{ textAlign: "end" }} >{client.address?.neighborhood || "-"}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>Rua</TableCell>
+                              <TableCell sx={{ textAlign: "end" }} >{client.address?.street || "-"}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>Complemento</TableCell>
+                              <TableCell sx={{ textAlign: "end" }} >{client.address?.complement || "-"}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>Número Residencial</TableCell>
+                              <TableCell sx={{ textAlign: "end" }}> {client.address?.residentialNumber || "-"}</TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </Box>
+                      
+                      {/* Passaporte */}
+                      <Box>
+                        <Table size="small" aria-label="passport">
+                          <Typography variant="subtitle1" component="div">
+                            Passaporte
+                          </Typography>
+                          <TableBody>
+                            <TableRow>
+                              <TableCell>Número</TableCell>
+                              <TableCell sx={{ textAlign: "end" }} >{client.passport?.number ?? "-"}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>Data de Emissão</TableCell>
+                              <TableCell sx={{ textAlign: "end" }} >{client.passport?.emissionDate || "-"}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>Data de Vencimento</TableCell>
+                              <TableCell sx={{ textAlign: "end" }} >{client.passport?.expirationDate || "-"}</TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </Box>
                     </Box>
                   </Collapse>
                 </TableCell>
