@@ -24,21 +24,20 @@ const useDeleteUser = () => {
   });
 };
 
-// Hook para buscar todos os "
-const useAllUsers = () => {
+// Hook para buscar todos os usuários
+const useGetAllUsers = () => {
   return useQuery<ListOfUser, GenericError>({
       queryKey: ["users"], // Chave única para cache
       queryFn: async () => {
           const response = await findAllUsers();
 
-          // Lida com o possível retorno de erro do serviço
           if ("statusCode" in response) {
               throw response; // O React Query trata o erro lançado
           }
 
-          return response; // Retorna a lista de " em caso de sucesso
+          return response; // Retorna a lista de usuários em caso de sucesso
       },
-      initialData: [],
+      initialData: []
   });
 };
-export  { useDeleteUser, useAllUsers }
+export  { useDeleteUser, useGetAllUsers }

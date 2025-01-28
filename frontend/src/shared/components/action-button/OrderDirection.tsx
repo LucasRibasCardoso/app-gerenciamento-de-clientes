@@ -16,7 +16,6 @@ const OrderDirection = () => {
         <IconButton
             onClick={toggleOrderDirection}
             sx={{
-                height: "45px",
                 borderColor: "#404040",
                 border: "1px solid #404040",
                 borderRadius: "5px",

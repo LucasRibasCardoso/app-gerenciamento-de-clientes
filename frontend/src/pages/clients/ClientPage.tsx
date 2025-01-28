@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Box, Button } from "@mui/material";
 import NavigationBar from "../../shared/components/navigation-bar/NavigationBar";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -5,7 +6,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 import ActionButton from "../../shared/components/action-button/ActionButton";
-import ClientsSearchAndSort from "../../shared/components/clients-search-and-sort/ClientsSearchAndSort";
+import SearchBar from "../../shared/components/search-bar/SearchBar";
+import SelectButton from "../../shared/components/select-button/SelectButton";
+import { useGetAllClients } from "../../shared/hooks/client/ClientHook";
 
 // Mock de client ID
 const clientID = "1";
@@ -28,14 +31,62 @@ const handleNewClient = () => {
 
 export default function Clients() {
     document.title = "Clientes - Client Management";
+
+    const [searchQuery, setSearchQuery] = useState<string>("");
+    const [orderBy, setOrderBy] = useState<string>("");
+    const [orderDirection, setOrderDirection] = useState<string>("");
+
+    // Hook com filtros dinâmicos
+    const { data: clients, isLoading, error } = useGetAllClients({
+        searchQuery,
+        orderBy,
+        orderDirection,
+    });
+
+    // Exibe clientes no console para teste
+        useEffect(() => {
+            if (!isLoading && clients) {
+                console.log("Clientes encontrados:", clients);
+            }
+            if (error) {
+                console.error("Erro ao buscar clientes:", error.message);
+            }
+        }, [clients, isLoading, error]);
     
     return (
         <Box sx={{backgroundColor: "background.default", width: "100vw", height: "100vh"}}>
+            {/* Barra de navegação */}
             <NavigationBar />
 
-            <Box sx={{display: "flex", justifyContent:"space-between", margin: "15px"}}>
+            {/* Barra de funcionalidade */}
+            <Box sx={{display: "flex", justifyContent:"space-between", margin: "15px", height: "45px"}}>
                 
-                <ClientsSearchAndSort/>
+                <Box sx={{ display: "flex", gap: "15px",}}>
+                    {/* Barra de pesquisa */}
+                    <SearchBar onSearch={(query) => setSearchQuery(query)} />
+
+                    {/* Seleção de campo de ordenação */}
+                    <SelectButton
+                        label="Ordenar"
+                        value={orderBy}
+                        options={[
+                            { value: "id", label: "ID" },
+                            { value: "completeName", label: "Nome" },
+                        ]}
+                        onChange={(value) => setOrderBy(value)}
+                    />  
+                    
+                    {/* Seleção de direção da ordenação */}
+                    <SelectButton
+                        label="Direção"
+                        value={orderDirection}
+                        options={[
+                            { value: "asc", label: "Crescente" },
+                            { value: "desc", label: "Decrescente" },
+                        ]}
+                        onChange={(value) => setOrderDirection(value as "asc" | "desc")}
+                    />
+                </Box>
                 
                 <Box sx={{display: "flex", gap: "15px"}}>
                     <ActionButton
@@ -66,6 +117,11 @@ export default function Clients() {
                         CADASTRAR CLIENTE
                     </Button>
                 </Box>
+            </Box>
+
+            {/* Tabela de clientes */}
+            <Box>
+                
             </Box>
         </Box>
     );

@@ -4,13 +4,14 @@ import { ListOfUser, GenericError } from "../../../types/types";
 // Função para buscar todos os usuários
 const findAllUsers = async (): Promise<ListOfUser | GenericError> => {
     try {
-        const { data } = await Api.get<ListOfUser>("/users");
+        const { data } = await Api.get<ListOfUser | GenericError>("/users");
         return data;
-    } catch (error: any) {
+    } 
+    catch (error: any) {
         if (error.response) {
             return {
                 message: error.response.data.message || 
-                "Não foi possível recuperar a lista de usuários. Verifique os dados da solicitação ou tente novamente mais tarde.",
+                "Não foi possível recuperar a lista de usuários.",
                 statusCode: error.response.status || 500,
             } as GenericError;
         }

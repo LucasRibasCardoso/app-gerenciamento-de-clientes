@@ -8,6 +8,36 @@ export type UserResponse = {
 // Tipo para a lista de usuários
 export type ListOfUser = UserResponse[];
 
+export type PassportResponse = {
+    number: string | null;
+    emissionDate: string | null;
+    expirationDate: string | null;
+};
+
+export type AddressResponse = {
+    zipCode: string | null;
+    country: string | null;
+    state: string | null;
+    city: string | null;
+    neighborhood: string | null;
+    street: string | null;
+    complement: string | null;
+    residentialNumber: string | null;
+};
+
+export type ClientResponse = {
+    id: number;
+    completeName: string;
+    cpf: string;
+    birthDate: string | null;
+    phone: string | null;
+    email: string | null;
+    passport: PassportResponse | null;
+    address: AddressResponse | null;
+};
+
+export type ListOfClient = ClientResponse[];
+
 export type LoginResponse = {
     username: string;
     roles: string[];
