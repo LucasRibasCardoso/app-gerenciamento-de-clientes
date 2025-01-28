@@ -3,8 +3,9 @@ import NavigationBar from "../../shared/components/navigation-bar/NavigationBar"
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import SearchBar from "../../shared/components/search-bar/SearchBar";
+
 import ActionButton from "../../shared/components/action-button/ActionButton";
+import ClientsSearchAndSort from "../../shared/components/clients-search-and-sort/ClientsSearchAndSort";
 
 // Mock de client ID
 const clientID = "1";
@@ -19,25 +20,24 @@ const handleEditClient = (clientID: string) => {
     console.log("Client para ser editado: " + clientID);
 }
 
-// Mock de função para buscar clientes
-const handleSearch = (query: string) => {
-    console.log("Buscando por:", query);
-    // Adicione lógica de busca (ex.: chamada de API ou filtragem de dados)
-};
+// Mock de função para crir novo cliente
+const handleNewClient = () => {
+    console.log("Criar um novo cliente.");
+}
 
 
 export default function Clients() {
-
-
+    document.title = "Clientes - Client Management";
+    
     return (
         <Box sx={{backgroundColor: "background.default", width: "100vw", height: "100vh"}}>
             <NavigationBar />
 
             <Box sx={{display: "flex", justifyContent:"space-between", margin: "15px"}}>
-                <Box sx={{display: "flex", gap: "15px"}}>
                 
-                    <SearchBar onSearch={handleSearch} />
-
+                <ClientsSearchAndSort/>
+                
+                <Box sx={{display: "flex", gap: "15px"}}>
                     <ActionButton
                         icon={<DeleteIcon sx={{ mr: 1 }} />}
                         text="DELETAR"
@@ -57,11 +57,15 @@ export default function Clients() {
                         id={clientID}
                         onClick={handleEditClient}
                     />
+                    <Button 
+                        startIcon={<PersonAddIcon />} 
+                        disableElevation 
+                        variant="contained"
+                        onClick={handleNewClient}
+                    >
+                        CADASTRAR CLIENTE
+                    </Button>
                 </Box>
-
-                <Button startIcon={<PersonAddIcon />} disableElevation variant="contained">
-                    CADASTRAR CLIENTE
-                </Button>
             </Box>
         </Box>
     );

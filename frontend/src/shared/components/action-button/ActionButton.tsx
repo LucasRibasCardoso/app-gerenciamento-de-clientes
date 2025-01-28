@@ -6,16 +6,6 @@ interface ActionButtonProps {
   hoverColor: string;
   borderColor: string;
   iconColor: string;
-  id: string; 
-  onClick: (id: string) => void; 
-}
-
-interface ActionButtonProps {
-  icon: React.ReactNode;
-  text: string;
-  hoverColor: string;
-  borderColor: string;
-  iconColor: string;
   id: string;
   onClick: (id: string) => void; 
 }

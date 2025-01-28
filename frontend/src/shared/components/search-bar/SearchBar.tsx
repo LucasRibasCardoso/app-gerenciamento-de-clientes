@@ -10,8 +10,8 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({placeholder = "Buscar cliente...",  onSearch}) => {
-    const [search, setSearch] = useState<string>(""); // Estado para controlar o texto digitado
-
+    const [search, setSearch] = useState<string>("");
+    
     // Lida com o envio do formulário
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault(); 
@@ -30,14 +30,15 @@ const SearchBar: React.FC<SearchBarProps> = ({placeholder = "Buscar cliente...",
                 display: "flex",
                 alignItems: "center",
                 border: "1px, solid, #404040",
-                pl: "5px",
-                borderRadius: "5px"
+                padding: "5px",
+                borderRadius: "5px",
+                height: "45px",
             }}
             onSubmit={handleSubmit}
         >
             {/* Input search */}
             <InputBase
-                sx={{ display: "flex" }}
+                sx={{ display: "flex", minWidth: "200px" }}
                 placeholder={placeholder}
                 value={search}
                 onChange={handleChange} 

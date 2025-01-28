@@ -4,6 +4,8 @@ import LoginForm from "../../shared/components/form-login/FormLogin";
 import { useState } from "react";
 
 export default function Login() {
+  document.title = "Login - Client Management";
+
   const [openAlert, setOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -11,6 +13,7 @@ export default function Login() {
     setErrorMessage(message);
     setOpenAlert(true);
   };
+
 
   return (
     <Box
