@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
-import { Box, Button } from "@mui/material";
-import NavigationBar from "../../shared/components/navigation-bar/NavigationBar";
+import { useState } from "react";
+import { Box, Button, } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
+import NavigationBar from "../../shared/components/navigation-bar/NavigationBar";
 import ActionButton from "../../shared/components/action-button/ActionButton";
 import SearchBar from "../../shared/components/search-bar/SearchBar";
 import SelectButton from "../../shared/components/select-button/SelectButton";
 import { useGetAllClients } from "../../shared/hooks/client/ClientHook";
+import ClientsTable from "../../shared/components/table-clients/ClientTable";
 
 // Mock de client ID
 const clientID = "1";
@@ -28,7 +29,6 @@ const handleNewClient = () => {
     console.log("Criar um novo cliente.");
 }
 
-
 export default function Clients() {
     document.title = "Clientes - Client Management";
 
@@ -37,22 +37,12 @@ export default function Clients() {
     const [orderDirection, setOrderDirection] = useState<string>("");
 
     // Hook com filtros dinâmicos
-    const { data: clients, isLoading, error } = useGetAllClients({
+    const clients = useGetAllClients({
         searchQuery,
         orderBy,
         orderDirection,
     });
 
-    // Exibe clientes no console para teste
-        useEffect(() => {
-            if (!isLoading && clients) {
-                console.log("Clientes encontrados:", clients);
-            }
-            if (error) {
-                console.error("Erro ao buscar clientes:", error.message);
-            }
-        }, [clients, isLoading, error]);
-    
     return (
         <Box sx={{backgroundColor: "background.default", width: "100vw", height: "100vh"}}>
             {/* Barra de navegação */}
@@ -120,9 +110,7 @@ export default function Clients() {
             </Box>
 
             {/* Tabela de clientes */}
-            <Box>
-                
-            </Box>
+            <ClientsTable clients={clients.data || []}/>
         </Box>
     );
 }
