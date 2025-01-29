@@ -6,12 +6,12 @@ interface ActionButtonProps {
   hoverColor: string;
   borderColor: string;
   iconColor: string;
-  id: string;
-  onClick: (id: string) => void; 
+  onClick: () => void; 
+  disabled?: boolean;
 }
 
 const ActionButton: React.FC<ActionButtonProps> = 
-  ({ icon, text, hoverColor, borderColor, iconColor, id, onClick, ...props }) => (
+  ({ icon, text, hoverColor, borderColor, iconColor, onClick, disabled, ...props }) => (
   <Button
     variant="outlined"
     sx={{
@@ -25,13 +25,15 @@ const ActionButton: React.FC<ActionButtonProps> =
         },
       },
     }}
-    onClick={() => onClick(id)}  // Passa o id para a função onClick
+    onClick={onClick}
+    disabled={disabled}
     {...props}
   >
     {icon}
     {text}
   </Button>
 );
+
 
 
 export default ActionButton;

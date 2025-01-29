@@ -11,26 +11,37 @@ import {
   IconButton,
   Typography,
   Box,
+  Checkbox
 } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { ListOfClient } from "../../types/types";
 
 type Props = {
   clients: ListOfClient;
+  onSelectClient: (id: string | null) => void;
 };
 
-const ClientsTable: React.FC<Props> = ({ clients }) => {
+const ClientsTable: React.FC<Props> = ({ clients, onSelectClient }) => {
   const [openRows, setOpenRows] = useState<Record<number, boolean>>({});
+  const [selectedClient, setSelectedClient] = useState<string | null>(null);
 
   const toggleRow = (id: number) => {
     setOpenRows((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+
+  const handleCheckboxChange = (id: number) => {
+    const newSelectedClient = selectedClient === id.toString() ? null : id.toString();
+    setSelectedClient(newSelectedClient);
+    onSelectClient(newSelectedClient);
+  };
+  
 
   return (
     <TableContainer component={Paper}>
       <Table size="small">
         <TableHead sx={{ backgroundColor: "#616161" }}>
           <TableRow>
+            <TableCell />
             <TableCell />
             <TableCell sx={{ color: "background.default", fontWeight: "bold"}}>Nome</TableCell>
             <TableCell sx={{ color: "background.default", fontWeight: "bold"}} >CPF</TableCell>
@@ -50,6 +61,11 @@ const ClientsTable: React.FC<Props> = ({ clients }) => {
                   ":hover": { backgroundColor: "#BFBFBF" },
                 }}
               >
+                <TableCell>
+                  <Checkbox  
+                    checked={selectedClient === client.id.toString()}
+                    onChange={() => handleCheckboxChange(client.id)}/>
+                </TableCell>
                 <TableCell>
                   <IconButton
                     onClick={() => toggleRow(client.id)}
