@@ -10,7 +10,7 @@ import SearchBar from "../../shared/components/search-bar/SearchBar";
 import SelectButton from "../../shared/components/select-button/SelectButton";
 import { useGetAllClients } from "../../shared/hooks/client/ClientHook";
 import ClientsTable from "../../shared/components/table-clients/ClientTable";
-import { useError } from "../../shared/context/ErrorContext";
+import { usePopUp } from "../../shared/context/PopUpContext";
 
 // Mock de função para deletar cliente
 const handleDeleteClient = (clientID: string) => {
@@ -35,7 +35,7 @@ export default function Clients() {
     const [orderDirection, setOrderDirection] = useState<string>("");
     const [selectedClient, setSelectedClient] = useState<string | null>(null);
 
-    const { openErrorSnackbar } = useError();
+    const { showMessage } = usePopUp();
 
     // Hook com filtros dinâmicos
     const clients = useGetAllClients({
@@ -46,7 +46,7 @@ export default function Clients() {
 
     // Abre o popup em caso de ocorrer algum erro
     if (clients.error) {
-        openErrorSnackbar(clients.error.message);
+        showMessage(clients.error.message, "error");
     }
 
     return (

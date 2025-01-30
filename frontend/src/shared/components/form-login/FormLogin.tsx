@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useLogin } from "../../hooks/login/LoginHook";
 import { isValidationError, isGenericError } from "../../types/types";
-import { useError } from "../../context/ErrorContext";
+import { usePopUp } from "../../context/PopUpContext";
 
 // Definição do esquema de validação com Yup
 const schema = yup.object({
@@ -29,7 +29,7 @@ interface FormData {
 export default function FormLogin() {
   const navigate = useNavigate();
   const login = useLogin();
-  const { openErrorSnackbar } = useError();
+  const { showMessage } = usePopUp();
 
   const {
     control,
@@ -57,7 +57,7 @@ export default function FormLogin() {
         });
       } 
       else if (isGenericError(error)) {
-        openErrorSnackbar(error.message);
+        showMessage(error.message, "error");
       }
     }
   };

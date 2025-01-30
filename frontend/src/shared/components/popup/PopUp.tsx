@@ -9,13 +9,13 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-interface ErrorSnackbarProps {
+interface PopUpProps {
   open: boolean;
   message: string;
   onClose: () => void;
 }
 
-export const ErrorSnackbar: React.FC<ErrorSnackbarProps> = ({ open, message, onClose }) => {
+export const PopUp: React.FC<PopUpProps> = ({ open, message, onClose }) => {
   return (
     <Snackbar
       open={open}
