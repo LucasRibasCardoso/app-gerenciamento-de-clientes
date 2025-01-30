@@ -14,10 +14,10 @@ import {
   Checkbox
 } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { ListOfClient } from "../../types/types";
+import { ClientResponse } from "../../types/types";
 
 type Props = {
-  clients: ListOfClient;
+  clients: ClientResponse[];
   onSelectClient: (id: string | null) => void;
 };
 

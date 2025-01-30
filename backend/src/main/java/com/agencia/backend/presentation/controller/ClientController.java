@@ -3,6 +3,7 @@ package com.agencia.backend.presentation.controller;
 import com.agencia.backend.presentation.dto.client.ClientRequestDTO;
 import com.agencia.backend.presentation.dto.client.ClientRequestUpdateDTO;
 import com.agencia.backend.presentation.dto.client.ClientResponseDTO;
+import com.agencia.backend.presentation.dto.pagination.PaginatedResponse;
 import com.agencia.backend.presentation.mapper.client.ClientMapper;
 import com.agencia.backend.presentation.validators.client.UrlParametersValidator;
 import com.agencia.backend.domain.entity.Client;
@@ -14,6 +15,7 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -68,7 +70,7 @@ public class ClientController {
   }
 
   @GetMapping
-  public ResponseEntity<List<ClientResponseDTO>> getAllClients(
+  public ResponseEntity<PaginatedResponse<ClientResponseDTO>> getAllClients(
       @RequestParam(required = false) String search,
       @RequestParam(required = false, defaultValue = "id") String orderBy,
       @RequestParam(required = false, defaultValue = "asc") String sortOrder,
@@ -79,13 +81,23 @@ public class ClientController {
     urlParametersValidator.validateOrderBy(orderBy);
     urlParametersValidator.validateSortOrder(sortOrder);
 
-    List<ClientResponseDTO> clientsResponse = findAllClientUseCase
-        .getClients(search, orderBy, sortOrder, page, size)
-        .stream()
-          .map(clientMapper::toDTO)
-          .collect(Collectors.toList());
+    // Busca os clientes paginados
+    Page<Client> clientsPage = findAllClientUseCase
+        .getClients(search, orderBy, sortOrder, page, size);
 
-    return ResponseEntity.ok(clientsResponse);
+    // Mapeia para DTO
+    List<ClientResponseDTO> clientResponse = clientsPage
+        .stream()
+        .map(clientMapper::toDTO)
+        .collect(Collectors.toList());
+
+    // Retorna a resposta paginada
+    return ResponseEntity.ok(new PaginatedResponse<>(
+        clientResponse,
+        clientsPage.getTotalPages(),
+        clientsPage.getTotalElements()
+
+    ));
   }
 
   @DeleteMapping("/{id}")

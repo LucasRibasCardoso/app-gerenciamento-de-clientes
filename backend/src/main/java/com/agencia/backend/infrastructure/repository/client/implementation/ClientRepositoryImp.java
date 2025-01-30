@@ -9,6 +9,7 @@ import com.agencia.backend.presentation.mapper.client.ClientMapper;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -45,17 +46,13 @@ public class ClientRepositoryImp implements ClientRepository {
   }
 
   @Override
-  public List<Client> findAll(String search, String orderBy, String sortOrder, int page, int size) {
+  public Page<Client> findAll(String searchQuery, String orderBy, String sortOrder, int page, int size) {
     Sort sortOder = Sort.by(Sort.Direction.fromString(sortOrder), orderBy);
     Pageable pageable = PageRequest.of(page, size, sortOder);
 
-    Specification<ClientModel> specification = specificationBuilder.build(search);
+    Specification<ClientModel> specification = specificationBuilder.build(searchQuery);
 
-    return jpaRepository.findAll(specification, pageable)
-        .getContent()
-        .stream()
-        .map(clientMapper::toDomain)
-        .collect(Collectors.toList());
+    return jpaRepository.findAll(specification, pageable).map(clientMapper::toDomain);
   }
 
   @Override

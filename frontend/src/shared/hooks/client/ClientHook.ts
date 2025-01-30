@@ -1,18 +1,28 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { GenericError, ListOfClient } from "../../types/types";
+
+import { ClientResponse, GenericError, isGenericError, PaginatedResponse } from "../../types/types";
 import { findAllClients, deleteClient } from "../../services/api/client/ClientService";
 import { usePopUp } from "../../context/PopUpContext";
 
 
 // Hook para buscar todos os clientes
-const useGetAllClients = (filters?: { searchQuery?: string; orderBy?: string; orderDirection?: string }) => {
-  return useQuery<ListOfClient, GenericError>({
+const useGetAllClients = (
+  filters?: {
+    searchQuery?: string;
+    orderBy?: string;
+    orderDirection?: string;
+    page?: number;
+    size?: number;
+  }
+) => {
+
+  return useQuery<PaginatedResponse<ClientResponse>, GenericError>({
     queryKey: ["clients", filters],
     queryFn: async () => {
       const response = await findAllClients(filters);
 
-      if ("statusCode" in response) {
-        throw response; // O React Query trata o erro lançado
+      if (isGenericError(response)) {
+        throw response;
       }
 
       return response;
@@ -29,7 +39,7 @@ const useDeleteClient = () => {
       const response = await deleteClient(clientID);
 
       // Se `result` for um erro (GenericError), lança-o
-      if  (response && "statusCode" in response) {
+      if  (isGenericError(response)) {
         throw response;
       }
     },

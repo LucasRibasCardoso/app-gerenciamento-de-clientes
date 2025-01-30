@@ -1,14 +1,14 @@
 package com.agencia.backend.domain.repository;
 
 import com.agencia.backend.domain.entity.Client;
-import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
 
 public interface ClientRepository {
 
   Client save(Client client);
 
-  List<Client> findAll(String search, String orderBy, String sortOrder, int page, int size);
+  Page<Client> findAll(String search, String orderBy, String sortOrder, int page, int size);
 
   Optional<Client> findById(Long id);
 

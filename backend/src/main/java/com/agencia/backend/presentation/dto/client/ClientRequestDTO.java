@@ -34,6 +34,7 @@ public record ClientRequestDTO(
     @Size(max = 100, message = "O e-mail deve ter no máximo 100 caracteres")
     String email,
 
-  PassportDTO passport,
+    PassportDTO passport,
 
-  AddressDTO address){}
+    AddressDTO address)
+{}

@@ -5,8 +5,11 @@ export type UserResponse = {
     roles: Set<string>;
 }; 
 
-// Tipo para a lista de usuários
-export type ListOfUser = UserResponse[];
+export type PaginatedResponse<T> = {
+    data: T[]; 
+    totalPages: number;
+    totalElements: number;
+  };
 
 export type PassportResponse = {
     number: string | null;
@@ -35,8 +38,6 @@ export type ClientResponse = {
     passport: PassportResponse | null;
     address: AddressResponse | null;
 };
-
-export type ListOfClient = ClientResponse[];
 
 export type LoginResponse = {
     username: string;
