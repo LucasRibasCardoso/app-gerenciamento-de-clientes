@@ -41,8 +41,8 @@ const ClientsTable: React.FC<Props> = ({ clients, onSelectClient }) => {
       <Table size="small">
         <TableHead sx={{ backgroundColor: "#616161", height: "45px"}}>
           <TableRow>
-            <TableCell />
-            <TableCell />
+            <TableCell width={"75px"} />
+            <TableCell width={"75px"} />
             <TableCell sx={{ color: "background.default", fontWeight: "bold", fontSize: "16px"}}>Nome</TableCell>
             <TableCell sx={{ color: "background.default", fontWeight: "bold", fontSize: "16px"}} >CPF</TableCell>
             <TableCell sx={{ color: "background.default", fontWeight: "bold", fontSize: "16px"}} >Telefone</TableCell>
@@ -61,12 +61,12 @@ const ClientsTable: React.FC<Props> = ({ clients, onSelectClient }) => {
                   ":hover": { backgroundColor: "#BFBFBF" },
                 }}
               >
-                <TableCell>
+                <TableCell width={"75px"}>
                   <Checkbox  
                     checked={selectedClient === client.id.toString()}
                     onChange={() => handleCheckboxChange(client.id)}/>
                 </TableCell>
-                <TableCell>
+                <TableCell width={"75px"}>
                   <IconButton
                     onClick={() => toggleRow(client.id)}
                     aria-label="expand row"
@@ -94,7 +94,7 @@ const ClientsTable: React.FC<Props> = ({ clients, onSelectClient }) => {
                       {/* Endereço */}
                       <Box>
                         <Table size="small" aria-label="address">
-                          <Typography variant="subtitle1" component="div">
+                          <Typography variant="subtitle1">
                             Endereço
                           </Typography>
                           <TableBody>
@@ -137,7 +137,7 @@ const ClientsTable: React.FC<Props> = ({ clients, onSelectClient }) => {
                       {/* Passaporte */}
                       <Box>
                         <Table size="small" aria-label="passport">
-                          <Typography variant="subtitle1" component="div">
+                          <Typography variant="subtitle1">
                             Passaporte
                           </Typography>
                           <TableBody>

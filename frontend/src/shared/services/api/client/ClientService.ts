@@ -33,4 +33,25 @@ const findAllClients = async (params?: {searchQuery?: string; orderBy?: string; 
     }
 };
 
-export { findAllClients };
+// Função para deletar um cliente
+const deleteClient = async (clientId: number) => {
+    try {
+        const url = `/clients/${clientId}`;
+        await Api.delete(url);
+    }
+    catch (error: any) {
+        if (error.response){
+            return {
+                message: error.response.data.message || 
+                "Não foi possível deletar o cliente.",
+                statusCode: error.response.status || 500,
+            } as GenericError;
+        }
+        return { 
+            message: "Ocorreu um erro inesperado ao tentar deletar o cliente. Verifique sua conexão e tente novamente.", 
+            statusCode: 500 
+        } as GenericError;
+    }
+};
+
+export { findAllClients, deleteClient };

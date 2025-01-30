@@ -1,21 +1,11 @@
 import { useState } from "react";
-import { Box, Button } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { Box, Backdrop, CircularProgress } from "@mui/material";
 
 import NavigationBar from "../../shared/components/navigation-bar/NavigationBar";
-import ActionButton from "../../shared/components/action-button/ActionButton";
-import SearchBar from "../../shared/components/search-bar/SearchBar";
-import SelectButton from "../../shared/components/select-button/SelectButton";
-import { useGetAllClients } from "../../shared/hooks/client/ClientHook";
+import { useGetAllClients, useDeleteClient } from "../../shared/hooks/client/ClientHook";
 import ClientsTable from "../../shared/components/table-clients/ClientTable";
 import { usePopUp } from "../../shared/context/PopUpContext";
-
-// Mock de função para deletar cliente
-const handleDeleteClient = (clientID: string) => {
-    console.log("Cliente para ser deletado: " + clientID);
-};
+import FunctionalityBar from "../../shared/components/funcionality-bar/FuncionalityBar";
 
 // Mock de função para editar cliente
 const handleEditClient = (clientID: string) => {
@@ -44,6 +34,9 @@ export default function Clients() {
         orderDirection,
     });
 
+    // Hook para deletar cliente
+    const { mutate:deleteClient, isPending: isDeleting } = useDeleteClient();
+
     // Abre o popup em caso de ocorrer algum erro
     if (clients.error) {
         showMessage(clients.error.message, "error");
@@ -55,73 +48,34 @@ export default function Clients() {
             <NavigationBar />
 
             {/* Barra de funcionalidade */}
-            <Box sx={{ display: "flex", justifyContent: "space-between", margin: "15px", height: "45px" }}>
-                <Box sx={{ display: "flex", gap: "15px" }}>
-                    {/* Barra de pesquisa */}
-                    <SearchBar onSearch={(query) => setSearchQuery(query)} />
-
-                    {/* Seleção de campo de ordenação */}
-                    <SelectButton
-                        label="Ordenar"
-                        value={orderBy}
-                        options={[
-                            { value: "id", label: "Recente Adicionado" },
-                            { value: "completeName", label: "Nome" },
-                        ]}
-                        onChange={(value) => setOrderBy(value)}
-                    />
-
-                    {/* Seleção de direção da ordenação */}
-                    <SelectButton
-                        label="Direção"
-                        value={orderDirection}
-                        options={[
-                            { value: "asc", label: "Crescente" },
-                            { value: "desc", label: "Decrescente" },
-                        ]}
-                        onChange={(value) => setOrderDirection(value as "asc" | "desc")}
-                    />
-                </Box>
-
-                <Box sx={{ display: "flex", gap: "15px" }}>
-                    <ActionButton
-                        icon={<DeleteIcon sx={{ mr: 1 }} />}
-                        text="DELETAR"
-                        hoverColor="#b00020"
-                        borderColor="primary.main"
-                        iconColor="primary.main"
-                        onClick={() => {
-                            if (selectedClient) handleDeleteClient(selectedClient);
-                        }}
-                    />
-
-                    <ActionButton
-                        icon={<EditIcon sx={{ mr: 1 }} />}
-                        text="EDITAR"
-                        hoverColor="#0A5C5A"
-                        borderColor="#404040"
-                        iconColor="primary"
-                        onClick={() => {
-                            if (selectedClient) handleEditClient(selectedClient);
-                        }}
-                    />
-
-                    <Button
-                        startIcon={<PersonAddIcon />}
-                        disableElevation
-                        variant="contained"
-                        onClick={handleNewClient}
-                    >
-                        CADASTRAR CLIENTE
-                    </Button>
-                </Box>
-            </Box>
+            <FunctionalityBar 
+                onSearch={(query) => setSearchQuery(query)}
+                orderBy={orderBy}
+                onOrderByChange={(value) => setOrderBy(value)}
+                orderDirection={orderDirection}
+                onOrderDirectionChange={(value) => setOrderDirection(value as "asc" | "desc")}
+                selectedClient={selectedClient}
+                onDeleteClient={() => {
+                    if (selectedClient) deleteClient(Number(selectedClient));
+                }}
+                onEditClient={() => {
+                    if (selectedClient) handleEditClient(selectedClient);
+                }}
+                onCreateClient={handleNewClient}
+            />
 
             {/* Tabela de clientes */}
             <ClientsTable
                 clients={clients.data || []}
                 onSelectClient={(id) => setSelectedClient(id)} 
             />
+
+            <Backdrop
+                sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+                open={isDeleting}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </Box>
     );
 }

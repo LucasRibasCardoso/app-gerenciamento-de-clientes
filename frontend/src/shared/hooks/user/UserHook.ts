@@ -1,10 +1,12 @@
 import { useMutation, useQuery, useQueryClient  } from "@tanstack/react-query";
 import { findAllUsers, deleteUser } from "../../services/api/user/UserService";
 import { ListOfUser, GenericError } from "../../types/types";
+import { usePopUp } from "../../context/PopUpContext";
 
 // Hook para deletar um usuário
 const useDeleteUser = () => {
   const queryClient = useQueryClient();
+  const { showMessage } = usePopUp();
 
   return useMutation<void, GenericError, string>({
       mutationFn: async (userId) => {
@@ -17,9 +19,11 @@ const useDeleteUser = () => {
       },
       onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["users"] });
+          showMessage("Usuário deletado com sucesso.", "success", );
       },
       onError: (error) => {
-          console.error(`Error (${error.statusCode}): ${error.message}`);
+          showMessage(error.message || "Erro ao deletar usuário", "error");
+          console.error("Erro ao deletar usuário: ", error);
       },
   });
 };
