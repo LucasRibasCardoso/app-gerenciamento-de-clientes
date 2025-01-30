@@ -18,6 +18,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 @ExtendWith(MockitoExtension.class)
 class FindAllClientUseCaseImpTest {
@@ -66,15 +69,19 @@ class FindAllClientUseCaseImpTest {
     int page = 0;
     int size = 10;
 
-    when(clientRepository.findAll(search, orderBy, sortOrder, page, size)).thenReturn(clients);
+    Page<Client> clientPage = new PageImpl<>(clients, PageRequest.of(page, size), clients.size());
+
+    when(clientRepository.findAll(search, orderBy, sortOrder, page, size)).thenReturn(clientPage);
 
     // Act
-    List<Client> result = findAllClientUseCaseImp.getClients(search, orderBy, sortOrder, page, size);
+    Page<Client> result = findAllClientUseCaseImp.getClients(search, orderBy, sortOrder, page, size);
 
     // Assert
     assertAll(
         () -> assertNotNull(result),
-        () -> assertEquals(1, result.size())
+        () -> assertEquals(1, result.getTotalElements()),
+        () -> assertEquals(1, result.getTotalPages()),
+        () -> assertEquals(clients, result.getContent())
     );
   }
 
@@ -88,15 +95,19 @@ class FindAllClientUseCaseImpTest {
     int page = 0;
     int size = 10;
 
-    when(clientRepository.findAll(search, orderBy, sortOrder, page, size)).thenReturn(clients);
+    Page<Client> clientPage = new PageImpl<>(clients, PageRequest.of(page, size), clients.size());
+
+    when(clientRepository.findAll(search, orderBy, sortOrder, page, size)).thenReturn(clientPage);
 
     // Act
-    List<Client> result = findAllClientUseCaseImp.getClients(search, orderBy, sortOrder, page, size);
+    Page<Client> result = findAllClientUseCaseImp.getClients(search, orderBy, sortOrder, page, size);
 
     // Assert
     assertAll(
         () -> assertNotNull(result),
-        () -> assertEquals(0, result.size())
+        () -> assertEquals(0, result.getTotalElements()),
+        () -> assertEquals(0, result.getTotalPages()),
+        () -> assertEquals(clients, result.getContent())
     );
   }
 }

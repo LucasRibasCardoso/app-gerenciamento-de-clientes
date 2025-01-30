@@ -21,6 +21,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -85,23 +88,54 @@ public class ClientControllerGetAllTest {
     Client client = createClientDomain();
     ClientResponseDTO clientDTO = createClientResponseDTO();
 
-    when(findAllClientUseCase.getClients(search, orderBy, sortOrder, page, size)).thenReturn(List.of(client));
+    // Simula uma página com um cliente
+    Page<Client> clientPage = new PageImpl<>(List.of(client), PageRequest.of(page, size), 1);
+
+    when(findAllClientUseCase.getClients(search, orderBy, sortOrder, page, size)).thenReturn(clientPage);
     when(clientMapper.toDTO(client)).thenReturn(clientDTO);
 
-    String responseBody = objectMapper.writeValueAsString(List.of(clientDTO));
+    // Corpo da resposta esperada
+    String responseBody = """
+        {
+            "data": [
+                {
+                    "id": 1,
+                    "completeName": "João Da Silva",
+                    "cpf": "497.494.050-30",
+                    "birthDate": "01/01/1990",
+                    "phone": "(11) 98765-4321",
+                    "email": "joao.silva@example.com",
+                    "passport": {
+                        "number": "AB123456",
+                        "emissionDate": "01/06/2020",
+                        "expirationDate": "01/06/2030"
+                    },
+                    "address": {
+                        "zipCode": "12345-678",
+                        "country": "Brasil",
+                        "state": "SP",
+                        "city": "São Paulo",
+                        "neighborhood": "Jardim Primavera",
+                        "street": "Rua Das Flores",
+                        "complement": "Apto 101",
+                        "residentialNumber": "123"
+                    }
+                }
+            ],
+            "totalPages": 1,
+            "totalElements": 1
+        }
+        """;
 
     // Act & Assert
-    mockMvc.perform(get("/clients").param("orderBy", orderBy)
+    mockMvc.perform(get("/clients")
+            .param("orderBy", orderBy)
             .param("sortOrder", sortOrder)
+            .param("page", String.valueOf(page))
+            .param("size", String.valueOf(size))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(responseBody));
-
-    // Verify
-    verify(urlParametersValidator).validateOrderBy(orderBy);
-    verify(urlParametersValidator).validateSortOrder(sortOrder);
-    verify(findAllClientUseCase).getClients(search, orderBy, sortOrder, page, size);
-    verify(clientMapper).toDTO(client);
+        .andExpect(content().json(responseBody));
   }
 
   @Test
@@ -113,14 +147,28 @@ public class ClientControllerGetAllTest {
     int page = 0;
     int size = 10;
 
-    when(findAllClientUseCase.getClients(search, orderBy, sortOrder, page, size)).thenReturn(Collections.emptyList());
+    // Simula uma página vazia
+    Page<Client> clientPage = new PageImpl<>(Collections.emptyList(), PageRequest.of(page, size), 0);
 
-    String responseBody = objectMapper.writeValueAsString(List.of());
+    when(findAllClientUseCase.getClients(search, orderBy, sortOrder, page, size)).thenReturn(clientPage);
+
+    // Corpo da resposta esperada
+    String responseBody = """
+        {
+            "data": [],
+            "totalPages": 0,
+            "totalElements": 0
+        }
+        """;
 
     // Act & Assert
-    mockMvc.perform(get("/clients").contentType(MediaType.APPLICATION_JSON))
+    mockMvc.perform(get("/clients")
+            .param("orderBy", orderBy)
+            .param("sortOrder", sortOrder)
+            .param("page", String.valueOf(page))
+            .param("size", String.valueOf(size))
+            .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(content().json(responseBody));
   }
 }

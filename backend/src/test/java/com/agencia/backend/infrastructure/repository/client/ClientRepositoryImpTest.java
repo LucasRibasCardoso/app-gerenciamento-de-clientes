@@ -198,27 +198,34 @@ class ClientRepositoryImpTest {
     int page = 0;
     int size = 5;
 
-    Sort sort = Sort.by(Sort.Direction.ASC, orderBy);
+    // Configuração do Sort e Pageable
+    Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), orderBy);
     Pageable pageable = PageRequest.of(page, size, sort);
+
+    // Configuração da Specification
     Specification<ClientModel> specification = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
 
+    // Criação dos objetos de teste
     ClientModel clientModel = createClientModel();
     Client client = createClientDomain();
 
+    // Configuração do Page<ClientModel>
     Page<ClientModel> pageResult = new PageImpl<>(List.of(clientModel));
 
+    // Mocking dos comportamentos esperados
     when(specificationBuilder.build(search)).thenReturn(specification);
     when(clientJpaRepository.findAll(specification, pageable)).thenReturn(pageResult);
     when(clientMapper.toDomain(clientModel)).thenReturn(client);
 
     // Act
-    List<Client> result = clientRepository.findAll(search, orderBy, sortOrder, page, size);
+    Page<Client> result = clientRepository.findAll(search, orderBy, sortOrder, page, size);
 
     // Assert
     assertNotNull(result);
-    assertEquals(1, result.size());
-    assertEquals(client, result.get(0));
+    assertEquals(1, result.getTotalElements());
+    assertEquals(client, result.getContent().get(0));
 
+    // Verificação dos mocks
     verify(specificationBuilder).build(search);
     verify(clientJpaRepository).findAll(specification, pageable);
     verify(clientMapper).toDomain(clientModel);
@@ -233,27 +240,33 @@ class ClientRepositoryImpTest {
     int page = 0;
     int size = 5;
 
-    Sort sort = Sort.by(Sort.Direction.ASC, orderBy);
+    // Configuração do Sort e Pageable
+    Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), orderBy);
     Pageable pageable = PageRequest.of(page, size, sort);
+
+    // Configuração da Specification
     Specification<ClientModel> specification = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
 
+    // Configuração do Page<ClientModel> vazio
     Page<ClientModel> pageResult = new PageImpl<>(Collections.emptyList());
 
+    // Mocking dos comportamentos esperados
     when(specificationBuilder.build(search)).thenReturn(specification);
     when(clientJpaRepository.findAll(specification, pageable)).thenReturn(pageResult);
 
     // Act
-    List<Client> result = clientRepository.findAll(search, orderBy, sortOrder, page, size);
+    Page<Client> result = clientRepository.findAll(search, orderBy, sortOrder, page, size);
 
     // Assert
     assertNotNull(result);
     assertTrue(result.isEmpty());
+    assertEquals(0, result.getTotalElements());
 
+    // Verificação dos mocks
     verify(specificationBuilder).build(search);
     verify(clientJpaRepository).findAll(specification, pageable);
     verify(clientMapper, never()).toDomain(any(ClientModel.class));
   }
-
   @Test
   void ShouldReturnTrue_WhenClientByCpfExists() {
     // Arrange
