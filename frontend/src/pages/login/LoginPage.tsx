@@ -1,19 +1,9 @@
-import { Box, Typography, Snackbar, Alert } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import AirplaneSVG from "../../shared/assets/images/airplane-around-world.svg";
 import LoginForm from "../../shared/components/form-login/FormLogin";
-import { useState } from "react";
 
 export default function Login() {
   document.title = "Login - Client Management";
-
-  const [openAlert, setOpenAlert] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-
-  const handleError = (message: string) => {
-    setErrorMessage(message);
-    setOpenAlert(true);
-  };
-
 
   return (
     <Box
@@ -52,23 +42,9 @@ export default function Login() {
           alignItems: "center",
         }}
       >
-        <LoginForm onError={handleError} />
+        <LoginForm/>
       </Box>
 
-      {/* Snackbar para exibir erros */}
-      <Snackbar
-        open={openAlert}
-        autoHideDuration={5000}
-        onClose={() => setOpenAlert(false)}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      >
-        <Alert severity="error" onClose={() => setOpenAlert(false)}>
-          {errorMessage}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }

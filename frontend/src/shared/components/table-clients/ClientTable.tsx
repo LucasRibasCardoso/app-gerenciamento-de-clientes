@@ -39,15 +39,15 @@ const ClientsTable: React.FC<Props> = ({ clients, onSelectClient }) => {
   return (
     <TableContainer component={Paper}>
       <Table size="small">
-        <TableHead sx={{ backgroundColor: "#616161" }}>
+        <TableHead sx={{ backgroundColor: "#616161", height: "45px"}}>
           <TableRow>
             <TableCell />
             <TableCell />
-            <TableCell sx={{ color: "background.default", fontWeight: "bold"}}>Nome</TableCell>
-            <TableCell sx={{ color: "background.default", fontWeight: "bold"}} >CPF</TableCell>
-            <TableCell sx={{ color: "background.default", fontWeight: "bold"}} >Telefone</TableCell>
-            <TableCell sx={{ color: "background.default", fontWeight: "bold"}} >Email</TableCell>
-            <TableCell sx={{ color: "background.default", fontWeight: "bold"}} >Data de Nascimento</TableCell>
+            <TableCell sx={{ color: "background.default", fontWeight: "bold", fontSize: "16px"}}>Nome</TableCell>
+            <TableCell sx={{ color: "background.default", fontWeight: "bold", fontSize: "16px"}} >CPF</TableCell>
+            <TableCell sx={{ color: "background.default", fontWeight: "bold", fontSize: "16px"}} >Telefone</TableCell>
+            <TableCell sx={{ color: "background.default", fontWeight: "bold", fontSize: "16px"}} >Email</TableCell>
+            <TableCell sx={{ color: "background.default", fontWeight: "bold", fontSize: "16px"}} >Data de Nascimento</TableCell>
           </TableRow>
         </TableHead>
         

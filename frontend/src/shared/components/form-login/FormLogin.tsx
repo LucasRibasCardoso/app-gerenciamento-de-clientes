@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useLogin } from "../../hooks/login/LoginHook";
 import { isValidationError, isGenericError } from "../../types/types";
+import { useError } from "../../context/ErrorContext";
 
 // Definição do esquema de validação com Yup
 const schema = yup.object({
@@ -25,13 +26,10 @@ interface FormData {
   password: string;
 }
 
-interface LoginFormProps {
-  onError: (message: string) => void; // Callback para enviar mensagens de erro ao componente pai
-}
-
-export default function FormLogin({ onError }: LoginFormProps) {
+export default function FormLogin() {
   const navigate = useNavigate();
   const login = useLogin();
+  const { openErrorSnackbar } = useError();
 
   const {
     control,
@@ -49,15 +47,17 @@ export default function FormLogin({ onError }: LoginFormProps) {
         password: data.password,
       });
       navigate("/home");
-    } catch (error) {
+    } 
+    catch (error) {
       if (isValidationError(error)) {
         error.errors.forEach((erro) => {
           setError(erro.field as keyof FormData, {
             message: erro.message,
           });
         });
-      } else if (isGenericError(error)) {
-        onError(error.message); // Envia o erro genérico para o componente pai
+      } 
+      else if (isGenericError(error)) {
+        openErrorSnackbar(error.message);
       }
     }
   };
