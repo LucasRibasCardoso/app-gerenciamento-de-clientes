@@ -55,12 +55,7 @@ const ClientsTable: React.FC<Props> = ({ clients, onSelectClient }) => {
           {clients.map((client) => (
             <React.Fragment key={client.id}>
               {/* Linha Principal */}
-              <TableRow 
-                sx={{
-                  backgroundColor: openRows[client.id] ? "#BFBFBF" : "inherit",
-                  ":hover": { backgroundColor: "#BFBFBF" },
-                }}
-              >
+              <TableRow>
                 <TableCell width={"75px"}>
                   <Checkbox  
                     checked={selectedClient === client.id.toString()}

@@ -43,6 +43,8 @@ export default function NavigationBar() {
             sx={{
                 backgroundColor: "background.darkGreen",
                 position: "static",
+                height: "7vh",
+                minHeight: "65px"
             }}
         >
             <Container disableGutters maxWidth={false}>

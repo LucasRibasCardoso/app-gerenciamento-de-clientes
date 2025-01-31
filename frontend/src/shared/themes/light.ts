@@ -26,8 +26,8 @@ let LightTheme = createTheme({
       main: "#b00020"
     },
     background: {
-      default: "#d9d9d9",
-      paper: "#d9d9d9",
+      default: "#fff",
+      paper: "#fff",
       darkGreen: "#0D1F23",
       buttonHover: "rgba(255, 255, 255, 0.2)"
     },
