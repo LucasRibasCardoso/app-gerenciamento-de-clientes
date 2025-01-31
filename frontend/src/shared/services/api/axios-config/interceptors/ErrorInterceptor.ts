@@ -11,7 +11,10 @@ export const errorInterceptor = (error: AxiosError) => {
             return Promise.reject(error);
         }
         // Caso contrário (token expirado), redireciona para login
-        localStorage.setItem("logoutMessage", "Sua sessão expirou. Faça login novamente.");
+        if (localStorage.getItem("token")) {
+            localStorage.removeItem("token");
+        }
+        
         setTimeout(() => {
             window.location.href = "/login";
         }, 200);

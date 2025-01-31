@@ -17,7 +17,6 @@ interface NavButtonProps {
     label: string;
   }
   
-  // Componente reutilizável para os botões
   const NavButton: React.FC<NavButtonProps> = ({ href, icon, label }) => (
     <Button
          sx={{ my: 2, color: "white", fontWeight: 600 ,

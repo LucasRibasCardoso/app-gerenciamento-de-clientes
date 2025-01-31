@@ -1,6 +1,6 @@
 import Api from "../axios-config/AxiosConfig";
 
-import { LoginResponse, GenericError, ValidationErrorsResponse } from "../../../types/types";
+import { LoginResponse, GenericError, ValidationErrorsResponse, isValidationError } from "../../../types/types";
 
 // Função para efetuar login
 const login = async (
@@ -17,7 +17,7 @@ const login = async (
             const responseData = error.response.data;
 
             // Verifica se o erro é do tipo ValidationErrorsResponse
-            if (responseData.errors && Array.isArray(responseData.errors)) {
+            if (isValidationError(error)) {
                 return {
                     message: responseData.message || 
                         "Um ou mais campos apresentam erros de validação. Por favor, corrija e tente novamente.",

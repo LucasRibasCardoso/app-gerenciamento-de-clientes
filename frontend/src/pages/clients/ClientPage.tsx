@@ -25,7 +25,7 @@ export default function Clients() {
     const [orderDirection, setOrderDirection] = useState<string>("");
     const [selectedClient, setSelectedClient] = useState<string | null>(null);
     const [page, setPage] = useState<number>(1);
-    const [size, setSize] = useState<number>(10);
+    const [size, setSize] = useState<number>(12); // mostra 12 clientes por pagina
 
     const { showMessage } = usePopUp();
 
@@ -48,6 +48,7 @@ export default function Clients() {
 
     // Função para mudar de página
     const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
+        event.preventDefault();
         setPage(newPage);
     };
 

@@ -38,7 +38,6 @@ const useDeleteClient = () => {
     mutationFn: async (clientID) => {
       const response = await deleteClient(clientID);
 
-      // Se `result` for um erro (GenericError), lança-o
       if  (isGenericError(response)) {
         throw response;
       }

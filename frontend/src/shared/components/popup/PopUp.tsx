@@ -15,7 +15,7 @@ interface PopUpProps {
   onClose: () => void;
 }
 
-export const PopUp: React.FC<PopUpProps> = ({ open, message, onClose }) => {
+const PopUp: React.FC<PopUpProps> = ({ open, message, onClose }) => {
   return (
     <Snackbar
       open={open}
@@ -32,3 +32,5 @@ export const PopUp: React.FC<PopUpProps> = ({ open, message, onClose }) => {
     </Snackbar>
   );
 };
+
+export { PopUp };

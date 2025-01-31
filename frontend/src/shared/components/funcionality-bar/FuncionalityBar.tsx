@@ -6,7 +6,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 import ActionButton from "../action-button/ActionButton";
 import SearchBar from "../search-bar/SearchBar";
-import SelectButton from "../select-button/SelectButton"; 
+import SelectButton from "../action-button/SelectButton"; 
 
 interface FunctionalityBarProps {
   onSearch: (query: string) => void;
