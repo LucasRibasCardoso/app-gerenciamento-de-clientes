@@ -75,7 +75,7 @@ public class ClientController {
       @RequestParam(required = false, defaultValue = "id") String orderBy,
       @RequestParam(required = false, defaultValue = "asc") String sortOrder,
       @RequestParam(required = false, defaultValue = "0") int page,
-      @RequestParam(required = false, defaultValue = "10") int size
+      @RequestParam(required = false, defaultValue = "12") int size
   )
   {
     urlParametersValidator.validateOrderBy(orderBy);
@@ -96,7 +96,6 @@ public class ClientController {
         clientResponse,
         clientsPage.getTotalPages(),
         clientsPage.getTotalElements()
-
     ));
   }
 
