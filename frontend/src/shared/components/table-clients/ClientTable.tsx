@@ -37,7 +37,7 @@ const ClientsTable: React.FC<Props> = ({ clients, onSelectClient }) => {
   
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ mt: "15px" }}>
       <Table size="small">
         <TableHead sx={{ backgroundColor: "#616161", height: "45px"}}>
           <TableRow>

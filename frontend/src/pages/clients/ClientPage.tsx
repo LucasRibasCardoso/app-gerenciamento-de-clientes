@@ -1,25 +1,17 @@
 import { useState } from "react";
-import { Box, Backdrop, CircularProgress, Pagination } from "@mui/material";
+import { Box, Backdrop, CircularProgress, Pagination} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-import NavigationBar from "../../shared/components/navigation-bar/NavigationBar";
 import { useGetAllClients, useDeleteClient } from "../../shared/hooks/client/ClientHook";
 import ClientsTable from "../../shared/components/table-clients/ClientTable";
 import { usePopUp } from "../../shared/context/PopUpContext";
 import FunctionalityBar from "../../shared/components/funcionality-bar/FuncionalityBar";
-
-// Mock de função para editar cliente
-const handleEditClient = (clientID: string) => {
-    console.log("Cliente para ser editado: " + clientID);
-};
-
-// Mock de função para criar novo cliente
-const handleNewClient = () => {
-    console.log("Criar um novo cliente.");
-};
+import Layout from "../../shared/layouts/Layout";
 
 export default function Clients() {
     document.title = "Clientes - Client Management";
 
+    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [orderBy, setOrderBy] = useState<string>("");
     const [orderDirection, setOrderDirection] = useState<string>("");
@@ -53,10 +45,7 @@ export default function Clients() {
     };
 
     return (
-        <Box sx={{ backgroundColor: "background.default", width: "100vw", height: "100vh" }}>
-            {/* Barra de navegação */}
-            <NavigationBar />
-
+        <Layout>
             {/* Barra de funcionalidade */}
             <FunctionalityBar
                 onSearch={(query) => setSearchQuery(query)}
@@ -69,9 +58,9 @@ export default function Clients() {
                     if (selectedClient) deleteClient(Number(selectedClient));
                 }}
                 onEditClient={() => {
-                    if (selectedClient) handleEditClient(selectedClient);
+                    if (selectedClient) navigate("/cliente/" + selectedClient)
                 }}
-                onCreateClient={handleNewClient}
+                onCreateClient={() => navigate("/cliente")}
             />
 
             {/* Tabela de clientes */}
@@ -97,6 +86,7 @@ export default function Clients() {
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
-        </Box>
+
+        </Layout>
     );
 }

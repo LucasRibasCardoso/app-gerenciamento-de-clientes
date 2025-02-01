@@ -1,18 +1,19 @@
 import { Box, Typography } from '@mui/material';
 
-import NavigationBar from '../../shared/components/navigation-bar/NavigationBar';
 import MapSVG from "../../shared/assets/images/Study abroad-rafiki 1.svg";
 import CurrencyTable from '../../shared/components/currency-table/CurrencyTable';
+import Layout from '../../shared/layouts/Layout';
 
 export default function Home() {
     return(
-        <Box sx={{
-            width: "100vw",
-            height: "93vh",
-          }}>
-           <NavigationBar/>
-
-            <Box sx={{ height: "100%", display: "flex" }}>
+        <Layout centerBody={true}>
+            <Box 
+                sx={{ 
+                    width: "100%",
+                    display: "flex", 
+                    alignItems: "center",
+                    gap: "20px"
+                }}>
                 <Box 
                     sx={{ 
                         width: "50%", 
@@ -40,6 +41,6 @@ export default function Home() {
                     <CurrencyTable/>
                 </Box>
             </Box>
-        </Box>
+        </Layout>
     );
 }
