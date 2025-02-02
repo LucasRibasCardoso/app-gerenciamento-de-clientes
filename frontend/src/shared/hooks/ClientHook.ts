@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient  } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 import { 
@@ -28,7 +28,7 @@ const useGetAllClients = (
       const response = await findAllClients(filters);
 
       if (isGenericError(response)) {
-        throw response;
+        throw response;        
       }
 
       return response;

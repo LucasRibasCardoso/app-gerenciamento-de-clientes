@@ -11,17 +11,31 @@ import {
   IconButton,
   Typography,
   Box,
-  Checkbox
+  Checkbox,
+  TablePagination
 } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { ClientResponse } from "../../types/types";
 
 type Props = {
+  pageSize: number;
+  currentPage: number;
+  totalElements: number;
   clients: ClientResponse[];
   onSelectClient: (id: string | null) => void;
+  onPageChange: (newPage: number) => void;
+  onPageSizeChange: (size: number) => void;
 };
 
-const ClientsTable: React.FC<Props> = ({ clients, onSelectClient }) => {
+const ClientsTable: React.FC<Props> = ({
+  pageSize,
+  currentPage,
+  totalElements: totalPages,
+  clients,
+  onSelectClient,
+  onPageChange,
+  onPageSizeChange
+}) => {
   const [openRows, setOpenRows] = useState<Record<number, boolean>>({});
   const [selectedClient, setSelectedClient] = useState<string | null>(null);
 
@@ -35,9 +49,9 @@ const ClientsTable: React.FC<Props> = ({ clients, onSelectClient }) => {
     onSelectClient(newSelectedClient);
   };
   
-
   return (
-    <TableContainer component={Paper} sx={{ mt: "15px" }}>
+    <Box>
+      <TableContainer component={Paper} sx={{ mt: "15px" }}>
       <Table size="small">
         <TableHead sx={{ backgroundColor: "#616161", height: "45px"}}>
           <TableRow>
@@ -168,7 +182,23 @@ const ClientsTable: React.FC<Props> = ({ clients, onSelectClient }) => {
           )}
         </TableBody>
       </Table>
-    </TableContainer>
+      </TableContainer>
+
+      {/* Paginação */}
+      <Box sx={{ display: "flex", justifyContent: "center", margin: 2 }}>
+        <TablePagination
+          component="div"
+          count={totalPages}
+          rowsPerPage={pageSize}
+          page={currentPage}
+          onPageChange={(_, newPage) => onPageChange(newPage)}
+          onRowsPerPageChange={(event) => onPageSizeChange(parseInt(event.target.value, 10))}
+          rowsPerPageOptions={[5, 10, 25, 50]}
+          labelRowsPerPage="Clientes por página"
+        />
+      </Box>
+    </Box>
+
   );
 };
 
