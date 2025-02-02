@@ -37,7 +37,7 @@ export default function Clients() {
           showMessage(error.message, "error");
         }
       }, [isError, error, showMessage]);
-      
+
     // Hook para deletar cliente
     const { mutate: deleteClient, isPending: isDeleting } = useDeleteClient();
 
@@ -66,11 +66,11 @@ export default function Clients() {
 
     return (
         <Layout>
+            
             {/* Backdrop para loading */}
             <Backdrop
                 sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
-                open={isDeleting || isLoading}
-            >
+                open={isDeleting || isLoading}>
                 <CircularProgress color="inherit" />
             </Backdrop>
 
@@ -133,7 +133,6 @@ export default function Clients() {
                 />
                 </Box>
             </Modal>
-
 
         </Layout>
     );
