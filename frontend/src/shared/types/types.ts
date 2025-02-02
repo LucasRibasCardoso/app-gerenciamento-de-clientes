@@ -32,12 +32,22 @@ export type ClientResponse = {
     id: number;
     completeName: string;
     cpf: string;
-    birthDate: string | null;
+    birthDate: string;
+    phone: string | null;
+    email: string | null;
+    passport: PassportResponse;
+    address: AddressResponse;
+};
+
+export type ClientRequest = {
+    completeName: string;
+    cpf: string;
+    birthDate: string;
     phone: string | null;
     email: string | null;
     passport: PassportResponse | null;
     address: AddressResponse | null;
-};
+}
 
 export type LoginResponse = {
     username: string;
@@ -52,8 +62,8 @@ export type GenericError = {
 
 // Formato de erro de validação
 export type ValidationError = {
-    field: string; // Nome do campo que causou o erro
-    message: string; // Mensagem de erro para o campo
+    field: string;
+    message: string;
 };
 
 export type ValidationErrorsResponse = {

@@ -1,10 +1,10 @@
 import Api from "../axios-config/AxiosConfig";
-import { ClientResponse, GenericError } from "../../../types/types";
+import { ClientResponse as UserResponsee, GenericError } from "../../../types/types";
 
 // Função para buscar todos os usuários
-const findAllUsers = async (): Promise<ClientResponse[] | GenericError> => {
+const findAllUsers = async (): Promise<UserResponsee[] | GenericError> => {
     try {
-        const { data } = await Api.get<ClientResponse[] | GenericError>("/users");
+        const { data } = await Api.get<UserResponsee[] | GenericError>("/users");
         return data;
     } 
     catch (error: any) {

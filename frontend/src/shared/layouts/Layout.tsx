@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import NavigationBar from "../components/navigation-bar/NavigationBar";
+import NavigationBar from "../components/bars/NavigationBar";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -23,7 +23,8 @@ export default function Layout({ children, centerBody = false }: LayoutProps) {
         component="main"
         sx={{
           flexGrow: 1,
-          padding: "15px",
+          paddingTop: "85px",
+          paddingX: "15px",
           display: "flex",
           flexDirection: "column",
           justifyContent: centerBody ? "center" : "flex-start",

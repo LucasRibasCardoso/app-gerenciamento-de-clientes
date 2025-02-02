@@ -1,14 +1,24 @@
 import { useState } from "react";
-import { Box, Typography, TextField, Button, Collapse, IconButton } from "@mui/material";
-import Grid from '@mui/material/Grid2';
+import { 
+    Box, 
+    Typography, 
+    TextField, 
+    Button, 
+    Collapse, 
+    IconButton 
+} from "@mui/material";
+import { ExpandMore, ExpandLess } from "@mui/icons-material";
 import { useForm, Controller } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import Grid from '@mui/material/Grid2';
 import InputMask from "react-input-mask";
-import { ExpandMore, ExpandLess } from "@mui/icons-material";
+import SaveIcon from '@mui/icons-material/Save';
+
 
 import Layout from "../../shared/layouts/Layout";
+import { ClientRequest } from "../../shared/types/types";
 
 
 const clientSchema = yup.object().shape({
@@ -90,56 +100,12 @@ const clientSchema = yup.object().shape({
     }).default(null),
 });
 
-interface FormData {
-    completeName: string;
-    cpf: string;
-    birthDate: string;
-    phone: string | null;
-    email: string | null;
-    passport: {
-        number: string | null;
-        emissionDate: string | null;
-        expirationDate: string | null;
-    };
-    address: {
-        zipCode: string | null;
-        country: string | null;
-        state: string | null;
-        city: string | null;
-        neighborhood: string | null;
-        street: string | null;
-        complement: string | null;
-        residentialNumber: string | null;
-    };
-}
-
 export default function FormSaveClient() {
     const { id } = useParams();
+    let titleForm = id ? "Editar Cliente" : "Cadastrar Cliente";
 
-    const { control, handleSubmit, formState: { errors }} = useForm<FormData>({
-        resolver: yupResolver(clientSchema as unknown as yup.SchemaOf<FormData>),
-        defaultValues: {
-            completeName: "",
-            cpf: "",
-            birthDate: "",
-            phone: null,
-            email: null,
-            passport: {
-                number: null,
-                emissionDate: null,
-                expirationDate: null
-            },
-            address: {
-                zipCode: null,
-                country: null,
-                state: null,
-                city: null,
-                neighborhood: null,
-                street: null,
-                complement: null,
-                residentialNumber: null
-            }
-        }
+    const { control, handleSubmit, formState: { errors }} = useForm<ClientRequest>({
+        resolver: yupResolver(clientSchema as unknown as yup.SchemaOf<ClientRequest>),
     });
 
     const [passportCollapse, setPassportCollapse] = useState(false);
@@ -153,17 +119,9 @@ export default function FormSaveClient() {
         setAddressCollapse(!addressCollapse);
     };
 
-    const onSubmit = (data: FormData) => {
+    const onSubmit = (data: ClientRequest) => {
         console.log(data);
     };
-
-    let titleForm;
-    if (id) {
-        titleForm = "Editar Cliente";
-    }
-    else {
-        titleForm = "Cadastrar Cliente";
-    }
 
     return (
         <Layout>
@@ -560,7 +518,9 @@ export default function FormSaveClient() {
                     <Button 
                         type="submit" 
                         variant="contained" 
-                        fullWidth>
+                        fullWidth
+                        startIcon={<SaveIcon/>}
+                    >
                         Salvar
                     </Button>
                 </Box>

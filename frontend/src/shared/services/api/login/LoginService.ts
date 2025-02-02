@@ -1,6 +1,12 @@
 import Api from "../axios-config/AxiosConfig";
 
-import { LoginResponse, GenericError, ValidationErrorsResponse, isValidationError } from "../../../types/types";
+import { 
+    LoginResponse, 
+    GenericError, 
+    ValidationErrorsResponse, 
+    isValidationError, 
+    isGenericError 
+} from "../../../types/types";
 
 // Função para efetuar login
 const login = async (
@@ -10,36 +16,24 @@ const login = async (
     try {
         const { data } = await Api.post<LoginResponse>("/auth/login", { username, password });
         return data; 
-    } catch (error: any) {
-        // Captura o erro e verifica o formato
-        if (error.response) {
-            const statusCode = error.response.status || 500;
-            const responseData = error.response.data;
+    } 
+    catch (error: any) {
 
-            // Verifica se o erro é do tipo ValidationErrorsResponse
-            if (isValidationError(error)) {
-                return {
-                    message: responseData.message || 
-                        "Um ou mais campos apresentam erros de validação. Por favor, corrija e tente novamente.",
-                    statusCode,
-                    errors: new Set(
-                        responseData.errors.map((err: any) => ({
-                            field: err.field,
-                            message: err.message,
-                        }))
-                    ),
-                } as ValidationErrorsResponse;
-            }
-
-            // Caso contrário, trata como um erro genérico
+        if (isValidationError(error.response)) {
             return {
-                message: responseData.message || 
-                    "Não foi possível realizar o login. Verifique suas credenciais ou tente novamente mais tarde.",
-                statusCode,
+                message: error.response.data.message || "Erro de validação nos campos enviados.",
+                statusCode: error.response.status,
+                errors: new Set(error.response.data.errors),
+            } as ValidationErrorsResponse;
+        }
+
+        if (isGenericError(error.response)) {
+            return {
+                message: error.response.data.message || "Não foi possível realizar login.",
+                statusCode: error.response.status,
             } as GenericError;
         }
 
-        // Em caso de falha de rede ou erro desconhecido
         return { 
             message: "Ocorreu um erro inesperado ao tentar realizar o login. Verifique sua conexão e tente novamente.", 
             statusCode: 500 

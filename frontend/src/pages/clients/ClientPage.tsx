@@ -3,9 +3,9 @@ import { Box, Backdrop, CircularProgress, Pagination} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import { useGetAllClients, useDeleteClient } from "../../shared/hooks/client/ClientHook";
-import ClientsTable from "../../shared/components/table-clients/ClientTable";
+import ClientsTable from "../../shared/components/tables/ClientTable";
 import { usePopUp } from "../../shared/context/PopUpContext";
-import FunctionalityBar from "../../shared/components/funcionality-bar/FuncionalityBar";
+import FunctionalityBar from "../../shared/components/bars/FuncionalityBar";
 import Layout from "../../shared/layouts/Layout";
 
 export default function Clients() {

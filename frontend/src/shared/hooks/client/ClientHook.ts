@@ -1,11 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { ClientResponse, GenericError, isGenericError, PaginatedResponse } from "../../types/types";
-import { findAllClients, deleteClient } from "../../services/api/client/ClientService";
+import { 
+  ClientResponse, 
+  ClientRequest,
+  GenericError, 
+  isGenericError, 
+  PaginatedResponse, 
+  ValidationErrorsResponse,
+  isValidationError
+} from "../../types/types";
+import { findAllClients, deleteClient, saveClient } from "../../services/api/client/ClientService";
 import { usePopUp } from "../../context/PopUpContext";
 
 
-// Hook para buscar todos os clientes
 const useGetAllClients = (
   filters?: {
     searchQuery?: string;
@@ -43,7 +50,10 @@ const useDeleteClient = () => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      queryClient.invalidateQueries({ 
+        queryKey: ["clients"],
+        exact: true
+      });
       showMessage("Cliente deletado com sucesso", "success");
     },
     onError: (error) => {
@@ -54,5 +64,31 @@ const useDeleteClient = () => {
   
 };
 
+const useSaveClient = () => {
+  const queryClient = useQueryClient();
+  const { showMessage } = usePopUp();
 
-export { useGetAllClients, useDeleteClient }
+  return useMutation<ClientResponse, GenericError | ValidationErrorsResponse, ClientRequest>({
+    mutationFn: async (data) => {
+      const response = await saveClient(data);
+      
+      if (isValidationError(response) || isGenericError(response)) {
+        throw response;
+      }
+
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: "clients",
+        exact: true
+      }); 
+      showMessage("Cliente salvo com sucesso!", "success");
+    },
+    onError: (error) => {
+      showMessage(error.message || "Erro ao salvar cliente.", "error");
+    },
+  });
+};
+
+export { useGetAllClients, useDeleteClient, useSaveClient }

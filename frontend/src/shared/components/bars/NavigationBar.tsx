@@ -8,7 +8,7 @@ import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 
-import LogoutButton from "../action-button/LogoutButton";
+import LogoutButton from "../buttons/LogoutButton";
 
 // Tipagem para as props do NavButton
 interface NavButtonProps {
@@ -42,9 +42,8 @@ export default function NavigationBar() {
         <AppBar 
             sx={{
                 backgroundColor: "background.darkGreen",
-                position: "static",
-                height: "7vh",
-                minHeight: "65px"
+                position: "fixed",
+                height: "70px",
             }}
         >
             <Container disableGutters maxWidth={false}>

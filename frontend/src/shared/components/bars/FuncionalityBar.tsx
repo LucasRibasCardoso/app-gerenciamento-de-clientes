@@ -4,9 +4,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
-import ActionButton from "../action-button/ActionButton";
-import SearchBar from "../search-bar/SearchBar";
-import SelectButton from "../action-button/SelectButton"; 
+import ActionButton from "../buttons/ActionButton";
+import SearchBar from "./SearchBar";
+import SelectButton from "../buttons/SelectButton"; 
 
 interface FunctionalityBarProps {
   onSearch: (query: string) => void;

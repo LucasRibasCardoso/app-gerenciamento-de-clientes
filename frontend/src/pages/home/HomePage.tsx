@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 
 import MapSVG from "../../shared/assets/images/Study abroad-rafiki 1.svg";
-import CurrencyTable from '../../shared/components/currency-table/CurrencyTable';
+import CurrencyTable from '../../shared/components/tables/CurrencyTable';
 import Layout from '../../shared/layouts/Layout';
 
 export default function Home() {

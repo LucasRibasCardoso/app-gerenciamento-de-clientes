@@ -1,6 +1,13 @@
-import { ClientResponse, GenericError, PaginatedResponse } from "../../../types/types";
+import { 
+  ClientResponse, 
+  GenericError, 
+  isGenericError, 
+  isValidationError, 
+  PaginatedResponse, 
+  ClientRequest, 
+  ValidationErrorsResponse 
+} from "../../../types/types";
 import Api from "../axios-config/AxiosConfig";
-
 
 const findAllClients = async (
     params?: {
@@ -30,34 +37,31 @@ const findAllClients = async (
       return response.data;
     } 
     catch (error: any) {
-      if (error.response) {
+      if (isGenericError(error.response)) {
         return {
-          message:
-            error.response.data.message ||
-            "Não foi possível recuperar a lista de clientes.",
-          statusCode: error.response.status || 500,
+          message: error.response.data.message || "Não foi possível recuperar a lista de clientes.",
+          statusCode: error.response.status,
         } as GenericError;
       }
   
       return {
-        message:
-          "Ocorreu um erro inesperado ao tentar recuperar a lista de clientes. Verifique sua conexão e tente novamente.",
+        message: "Ocorreu um erro inesperado ao tentar recuperar a lista de clientes. Verifique sua conexão e tente novamente.",
         statusCode: 500,
       } as GenericError;
     }
-  };
+};
 
+// Função para deletar um cliente
 const deleteClient = async (clientId: number) => {
     try {
         const url = `/clients/${clientId}`;
         await Api.delete(url);
     }
     catch (error: any) {
-        if (error.response){
+        if (isGenericError(error.response)){
             return {
-                message: error.response.data.message || 
-                "Não foi possível deletar o cliente.",
-                statusCode: error.response.status || 500,
+                message: error.response.data.message || "Não foi possível deletar o cliente.",
+                statusCode: error.response.status,
             } as GenericError;
         }
         return { 
@@ -67,4 +71,34 @@ const deleteClient = async (clientId: number) => {
     }
 };
 
-export { findAllClients, deleteClient };
+// Função para salvar o cliente
+const saveClient = async (data: ClientRequest): Promise<ClientResponse | GenericError | ValidationErrorsResponse> => {
+  try {
+      const response = await Api.post<ClientResponse>("/clients", data);
+      return response.data;
+  } 
+  catch (error: any) {
+      if (isValidationError(error.response)) {
+          return {
+              message: error.response.data.message || "Erro de validação nos campos enviados.",
+              statusCode: error.response.status,
+              errors: new Set(error.response.data.errors),
+          } as ValidationErrorsResponse;
+      }
+
+      if (isGenericError(error.response)) {
+          return {
+              message: error.response.data.message || "Não foi possível salvar o cliente.",
+              statusCode: error.response.status,
+          } as GenericError;
+      }
+
+      return {
+          message: "Ocorreu um erro inesperado ao tentar salvar o cliente. Verifique sua conexão e tente novamente.",
+          statusCode: 500,
+      } as GenericError;
+  }
+};
+
+
+export { findAllClients, deleteClient, saveClient};
