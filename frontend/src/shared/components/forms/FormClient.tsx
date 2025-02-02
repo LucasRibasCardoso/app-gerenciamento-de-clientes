@@ -1,24 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
     Box, 
     Typography, 
     TextField, 
     Button, 
     Collapse, 
-    IconButton 
+    IconButton,
 } from "@mui/material";
 import { ExpandMore, ExpandLess } from "@mui/icons-material";
 import { useForm, Controller } from "react-hook-form";
-import { useParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Grid from "@mui/material/Grid2";
 import InputMask from "react-input-mask";
+import CloseIcon from '@mui/icons-material/Close';
 
 
-import Layout from "../../shared/layouts/Layout";
-import { ClientRequest } from "../../shared/types/types";
-import { SaveButton } from "../../shared/components/buttons";
+import { ClientRequest } from "../../types/types";
+import { SaveButton } from "../buttons";
 
 
 const clientSchema = yup.object().shape({
@@ -100,9 +99,14 @@ const clientSchema = yup.object().shape({
     }).default(null),
 });
 
-export default function FormSaveClient() {
-    const { id } = useParams();
-    let titleForm = id ? "Editar Cliente" : "Cadastrar Cliente";
+interface ClientFormModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    isEditing: boolean;
+    clientId: number | null;
+}
+
+const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientId }) => {
 
     const { control, handleSubmit, formState: { errors }} = useForm<ClientRequest>({
         resolver: yupResolver(clientSchema as unknown as yup.SchemaOf<ClientRequest>),
@@ -119,29 +123,51 @@ export default function FormSaveClient() {
         setAddressCollapse(!addressCollapse);
     };
 
+    // Carregar dados do cliente se estiver editando
+    useEffect(() => {
+        if (isEditing && clientId) {
+            // Chama hook para buscar cliente pelo id
+            console.log("Editando cliente: " + clientId);
+        }
+        else {
+            // Limpa formulário para cadastrar novo cliente
+            console.log("Formulario limpa para cadastro");
+        }
+    }, [isEditing, clientId]);
+
     const onSubmit = (data: ClientRequest) => {
         console.log(data);
+        onClose();
     };
 
     return (
-        <Layout>
-            <Box
-                component="form"
-                onSubmit={handleSubmit(onSubmit)}
+        <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "25px",
+            }}>
+            {/* Botão de fechar */}
+            <IconButton
+                aria-label="fechar"
+                onClick={onClose}
                 sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "25px",
-                    width: "100%",
-                    maxWidth: "650px",
-                    margin: "auto",
-                    padding: "20px",
-                }}>
-                <Typography variant="h1" textAlign="center" mb={"30px"}>
-                    {titleForm}
-                </Typography>
+                position: "absolute",
+                top: 8,
+                right: 8,
+                color: "text.secondary",
+                }}
+            >
+                <CloseIcon />
+            </IconButton>
 
-                <Grid container spacing={2}>
+            <Typography variant="h1" textAlign="center" mb={"30px"}>
+                {isEditing ? "Editar Cliente" : "Cadastrar Cliente"}
+            </Typography>
+
+            <Grid container spacing={2}>
                     <Grid size={6}>
                         <Controller
                             name="completeName"
@@ -248,10 +274,10 @@ export default function FormSaveClient() {
                             )}
                         />
                     </Grid>
-                </Grid>
+            </Grid>
 
-                {/* Seção de Passaporte */}
-                <Box>
+            {/* Seção de Passaporte */}
+            <Box>
                     <Button
                         fullWidth
                         variant="outlined"
@@ -340,10 +366,10 @@ export default function FormSaveClient() {
                             </Grid>
                         </Grid>
                     </Collapse>
-                </Box>
+            </Box>
 
-                {/* Seção de Endereço */}
-                <Box>
+            {/* Seção de Endereço */}
+            <Box>
                     <Button
                         fullWidth
                         variant="outlined"
@@ -512,10 +538,11 @@ export default function FormSaveClient() {
                             </Grid>
                         </Grid>
                     </Collapse>
-                </Box>
-
-                <SaveButton />
             </Box>
-        </Layout>
+
+            <SaveButton />
+        </Box>
     );
 }
+
+export default FormClient;

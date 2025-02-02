@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { Box, Backdrop, CircularProgress, Pagination} from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Box, Backdrop, CircularProgress, Pagination, Modal} from "@mui/material";
 
 import { useGetAllClients, useDeleteClient } from "../../shared/hooks/ClientHook";
 import { ClientsTable } from "../../shared/components/tables";
 import { FunctionalityBar } from "../../shared/components/bars";
 import Layout from "../../shared/layouts/Layout";
 import { usePopUp } from "../../shared/context/PopUpContext";
+import { FormClient } from "../../shared/components/forms";
 
 export default function Clients() {
     document.title = "Clientes - Client Management";
 
-    const navigate = useNavigate();
+    const { showMessage } = usePopUp();
+
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [orderBy, setOrderBy] = useState<string>("");
     const [orderDirection, setOrderDirection] = useState<string>("");
@@ -19,7 +20,9 @@ export default function Clients() {
     const [page, setPage] = useState<number>(1);
     const [size, setSize] = useState<number>(12); // mostra 12 clientes por pagina
 
-    const { showMessage } = usePopUp();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingClientId, setEditingClientId] = useState<number | null>(null);
 
     // Hook com filtros dinâmicos e paginação
     const clients = useGetAllClients({
@@ -43,6 +46,29 @@ export default function Clients() {
         setPage(newPage);
     };
 
+    // Função para abrir o modal de edição
+    const handleEditClient = () => {
+        if (selectedClient) {
+        setIsEditing(true);
+        setEditingClientId(Number(selectedClient));
+        setIsModalOpen(true);
+        }
+    };
+
+    // Função para abrir o modal de criação
+    const handleCreateClient = () => {
+        setIsEditing(false);
+        setEditingClientId(null);
+        setIsModalOpen(true);
+    };
+
+    // Função para fechar o modal
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setIsEditing(false);
+        setEditingClientId(null);
+    };
+
     return (
         <Layout>
             {/* Barra de funcionalidade */}
@@ -56,10 +82,8 @@ export default function Clients() {
                 onDeleteClient={() => {
                     if (selectedClient) deleteClient(Number(selectedClient));
                 }}
-                onEditClient={() => {
-                    if (selectedClient) navigate("/cliente/" + selectedClient)
-                }}
-                onCreateClient={() => navigate("/cliente")}
+                onEditClient={handleEditClient}
+                onCreateClient={handleCreateClient}
             />
 
             {/* Tabela de clientes */}
@@ -85,6 +109,37 @@ export default function Clients() {
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
+
+            {/* Modal de edição e cadastro */}
+            <Modal
+                open={isModalOpen}
+                onClose={handleCloseModal}
+                aria-labelledby="client-form-modal"
+                aria-describedby="client-form-modal-description"
+            >
+                <Box
+                sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: "90%",
+                    maxWidth: "650px",
+                    bgcolor: "background.paper",
+                    boxShadow: 24,
+                    p: 4,
+                    borderRadius: 2,
+                }}
+                >
+                <FormClient
+                    isOpen={isModalOpen}
+                    onClose={handleCloseModal}
+                    isEditing={isEditing}
+                    clientId={editingClientId}
+                />
+                </Box>
+            </Modal>
+
 
         </Layout>
     );
