@@ -68,6 +68,9 @@ public class LoginController {
 
   @PostMapping("/login")
   public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto) {
+    validateUserRequest.validateUsername(dto.username());
+    validateUserRequest.validatePassword(dto.password());
+
     Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(dto.username(), dto.password())
     );
