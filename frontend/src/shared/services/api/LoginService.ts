@@ -1,4 +1,4 @@
-import Api from "../axios-config/AxiosConfig";
+import Api from "./axios-config/AxiosConfig";
 
 import { 
     LoginResponse, 
@@ -6,7 +6,7 @@ import {
     ValidationErrorsResponse, 
     isValidationError, 
     isGenericError 
-} from "../../../types/types";
+} from "../../types/types";
 
 // Função para efetuar login
 const login = async (
@@ -19,7 +19,7 @@ const login = async (
     } 
     catch (error: any) {
 
-        if (isValidationError(error.response)) {
+        if (isValidationError(error.response.data)) {
             return {
                 message: error.response.data.message || "Erro de validação nos campos enviados.",
                 statusCode: error.response.status,
@@ -27,7 +27,7 @@ const login = async (
             } as ValidationErrorsResponse;
         }
 
-        if (isGenericError(error.response)) {
+        if (isGenericError(error.response.data)) {
             return {
                 message: error.response.data.message || "Não foi possível realizar login.",
                 statusCode: error.response.status,

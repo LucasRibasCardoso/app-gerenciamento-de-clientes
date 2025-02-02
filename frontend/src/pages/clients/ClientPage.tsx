@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Box, Backdrop, CircularProgress, Pagination} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-import { useGetAllClients, useDeleteClient } from "../../shared/hooks/client/ClientHook";
-import ClientsTable from "../../shared/components/tables/ClientTable";
-import { usePopUp } from "../../shared/context/PopUpContext";
-import FunctionalityBar from "../../shared/components/bars/FuncionalityBar";
+import { useGetAllClients, useDeleteClient } from "../../shared/hooks/ClientHook";
+import { ClientsTable } from "../../shared/components/tables";
+import { FunctionalityBar } from "../../shared/components/bars";
 import Layout from "../../shared/layouts/Layout";
+import { usePopUp } from "../../shared/context/PopUpContext";
 
 export default function Clients() {
     document.title = "Clientes - Client Management";
@@ -29,14 +29,13 @@ export default function Clients() {
         page: page - 1,
         size,
     });
-
-    // Hook para deletar cliente
-    const { mutate: deleteClient, isPending: isDeleting } = useDeleteClient();
-
     // Abre o popup em caso de ocorrer algum erro
     if (clients.error) {
         showMessage(clients.error.message, "error");
     }
+
+    // Hook para deletar cliente
+    const { mutate: deleteClient, isPending: isDeleting } = useDeleteClient();
 
     // Função para mudar de página
     const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {

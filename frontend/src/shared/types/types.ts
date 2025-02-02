@@ -5,7 +5,7 @@ export type UserResponse = {
     roles: Set<string>;
 }; 
 
-export type PaginatedResponse<T> = {
+export type PageResponse<T> = {
     data: T[]; 
     totalPages: number;
     totalElements: number;

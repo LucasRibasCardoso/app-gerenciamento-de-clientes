@@ -12,13 +12,13 @@ import { useForm, Controller } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Grid from '@mui/material/Grid2';
+import Grid from "@mui/material/Grid2";
 import InputMask from "react-input-mask";
-import SaveIcon from '@mui/icons-material/Save';
 
 
 import Layout from "../../shared/layouts/Layout";
 import { ClientRequest } from "../../shared/types/types";
+import { SaveButton } from "../../shared/components/buttons";
 
 
 const clientSchema = yup.object().shape({
@@ -514,16 +514,7 @@ export default function FormSaveClient() {
                     </Collapse>
                 </Box>
 
-                <Box sx={{ display: "flex", gap: "15px"}}>
-                    <Button 
-                        type="submit" 
-                        variant="contained" 
-                        fullWidth
-                        startIcon={<SaveIcon/>}
-                    >
-                        Salvar
-                    </Button>
-                </Box>
+                <SaveButton />
             </Box>
         </Layout>
     );

@@ -1,18 +1,17 @@
-import Api from "../axios-config/AxiosConfig";
-import { ClientResponse as UserResponsee, GenericError } from "../../../types/types";
+import Api from "./axios-config/AxiosConfig";
+import { UserResponse, GenericError, isGenericError } from "../../types/types";
 
 // Função para buscar todos os usuários
-const findAllUsers = async (): Promise<UserResponsee[] | GenericError> => {
+const findAllUsers = async (): Promise<UserResponse[] | GenericError> => {
     try {
-        const { data } = await Api.get<UserResponsee[] | GenericError>("/users");
+        const { data } = await Api.get<UserResponse[] | GenericError>("/users");
         return data;
     } 
     catch (error: any) {
-        if (error.response) {
+        if (isGenericError(error.response)) {
             return {
-                message: error.response.data.message || 
-                "Não foi possível recuperar a lista de usuários.",
-                statusCode: error.response.status || 500,
+                message: error.response.data.message || "Não foi possível recuperar a lista de usuários.",
+                statusCode: error.response.status,
             } as GenericError;
         }
 
@@ -30,15 +29,16 @@ const deleteUser = async (userId: string): Promise<void | GenericError> => {
         await Api.delete(`users/${userId}`);
     } 
     catch (error: any) {
-        if (error.response) {
+        if (isGenericError(error.response)) {
             return {
                 message: error.response.data.message || `Não foi possível deletar o usuário com ID: ${userId}. Verifique os dados ou tente novamente mais tarde.`,
-                statusCode: error.response.status || 500,
+                statusCode: error.response.status,
             } as GenericError;
         }
 
-        // Retorna erro genérico em caso de falha de rede ou erro desconhecido
-        return { message: "`Ocorreu um erro inesperado ao tentar deletar o usuário com ID: ${userId}. Verifique sua conexão e tente novamente.`", statusCode: 500 } as GenericError;
+        return { 
+            message: "`Ocorreu um erro inesperado ao tentar deletar o usuário com ID: ${userId}. Verifique sua conexão e tente novamente.`", 
+            statusCode: 500 } as GenericError;
     }
 };
 

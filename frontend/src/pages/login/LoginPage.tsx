@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import AirplaneSVG from "../../shared/assets/images/airplane-around-world.svg";
-import LoginForm from "../../shared/components/form-login/FormLogin";
+import { FormLogin } from "../../shared/components/forms";
 
 export default function Login() {
   document.title = "Login - Client Management";
@@ -42,7 +42,7 @@ export default function Login() {
           alignItems: "center",
         }}
       >
-        <LoginForm/>
+        <FormLogin/>
       </Box>
 
     </Box>

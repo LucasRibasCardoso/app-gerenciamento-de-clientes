@@ -1,17 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 import { 
   ClientResponse, 
   ClientRequest,
   GenericError, 
   isGenericError, 
-  PaginatedResponse, 
+  PageResponse, 
   ValidationErrorsResponse,
   isValidationError
-} from "../../types/types";
-import { findAllClients, deleteClient, saveClient } from "../../services/api/client/ClientService";
-import { usePopUp } from "../../context/PopUpContext";
-
+} from "../types/types";
+import { findAllClients, deleteClient, saveClient } from "../services/api/ClientService";
+import { usePopUp } from "../context/PopUpContext";
 
 const useGetAllClients = (
   filters?: {
@@ -22,8 +22,7 @@ const useGetAllClients = (
     size?: number;
   }
 ) => {
-
-  return useQuery<PaginatedResponse<ClientResponse>, GenericError>({
+  return useQuery<PageResponse<ClientResponse>, GenericError>({
     queryKey: ["clients", filters],
     queryFn: async () => {
       const response = await findAllClients(filters);
@@ -43,46 +42,36 @@ const useDeleteClient = () => {
 
   return useMutation<void, GenericError, number>({
     mutationFn: async (clientID) => {
-      const response = await deleteClient(clientID);
-
-      if  (isGenericError(response)) {
-        throw response;
-      }
+      await deleteClient(clientID);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ 
-        queryKey: ["clients"],
-        exact: true
-      });
+      queryClient.invalidateQueries({queryKey: ["clients"]});
       showMessage("Cliente deletado com sucesso", "success");
     },
     onError: (error) => {
       showMessage(error.message || "Erro ao deletar cliente.", "error");
-      console.error("Erro ao deletar cliente: ", error);
     }
   });
-  
 };
 
 const useSaveClient = () => {
   const queryClient = useQueryClient();
   const { showMessage } = usePopUp();
+  const navigate = useNavigate();
 
   return useMutation<ClientResponse, GenericError | ValidationErrorsResponse, ClientRequest>({
     mutationFn: async (data) => {
       const response = await saveClient(data);
       
       if (isValidationError(response) || isGenericError(response)) {
+        console.error(response);
         throw response;
       }
-
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: "clients",
-        exact: true
-      }); 
+      queryClient.invalidateQueries({queryKey: "clients"}); 
+      navigate("/clientes");
       showMessage("Cliente salvo com sucesso!", "success");
     },
     onError: (error) => {
@@ -90,5 +79,7 @@ const useSaveClient = () => {
     },
   });
 };
+
+
 
 export { useGetAllClients, useDeleteClient, useSaveClient }

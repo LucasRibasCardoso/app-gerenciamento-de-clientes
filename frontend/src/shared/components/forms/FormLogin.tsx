@@ -1,12 +1,11 @@
 import { useForm, Controller } from "react-hook-form";
 import { TextField, Button, Box, Typography } from "@mui/material";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
 
-import { useLogin } from "../../hooks/login/LoginHook";
-import { isValidationError, isGenericError } from "../../types/types";
+import { useLogin } from "../../hooks/LoginHook";
 import { usePopUp } from "../../context/PopUpContext";
+import { isGenericError, isValidationError } from "../../types/types";
 
 // Definição do esquema de validação com Yup
 const schema = yup.object({
@@ -29,7 +28,6 @@ interface FormData {
 }
 
 export default function FormLogin() {
-  const navigate = useNavigate();
   const login = useLogin();
   const { showMessage } = usePopUp();
 
@@ -43,7 +41,6 @@ export default function FormLogin() {
         username: data.username,
         password: data.password,
       });
-      navigate("/home");
     } 
     catch (error) {
       if (isValidationError(error)) {

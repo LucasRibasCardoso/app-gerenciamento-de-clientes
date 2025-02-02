@@ -8,7 +8,7 @@ import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 
-import LogoutButton from "../buttons/LogoutButton";
+import { LogoutButton } from "../buttons";
 
 // Tipagem para as props do NavButton
 interface NavButtonProps {

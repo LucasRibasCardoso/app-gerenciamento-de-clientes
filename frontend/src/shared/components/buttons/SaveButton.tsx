@@ -17,4 +17,4 @@ const SaveButton = ({ onClick }: SaveButtonProps) => (
     </Button>
 );
 
-export default { SaveButton };
+export default SaveButton;

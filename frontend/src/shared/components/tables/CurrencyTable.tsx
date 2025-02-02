@@ -9,25 +9,27 @@ import {
     Typography, 
     CircularProgress 
 } from "@mui/material";
-import { useCurrencyQuotes } from "../../hooks/home/useCurrencyQuotes";
-import { usePopUp } from "../../context/PopUpContext";
 
-import EuaSVG from "../../assets/images/countriesFlags/estados-unidos.svg";
-import CanadaSVG from "../../assets/images/countriesFlags/canada.svg"
-import ArgentinaSVG from "../../assets/images/countriesFlags/argentina.svg"; 
-import ReinoUnidoSVG from "../../assets/images/countriesFlags/reino-unido.svg"; 
-import SuicaSVG from "../../assets/images/countriesFlags/suica.svg"; 
-import EuroSVG from "../../assets/images/countriesFlags/uniao-europeia.svg";
+import { useCurrencyQuotes } from "../../hooks/useCurrencyQuotes";
 import { useCurrencyQuotesMock } from "../../../mocks/useCurrencyQuotesMock";
+import { usePopUp } from "../../context/PopUpContext";
+import {
+    ArgentinaFlag, 
+    CanadaFlag, 
+    EstadosUnidosFlag, 
+    ReinoUnidoFlag, 
+    SuicaFlag, 
+    UniaoEuropeiaFlag 
+} from "../../assets/countriesFlags";
 
 const flagSVGs: { [key: string]: string } = {
-    "USD-BRLT": EuaSVG,
-    "USD-BRL": EuaSVG,
-    "CAD-BRL": CanadaSVG,
-    "ARS-BRL": ArgentinaSVG,
-    "GBP-BRL": ReinoUnidoSVG,
-    "CHF-BRL": SuicaSVG,
-    "EUR-BRL": EuroSVG,
+    "USD-BRLT": EstadosUnidosFlag,
+    "USD-BRL": EstadosUnidosFlag,
+    "CAD-BRL": CanadaFlag,
+    "ARS-BRL": ArgentinaFlag,
+    "GBP-BRL": ReinoUnidoFlag,
+    "CHF-BRL": SuicaFlag,
+    "EUR-BRL": UniaoEuropeiaFlag,
 };
 
 const CurrencyTable = () => {
