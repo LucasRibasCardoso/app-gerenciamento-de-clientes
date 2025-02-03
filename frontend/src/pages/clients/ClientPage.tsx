@@ -36,7 +36,7 @@ export default function Clients() {
         if (isError && error) {
           showMessage(error.message, "error");
         }
-      }, [isError, error, showMessage]);
+    }, [isError, error, showMessage]);
 
     // Hook para deletar cliente
     const { mutate: deleteClient, isPending: isDeleting } = useDeleteClient();

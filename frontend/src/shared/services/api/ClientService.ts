@@ -5,7 +5,7 @@ import {
   isValidationError, 
   PageResponse, 
   ClientRequest, 
-  ValidationErrorsResponse 
+  ValidationErrorsResponse
 } from "../../types/types";
 import Api from "./axios-config/AxiosConfig";
 
@@ -78,25 +78,26 @@ const saveClient = async (data: ClientRequest): Promise<ClientResponse | Generic
       return response.data;
   } 
   catch (error: any) {
-      if (isValidationError(error.response)) {
-          return {
-              message: error.response.data.message || "Erro de validação nos campos enviados.",
-              statusCode: error.response.status,
-              errors: new Set(error.response.data.errors),
-          } as ValidationErrorsResponse;
+    if (error.response) {
+      if (isValidationError(error.response.data)) {
+        return {
+          message: error.response.data.message || "Erro na validação dos campos enviados",
+          statusCode: error.status,
+          errors: new Set(error.response.data.errors),
+        } as ValidationErrorsResponse;
       }
-
-      if (isGenericError(error.response)) {
-          return {
-              message: error.response.data.message || "Não foi possível salvar o cliente.",
-              statusCode: error.response.status,
-          } as GenericError;
-      }
-
-      return {
-          message: "Ocorreu um erro inesperado ao tentar salvar o cliente. Verifique sua conexão e tente novamente.",
-          statusCode: 500,
+      else {
+        return {
+          message: error.response.data.message || "Não foi possível salvar o cliente.",
+          statusCode: error.response.status,
       } as GenericError;
+      }
+    }
+
+    return {
+        message: "Ocorreu um erro inesperado ao tentar salvar o cliente. Verifique sua conexão e tente novamente.",
+        statusCode: 500,
+    } as GenericError;
   }
 };
 

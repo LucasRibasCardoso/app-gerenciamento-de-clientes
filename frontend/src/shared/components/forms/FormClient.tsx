@@ -18,6 +18,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { ClientRequest } from "../../types/types";
 import { SaveButton } from "../buttons";
+import { useSaveClient } from "../../hooks/ClientHook";
 
 
 const clientSchema = yup.object().shape({
@@ -115,6 +116,9 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
     const [passportCollapse, setPassportCollapse] = useState(false);
     const [addressCollapse, setAddressCollapse] = useState(false); 
 
+    // Hook para salvar o cliente
+    const { mutate: saveClient, isPending: isSaving } = useSaveClient(onClose);
+
     const togglePassportCollapse = () => {
         setPassportCollapse(!passportCollapse);
     };
@@ -129,16 +133,14 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
             // Chama hook para buscar cliente pelo id
             console.log("Editando cliente: " + clientId);
         }
-        else {
-            // Limpa formulário para cadastrar novo cliente
-            console.log("Formulario limpa para cadastro");
-        }
     }, [isEditing, clientId]);
 
+    // Função para enviar os dados do formulário
     const onSubmit = (data: ClientRequest) => {
         console.log(data);
-        onClose();
+        saveClient(data);
     };
+
 
     return (
         <Box
@@ -540,7 +542,7 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                     </Collapse>
             </Box>
 
-            <SaveButton />
+            <SaveButton disabled={isSaving}/>
         </Box>
     );
 }

@@ -87,7 +87,7 @@ const ClientsTable: React.FC<Props> = ({
                     onDoubleClick={() => handleDoubleClick(client.id)}
                     sx={{
                       cursor: "pointer",
-                      backgroundColor: selectedClient === client.id.toString() ? "rgba(76, 175, 79, 0.25)" : "inherit",
+                      backgroundColor: selectedClient === client.id.toString() ? "rgba(76, 175, 79, 0.25)" : "inherit"
                     }}
                   >
                     <TableCell width={"75px"}>
@@ -117,7 +117,7 @@ const ClientsTable: React.FC<Props> = ({
                           {/* Endereço */}
                           <Box>
                             <Table size="small" aria-label="address">
-                              <Typography variant="subtitle1">Endereço</Typography>
+                              <Typography component="thead" variant="subtitle1">Endereço</Typography>
                               <TableBody>
                                 <TableRow>
                                   <TableCell>CEP</TableCell>
@@ -158,7 +158,7 @@ const ClientsTable: React.FC<Props> = ({
                           {/* Passaporte */}
                           <Box>
                             <Table size="small" aria-label="passport">
-                              <Typography variant="subtitle1">Passaporte</Typography>
+                              <Typography component="thead" variant="subtitle1">Passaporte</Typography>
                               <TableBody>
                                 <TableRow>
                                   <TableCell>Número</TableCell>

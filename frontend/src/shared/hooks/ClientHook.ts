@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient  } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 
 import { 
   ClientResponse, 
@@ -54,28 +53,32 @@ const useDeleteClient = () => {
   });
 };
 
-const useSaveClient = () => {
+const useSaveClient = (onClose?: () => void) => {
   const queryClient = useQueryClient();
   const { showMessage } = usePopUp();
-  const navigate = useNavigate();
 
   return useMutation<ClientResponse, GenericError | ValidationErrorsResponse, ClientRequest>({
     mutationFn: async (data) => {
       const response = await saveClient(data);
       
       if (isValidationError(response) || isGenericError(response)) {
-        console.error(response);
         throw response;
       }
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: "clients"}); 
-      navigate("/clientes");
-      showMessage("Cliente salvo com sucesso!", "success");
+      queryClient.invalidateQueries({ queryKey: "clients" }); // Atualiza a lista de clientes
+      showMessage("Cliente salvo com sucesso!", "success"); 
+      onClose?.(); 
     },
     onError: (error) => {
-      showMessage(error.message || "Erro ao salvar cliente.", "error");
+      if (isValidationError(error)) {
+          Array.from(error.errors)
+            .map((err) => showMessage(err.message, "error"))
+      } 
+      else {
+        showMessage(error.message, "error"); // Exibe erros genéricos
+      }
     },
   });
 };

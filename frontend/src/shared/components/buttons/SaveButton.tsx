@@ -3,15 +3,17 @@ import SaveIcon from "@mui/icons-material/Save";
 
 type SaveButtonProps = {
     onClick?: () => void;
+    disabled?: boolean;
 };
 
-const SaveButton = ({ onClick }: SaveButtonProps) => (
+const SaveButton = ({ onClick, disabled }: SaveButtonProps) => (
     <Button
         type="submit"
         variant="contained"
         fullWidth
         startIcon={<SaveIcon />}
         onClick={onClick}
+        disabled={disabled}
     >
         Salvar
     </Button>
