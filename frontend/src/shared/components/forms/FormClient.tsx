@@ -16,9 +16,9 @@ import InputMask from "react-input-mask";
 import CloseIcon from '@mui/icons-material/Close';
 
 
-import { ClientRequest } from "../../types/types";
+import { ClientRequest, ClientRequestUpdate } from "../../types/types";
 import { SaveButton } from "../buttons";
-import { useSaveClient } from "../../hooks/ClientHook";
+import { useSaveClient, useGetClientById } from "../../hooks/ClientHook";
 
 
 const clientSchema = yup.object().shape({
@@ -33,71 +33,145 @@ const clientSchema = yup.object().shape({
 
     birthDate: yup.string()
         .required("A data de nascimento é obrigatória")
-        .matches(/^\d{2}\/\d{2}\/\d{4}$/, "Data de nascimento deve estar no formato dd/MM/yyyy"),
+        .matches(/^\d{2}\/\d{2}\/\d{4}$/, "Data de nascimento deve estar no formato dd/MM/yyyy")
+        .test("is-valid-date", "Data de nascimento inválida", (value) => {
+            if (!value) return true; // Permite valores nulos
+            const [day, month, year] = value.split("/");
+            const date = new Date(`${year}-${month}-${day}`);
+            return !isNaN(date.getTime()); // Verifica se a data é válida
+        }),
 
     phone: yup.string()
         .nullable()
-        .transform((value) => value === "" ? null : value)
+        .transform((value) => value || null) // Converte strings vazias para null
         .matches(/\(\d{2}\) \d{4,5}-\d{4}/, "Formato inválido")
-        .max(15, "O telefone deve ter no máximo 15 caracteres")
-        .default(null),
+        .max(15, "O telefone deve ter no máximo 15 caracteres"),
 
     email: yup.string()
         .nullable()
-        .transform((value) => value === "" ? null : value)
+        .transform((value) => value || null) // Converte strings vazias para null
         .email("E-mail inválido")
-        .max(100, "O e-mail deve ter no máximo 100 caracteres")
-        .default(null),
+        .max(100, "O e-mail deve ter no máximo 100 caracteres"),
 
     passport: yup.object().shape({
-      number: yup.string()
-        .nullable()
-        .transform((value) => value === "" ? null : value)
-        .default(null),
-      emissionDate: yup.string()
-        .nullable()
-        .transform((value) => value === "" ? null : value)
-        .default(null),
-      expirationDate: yup.string()
-        .nullable()
-        .transform((value) => value === "" ? null : value)
-        .default(null),
-    }).default(null),
+        number: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        emissionDate: yup.string()
+            .nullable()
+            .transform((value) => value || null)
+            .test("is-valid-date", "Data de emissão inválida", (value) => {
+                if (!value) return true; // Permite valores nulos
+                const [day, month, year] = value.split("/");
+                const date = new Date(`${year}-${month}-${day}`);
+                return !isNaN(date.getTime()); // Verifica se a data é válida
+            }),
+        expirationDate: yup.string()
+            .nullable()
+            .transform((value) => value || null)
+            .test("is-valid-date", "Data de validade inválida", (value) => {
+                if (!value) return true; // Permite valores nulos
+                const [day, month, year] = value.split("/");
+                const date = new Date(`${year}-${month}-${day}`);
+                return !isNaN(date.getTime()); // Verifica se a data é válida
+            }),
+    }),
 
     address: yup.object().shape({
-      zipCode: yup.string()
+        zipCode: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        country: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        state: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        city: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        neighborhood: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        street: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        complement: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        residentialNumber: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+    }),
+});
+
+const clientUpdateSchema = yup.object().shape({
+    completeName: yup.string()
         .nullable()
-        .transform((value) => value === "" ? null : value)
-        .default(null),
-      country: yup.string()
+        .required("O nome completo é obrigatório")
+        .max(100, "O nome completo deve ter no máximo 100 caracteres"),
+
+    birthDate: yup.string()
         .nullable()
-        .transform((value) => value === "" ? null : value)
-        .default(null),
-      state: yup.string()
+        .required("A data de nascimento é obrigatória")
+        .matches(/^\d{2}\/\d{2}\/\d{4}$/, "Data de nascimento deve estar no formato dd/MM/yyyy")
+        .test("is-valid-date", "Data de nascimento inválida", (value) => {
+            if (!value) return true; // Permite valores nulos
+            const [day, month, year] = value.split("/");
+            const date = new Date(`${year}-${month}-${day}`);
+            return !isNaN(date.getTime()); // Verifica se a data é válida
+        }),
+
+    phone: yup.string()
         .nullable()
-        .transform((value) => value === "" ? null : value)
-        .default(null),
-      city: yup.string()
+        .transform((value) => value || null) // Converte strings vazias para null
+        .matches(/\(\d{2}\) \d{4,5}-\d{4}/, "Formato inválido")
+        .max(15, "O telefone deve ter no máximo 15 caracteres"),
+
+    email: yup.string()
         .nullable()
-        .transform((value) => value === "" ? null : value)
-        .default(null),
-      neighborhood: yup.string()
-        .nullable()
-        .transform((value) => value === "" ? null : value)
-        .default(null),
-      street: yup.string()
-        .nullable()
-        .transform((value) => value === "" ? null : value)
-        .default(null),
-      complement: yup.string()
-        .nullable()
-        .transform((value) => value === "" ? null : value)
-        .default(null),
-      residentialNumber: yup.string()
-        .nullable()
-        .transform((value) => value === "" ? null : value)
-        .default(null),
-    }).default(null),
+        .transform((value) => value || null) // Converte strings vazias para null
+        .email("E-mail inválido")
+        .max(100, "O e-mail deve ter no máximo 100 caracteres"),
+
+    passport: yup.object().shape({
+        number: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        emissionDate: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        expirationDate: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+    }),
+
+    address: yup.object().shape({
+        zipCode: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        country: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        state: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        city: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        neighborhood: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        street: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        complement: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+        residentialNumber: yup.string()
+            .nullable()
+            .transform((value) => value || null),
+    }),
 });
 
 interface ClientFormModalProps {
@@ -140,7 +214,6 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
         console.log(data);
         saveClient(data);
     };
-
 
     return (
         <Box

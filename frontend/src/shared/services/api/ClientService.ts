@@ -33,7 +33,6 @@ const findAllClients = async (
 
     // Envia a searchQuery no corpo da requisição
     const response = await Api.get<PageResponse<ClientResponse> | GenericError>(finalUrl);
-
     return response.data;
   } 
   catch (error: any) {
@@ -46,8 +45,32 @@ const findAllClients = async (
       }
     }
     return {
-      message: "Ocorreu um erro inesperado ao tentar recuperar a lista de clientes. Verifique sua conexão e tente novamente.",
+      message: "Ocorreu um erro inesperado ao tentar recuperar a lista de clientes do banco de dados. Verifique sua conexão e tente novamente.",
       statusCode: 500,
+    } as GenericError;
+  }
+};
+
+
+// Função para buscar um cliente pelo ID
+const getClientById = async (clientId: number) => {
+  try {
+    const url = `/clients/${clientId}`;
+    const response = await Api.get(url);
+    return response.data
+  }
+  catch (error: any) {
+    if (error.response) {
+      if (isGenericError(error.response.data)) {
+        return {
+          message: error.response.data.message || "Não foi possível buscar o cliente.",
+          statusCode: error.status,
+        } as GenericError;
+      }
+    }
+    return {
+      message: "Ocorreu um erro inesperado ao tentar buscar cliente no banco de dados. Verifique sua conexão e tente novamente.",
+      statusCode: 500, 
     } as GenericError;
   }
 };
@@ -105,4 +128,4 @@ const saveClient = async (data: ClientRequest): Promise<ClientResponse | Generic
 
 
 
-export { findAllClients, deleteClient, saveClient};
+export { findAllClients, getClientById, deleteClient, saveClient};

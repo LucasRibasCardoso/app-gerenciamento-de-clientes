@@ -9,7 +9,7 @@ import {
   ValidationErrorsResponse,
   isValidationError
 } from "../types/types";
-import { findAllClients, deleteClient, saveClient } from "../services/api/ClientService";
+import { findAllClients, deleteClient, saveClient, getClientById } from "../services/api/ClientService";
 import { usePopUp } from "../context/PopUpContext";
 
 const useGetAllClients = (
@@ -28,6 +28,23 @@ const useGetAllClients = (
 
       if (isGenericError(response)) {
         throw response;        
+      }
+
+      return response;
+    },
+  });
+};
+
+const useGetClientById = (clientId: number) => {
+  return useQuery<ClientResponse, GenericError, ClientResponse>({
+    queryKey: ["client", clientId],
+    queryFn: async ({ queryKey }) => {
+      const [, id] = queryKey;
+
+      const response = await getClientById(id as number);
+
+      if (isGenericError(response)) {
+        throw response;
       }
 
       return response;
@@ -87,4 +104,4 @@ const useSaveClient = (onClose?: () => void) => {
 };
 
 
-export { useGetAllClients, useDeleteClient, useSaveClient };
+export { useGetAllClients, useDeleteClient, useSaveClient, useGetClientById };

@@ -11,13 +11,13 @@ export type PageResponse<T> = {
     totalElements: number;
   };
 
-export type PassportResponse = {
+export type Passport = {
     number: string | null;
     emissionDate: string | null;
     expirationDate: string | null;
 };
 
-export type AddressResponse = {
+export type Address = {
     zipCode: string | null;
     country: string | null;
     state: string | null;
@@ -28,6 +28,15 @@ export type AddressResponse = {
     residentialNumber: string | null;
 };
 
+export type ClientRequestUpdate = {
+    completeName: string | null;
+    birthDate: string | null; 
+    phone: string | null;
+    email: string | null;
+    passport: Passport;
+    address: Address;
+}
+
 export type ClientResponse = {
     id: number;
     completeName: string;
@@ -35,8 +44,8 @@ export type ClientResponse = {
     birthDate: string;
     phone: string | null;
     email: string | null;
-    passport: PassportResponse;
-    address: AddressResponse;
+    passport: Passport;
+    address: Address;
 };
 
 export type ClientRequest = {
@@ -45,8 +54,8 @@ export type ClientRequest = {
     birthDate: string;
     phone: string | null;
     email: string | null;
-    passport: PassportResponse | null;
-    address: AddressResponse | null;
+    passport: Passport;
+    address: Address;
 }
 
 export type LoginResponse = {
