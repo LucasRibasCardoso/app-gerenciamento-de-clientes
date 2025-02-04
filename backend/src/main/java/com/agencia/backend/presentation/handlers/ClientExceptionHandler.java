@@ -2,6 +2,7 @@ package com.agencia.backend.presentation.handlers;
 
 import com.agencia.backend.domain.exceptions.client.ClientAlreadyExistsException;
 import com.agencia.backend.domain.exceptions.client.ClientNotFoundException;
+import com.agencia.backend.domain.exceptions.client.InvalidBirthDateClientException;
 import com.agencia.backend.domain.exceptions.client.InvalidClientIdException;
 import com.agencia.backend.domain.exceptions.client.InvalidPassportDatesException;
 import com.agencia.backend.domain.exceptions.client.InvalidSortingParameterException;
@@ -28,7 +29,8 @@ public class ClientExceptionHandler {
       ClientAlreadyExistsException.class,
       InvalidClientIdException.class,
       InvalidSortingParameterException.class,
-      InvalidDateFormatException.class
+      InvalidDateFormatException.class,
+      InvalidBirthDateClientException.class
   })
   public ResponseEntity<GenericError> handlerBadRequest(Exception ex) {
     GenericError error = new GenericError(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
