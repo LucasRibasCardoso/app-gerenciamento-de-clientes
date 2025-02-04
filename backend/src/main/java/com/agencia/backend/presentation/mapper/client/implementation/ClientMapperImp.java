@@ -89,7 +89,7 @@ public class ClientMapperImp implements ClientMapper {
 
     return new Client(
         null,
-        textFormatter.format(dto.name()),
+        textFormatter.format(dto.completeName()),
         null, // Campo que não pode ser atualizado (cpf)
         dateConverter.convertToLocalDate(dto.birthDate()),
         dto.phone(),

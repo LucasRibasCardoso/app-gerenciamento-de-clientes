@@ -7,7 +7,7 @@ import {
   isGenericError, 
   PageResponse, 
   ValidationErrorsResponse,
-  isValidationError
+  isValidationError,
 } from "../types/types";
 import { findAllClients, deleteClient, saveClient, getClientById } from "../services/api/ClientService";
 import { usePopUp } from "../context/PopUpContext";

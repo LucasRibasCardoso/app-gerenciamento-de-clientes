@@ -192,8 +192,8 @@ class ClientRepositoryImpTest {
   @Test
   void ShouldFindAllClients_WhenClientsExist() {
     // Arrange
-    String search = "name:John";
-    String orderBy = "name";
+    String search = "completeName:John";
+    String orderBy = "completeName";
     String sortOrder = "ASC";
     int page = 0;
     int size = 5;
@@ -235,7 +235,7 @@ class ClientRepositoryImpTest {
   void ShouldReturnEmptyList_WhenNoClientsExist() {
     // Arrange
     String search = "nonExistentField:value";
-    String orderBy = "name";
+    String orderBy = "completeName";
     String sortOrder = "ASC";
     int page = 0;
     int size = 5;

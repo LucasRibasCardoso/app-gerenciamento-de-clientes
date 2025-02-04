@@ -1,4 +1,5 @@
 
+
 export type UserResponse = {
     id: string;
     username: string;
@@ -27,15 +28,6 @@ export type Address = {
     complement: string | null;
     residentialNumber: string | null;
 };
-
-export type ClientRequestUpdate = {
-    completeName: string | null;
-    birthDate: string | null; 
-    phone: string | null;
-    email: string | null;
-    passport: Passport;
-    address: Address;
-}
 
 export type ClientResponse = {
     id: number;

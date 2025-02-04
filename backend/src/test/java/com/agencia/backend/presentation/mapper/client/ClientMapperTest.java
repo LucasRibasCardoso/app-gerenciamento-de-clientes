@@ -277,7 +277,7 @@ class ClientMapperTest {
   void ShouldMapClientRequestUpdateDTOToDomain() {
     // Arrange
     ClientRequestUpdateDTO dto = new ClientRequestUpdateDTO(
-        "new name",
+        "new completeName",
         "01/01/2000",
         "(12) 12345-6789",
         "newEmail.@example.com",
@@ -294,7 +294,7 @@ class ClientMapperTest {
 
     when(passportMapper.toDomain(dto.passport())).thenReturn(mappedPassport);
     when(addressMapper.toDomain(dto.address())).thenReturn(mappedAddress);
-    when(textFormatter.format(dto.name())).thenReturn("New Name");
+    when(textFormatter.format(dto.completeName())).thenReturn("New Name");
     when(dateConverter.convertToLocalDate(dto.birthDate())).thenReturn(LocalDate.of(2000, 1, 1));
 
     // Act

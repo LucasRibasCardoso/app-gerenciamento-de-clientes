@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 public record ClientRequestUpdateDTO(
 
     @Size(max = 100, message = "O nome completo deve ter no máximo 100 caracteres")
-    String name,
+    String completeName,
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$", message = "Data de nascimento deve estar no formato dd/MM/yyyy")
