@@ -58,11 +58,13 @@ const deleteClient = async (clientId: number) => {
     await Api.delete(url);
   }
   catch (error: any) {
-    if (error.status && error.message) {
-      return {
-        message: error.response.data.message || "Não foi possível deletar o cliente.",
-        statusCode: error.response.status,
-      } as GenericError;
+    if (error.response) {
+      if (isGenericError(error.response.data)) {
+        return {
+          message: error.response.data.message || "Não foi possível deletar o cliente.",
+          statusCode: error.status,
+        } as GenericError;
+      }
     }
     return { 
       message: "Ocorreu um erro inesperado ao tentar deletar o cliente. Verifique sua conexão e tente novamente.", 
@@ -93,7 +95,6 @@ const saveClient = async (data: ClientRequest): Promise<ClientResponse | Generic
       } as GenericError;
       }
     }
-
     return {
         message: "Ocorreu um erro inesperado ao tentar salvar o cliente. Verifique sua conexão e tente novamente.",
         statusCode: 500,

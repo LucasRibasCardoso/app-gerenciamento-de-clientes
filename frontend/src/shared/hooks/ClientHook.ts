@@ -41,7 +41,10 @@ const useDeleteClient = () => {
 
   return useMutation<void, GenericError, number>({
     mutationFn: async (clientID) => {
-      await deleteClient(clientID);
+      const response = await deleteClient(clientID);
+      if (isGenericError(response)){
+        throw response;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: ["clients"]});
@@ -84,5 +87,4 @@ const useSaveClient = (onClose?: () => void) => {
 };
 
 
-
-export { useGetAllClients, useDeleteClient, useSaveClient }
+export { useGetAllClients, useDeleteClient, useSaveClient };

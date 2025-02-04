@@ -31,7 +31,7 @@ const FunctionalityBar: React.FC<FunctionalityBarProps> = ({
   onCreateClient,
 }) => {
   return (
-    <Box sx={{ display: "flex", justifyContent: "space-between", height: "45px" }}>
+    <Box sx={{ display: "flex", justifyContent: "space-between", height: "45px", gap: "15px" }}>
       <Box sx={{ display: "flex", gap: "15px" }}>
         {/* Barra de pesquisa */}
         <SearchBar onSearch={onSearch} />
