@@ -37,13 +37,14 @@ const findAllClients = async (
     return response.data;
   } 
   catch (error: any) {
-    if (isGenericError(error.response)) {
-      return {
-        message: error.response.data.message || "Não foi possível recuperar a lista de clientes.",
-        statusCode: error.response.status,
-      } as GenericError;
+    if (error.response) {
+      if (isGenericError(error.response.data)) {
+        return {
+          message: error.response.data.message || "Não foi possível recuperar a lista de clientes.",
+          statusCode: error.status,
+        } as GenericError;
+      }
     }
-
     return {
       message: "Ocorreu um erro inesperado ao tentar recuperar a lista de clientes. Verifique sua conexão e tente novamente.",
       statusCode: 500,
