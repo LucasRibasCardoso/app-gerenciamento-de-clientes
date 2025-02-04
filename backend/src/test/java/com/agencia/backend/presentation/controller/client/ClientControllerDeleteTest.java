@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.agencia.backend.application.useCase.client.FindClientByIdUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.agencia.backend.domain.exceptions.client.ClientNotFoundException;
 import com.agencia.backend.presentation.controller.ClientController;
@@ -31,6 +32,8 @@ public class ClientControllerDeleteTest {
   private CreateClientUseCase createClientUseCase;
   @MockitoBean
   private FindAllClientUseCase findAllClientUseCase;
+  @MockitoBean
+  private FindClientByIdUseCase findClientByIdUseCase;
   @MockitoBean
   private DeleteClientUseCase deleteClientUseCase;
   @MockitoBean

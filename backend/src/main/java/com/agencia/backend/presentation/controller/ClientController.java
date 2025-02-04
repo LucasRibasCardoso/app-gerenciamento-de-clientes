@@ -1,5 +1,6 @@
 package com.agencia.backend.presentation.controller;
 
+import com.agencia.backend.application.useCase.client.FindClientByIdUseCase;
 import com.agencia.backend.presentation.dto.client.ClientRequestDTO;
 import com.agencia.backend.presentation.dto.client.ClientRequestUpdateDTO;
 import com.agencia.backend.presentation.dto.client.ClientResponseDTO;
@@ -35,6 +36,7 @@ public class ClientController {
 
   private final CreateClientUseCase createClientUseCase;
   private final FindAllClientUseCase findAllClientUseCase;
+  private final FindClientByIdUseCase findClientByIdUseCase;
   private final DeleteClientUseCase deleteClientUseCase;
   private final UpdateClientUseCase updateClientUseCase;
 
@@ -44,6 +46,7 @@ public class ClientController {
   public ClientController(
       CreateClientUseCase createClientUseCase,
       FindAllClientUseCase findAllClientUseCase,
+      FindClientByIdUseCase findClientByIdUseCase,
       DeleteClientUseCase deleteClientUseCase,
       UpdateClientUseCase updateClientUseCase,
       UrlParametersValidator urlParametersValidator,
@@ -51,6 +54,7 @@ public class ClientController {
   ) {
     this.createClientUseCase = createClientUseCase;
     this.findAllClientUseCase = findAllClientUseCase;
+    this.findClientByIdUseCase = findClientByIdUseCase;
     this.deleteClientUseCase = deleteClientUseCase;
     this.updateClientUseCase = updateClientUseCase;
     this.urlParametersValidator = urlParametersValidator;
@@ -97,6 +101,14 @@ public class ClientController {
         clientsPage.getTotalPages(),
         clientsPage.getTotalElements()
     ));
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<ClientResponseDTO> getClientById(@PathVariable Long id) {
+    urlParametersValidator.validateID(id);
+
+    Client client = findClientByIdUseCase.getClient(id);
+    return ResponseEntity.ok(clientMapper.toDTO(client));
   }
 
   @DeleteMapping("/{id}")

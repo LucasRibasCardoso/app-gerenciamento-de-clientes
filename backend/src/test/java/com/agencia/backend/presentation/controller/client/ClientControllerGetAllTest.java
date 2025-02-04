@@ -1,5 +1,6 @@
 package com.agencia.backend.presentation.controller.client;
 
+import com.agencia.backend.application.useCase.client.FindClientByIdUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.agencia.backend.presentation.controller.ClientController;
 import com.agencia.backend.presentation.dto.address.AddressDTO;
@@ -28,7 +29,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -42,6 +42,8 @@ public class ClientControllerGetAllTest {
   private CreateClientUseCase createClientUseCase;
   @MockitoBean
   private FindAllClientUseCase findAllClientUseCase;
+  @MockitoBean
+  private FindClientByIdUseCase findClientByIdUseCase;
   @MockitoBean
   private DeleteClientUseCase deleteClientUseCase;
   @MockitoBean
@@ -95,7 +97,7 @@ public class ClientControllerGetAllTest {
     when(clientMapper.toDTO(client)).thenReturn(clientDTO);
 
     // Corpo da resposta esperada
-    String responseBody = """
+    String responseExpected = """
         {
             "data": [
                 {
@@ -135,7 +137,7 @@ public class ClientControllerGetAllTest {
             .param("size", String.valueOf(size))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().json(responseBody));
+        .andExpect(content().json(responseExpected));
   }
 
   @Test

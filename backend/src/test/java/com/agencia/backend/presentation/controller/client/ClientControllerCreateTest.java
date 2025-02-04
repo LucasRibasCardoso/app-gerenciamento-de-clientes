@@ -1,5 +1,6 @@
 package com.agencia.backend.presentation.controller.client;
 
+import com.agencia.backend.application.useCase.client.FindClientByIdUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.agencia.backend.presentation.controller.ClientController;
 import com.agencia.backend.presentation.dto.address.AddressDTO;
@@ -40,6 +41,8 @@ class ClientControllerCreateTest {
   private CreateClientUseCase createClientUseCase;
   @MockitoBean
   private FindAllClientUseCase findAllClientUseCase;
+  @MockitoBean
+  private FindClientByIdUseCase findClientByIdUseCase;
   @MockitoBean
   private DeleteClientUseCase deleteClientUseCase;
   @MockitoBean
