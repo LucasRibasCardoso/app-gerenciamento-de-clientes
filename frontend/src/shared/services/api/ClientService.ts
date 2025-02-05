@@ -105,7 +105,6 @@ const saveClient = async (data: ClientRequest): Promise<ClientResponse | Generic
   } 
   catch (error: any) {
     if (error.response) {
-      console.log(error.response);
       if (isValidationError(error.response.data)) {
         return {
           message: error.response.data.message || "Erro na validação dos campos enviados",
@@ -126,6 +125,8 @@ const saveClient = async (data: ClientRequest): Promise<ClientResponse | Generic
     } as GenericError;
   }
 };
+
+// Função para atualizar cliente
 
 
 

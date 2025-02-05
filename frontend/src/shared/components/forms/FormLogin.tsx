@@ -1,26 +1,9 @@
 import { useForm, Controller } from "react-hook-form";
 import { TextField, Button, Box, Typography } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
 import { useLogin } from "../../hooks/LoginHook";
-import { usePopUp } from "../../context/PopUpContext";
-import { isGenericError, isValidationError } from "../../types/types";
-
-// Definição do esquema de validação com Yup
-const schema = yup.object({
-  username: yup
-    .string()
-    .required("O usuário é obrigatório.")
-    .min(6, "O usuário deve ter no mínimo 6 caracteres.")
-    .max(100, "O nome de usuário deve ter no máximo 100 caracteres."),
-  password: yup
-    .string()
-    .required("A senha é obrigatória.")
-    .min(8, "A senha deve ter no mínimo 8 caracteres.")
-    .max(20, "A senha deve ter no máximo 20 caracteres.")
-    .matches(/[\W_]/, "A senha deve conter pelo menos um caractere especial."),
-});
+import { LoginSchema } from "./schemas";
 
 interface FormData {
   username: string;
@@ -29,31 +12,13 @@ interface FormData {
 
 export default function FormLogin() {
   const login = useLogin();
-  const { showMessage } = usePopUp();
 
-  const { control, handleSubmit, formState: { errors }, setError } = useForm<FormData>({
-    resolver: yupResolver(schema),
+  const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
+    resolver: yupResolver(LoginSchema),
   });
 
   const onSubmit = async (data: FormData) => {
-    try {
-      await login.mutateAsync({
-        username: data.username,
-        password: data.password,
-      });
-    } 
-    catch (error) {
-      if (isValidationError(error)) {
-        error.errors.forEach((erro) => {
-          setError(erro.field as keyof FormData, {
-            message: erro.message,
-          });
-        });
-      } 
-      else if (isGenericError(error)) {
-        showMessage(error.message, "error");
-      }
-    }
+    await login.mutateAsync({ username: data.username, password: data.password});
   };
 
   return (

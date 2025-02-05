@@ -40,15 +40,10 @@ const useGetClientById = (clientId: number) => {
     queryKey: ["client", clientId],
     queryFn: async ({ queryKey }) => {
       const [, id] = queryKey;
-
       const response = await getClientById(id as number);
-
-      if (isGenericError(response)) {
-        throw response;
-      }
-
       return response;
     },
+    enabled: !!clientId, // Só executa a query se clientId existir
   });
 };
 

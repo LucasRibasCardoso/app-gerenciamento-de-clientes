@@ -18,92 +18,9 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { ClientRequest } from "../../types/types";
 import { SaveButton } from "../buttons";
-import { useSaveClient } from "../../hooks/ClientHook";
-
-
-const clientSchema = yup.object().shape({
-    completeName: yup.string()
-        .required("O nome completo é obrigatório")
-        .max(100, "O nome completo deve ter no máximo 100 caracteres"),
-
-    cpf: yup.string()
-        .required("O CPF é obrigatório")
-        .max(14, "O CPF deve ter no máximo 14 caracteres")
-        .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido"),
-
-    birthDate: yup.string()
-        .required("A data de nascimento é obrigatória")
-        .matches(/^\d{2}\/\d{2}\/\d{4}$/, "Data de nascimento deve estar no formato dd/MM/yyyy")
-        .test("is-valid-date", "Data de nascimento inválida", (value) => {
-            if (!value) return true; // Permite valores nulos
-            const [day, month, year] = value.split("/");
-            const date = new Date(`${year}-${month}-${day}`);
-            return !isNaN(date.getTime()); // Verifica se a data é válida
-        }),
-
-    phone: yup.string()
-        .nullable()
-        .transform((value) => value || null) // Converte strings vazias para null
-        .matches(/\(\d{2}\) \d{4,5}-\d{4}/, "Formato inválido")
-        .max(15, "O telefone deve ter no máximo 15 caracteres"),
-
-    email: yup.string()
-        .nullable()
-        .transform((value) => value || null) // Converte strings vazias para null
-        .email("E-mail inválido")
-        .max(100, "O e-mail deve ter no máximo 100 caracteres"),
-
-    passport: yup.object().shape({
-        number: yup.string()
-            .nullable()
-            .transform((value) => value || null),
-        emissionDate: yup.string()
-            .nullable()
-            .transform((value) => value || null)
-            .test("is-valid-date", "Data de emissão inválida", (value) => {
-                if (!value) return true; // Permite valores nulos
-                const [day, month, year] = value.split("/");
-                const date = new Date(`${year}-${month}-${day}`);
-                return !isNaN(date.getTime()); // Verifica se a data é válida
-            }),
-        expirationDate: yup.string()
-            .nullable()
-            .transform((value) => value || null)
-            .test("is-valid-date", "Data de validade inválida", (value) => {
-                if (!value) return true; // Permite valores nulos
-                const [day, month, year] = value.split("/");
-                const date = new Date(`${year}-${month}-${day}`);
-                return !isNaN(date.getTime()); // Verifica se a data é válida
-            }),
-    }),
-
-    address: yup.object().shape({
-        zipCode: yup.string()
-            .nullable()
-            .transform((value) => value || null),
-        country: yup.string()
-            .nullable()
-            .transform((value) => value || null),
-        state: yup.string()
-            .nullable()
-            .transform((value) => value || null),
-        city: yup.string()
-            .nullable()
-            .transform((value) => value || null),
-        neighborhood: yup.string()
-            .nullable()
-            .transform((value) => value || null),
-        street: yup.string()
-            .nullable()
-            .transform((value) => value || null),
-        complement: yup.string()
-            .nullable()
-            .transform((value) => value || null),
-        residentialNumber: yup.string()
-            .nullable()
-            .transform((value) => value || null),
-    }),
-});
+import { useGetClientById, useSaveClient } from "../../hooks/ClientHook";
+import { usePopUp } from "../../context/PopUpContext";
+import { AddClientSchema } from "./schemas";
 
 interface ClientFormModalProps {
     isOpen: boolean;
@@ -114,15 +31,20 @@ interface ClientFormModalProps {
 
 const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientId }) => {
 
-    const { control, handleSubmit, formState: { errors }} = useForm<ClientRequest>({
-        resolver: yupResolver(clientSchema as unknown as yup.SchemaOf<ClientRequest>),
+    const { control, reset, handleSubmit, formState: { errors }} = useForm<ClientRequest>({
+        resolver: yupResolver(AddClientSchema as unknown as yup.SchemaOf<ClientRequest>),
     });
+
+    const { showMessage } = usePopUp();
 
     const [passportCollapse, setPassportCollapse] = useState(false);
     const [addressCollapse, setAddressCollapse] = useState(false); 
 
     // Hook para salvar o cliente
     const { mutate: saveClient, isPending: isSaving } = useSaveClient(onClose);
+
+    // Busca os dados do cliente se estiver no modo de edição
+    const { data: clientData, isLoading, isError, error } = useGetClientById(clientId!);
 
     const togglePassportCollapse = () => {
         setPassportCollapse(!passportCollapse);
@@ -132,19 +54,29 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
         setAddressCollapse(!addressCollapse);
     };
 
-    // Carregar dados do cliente se estiver editando
-    useEffect(() => {
-        if (isEditing && clientId) {
-            // Chama hook para buscar cliente pelo id
-            console.log("Editando cliente: " + clientId);
-        }
-    }, [isEditing, clientId]);
+    /// Preenche o formulário com os dados do cliente quando eles são carregados
+  useEffect(() => {
+    if (isEditing && clientData) {
+      reset({
+        ...clientData,
+        completeName: clientData.completeName, // Mapeia campos, se necessário
+      });
+    }
+  }, [clientData, isEditing, reset]);
 
-    // Função para enviar os dados do formulário
-    const onSubmit = (data: ClientRequest) => {
-        console.log(data);
-        saveClient(data);
-    };
+  // Função para enviar os dados do formulário
+  const onSubmit = (data: ClientRequest) => {
+    console.log(data);
+    saveClient(data);
+  };
+
+    if (isLoading) {
+        return <div>Carregando...</div>; 
+    }
+    if (isError) {
+        console.error(error);
+        showMessage(error.message, "error");
+    }
 
     return (
         <Box
