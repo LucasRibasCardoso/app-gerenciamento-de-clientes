@@ -4,11 +4,13 @@ import {
   isGenericError, 
   isValidationError, 
   PageResponse, 
-  ClientRequest, 
+  AddClientRequest, 
   ValidationErrorsResponse,
+  UpdateClientRequest,
 } from "../../types/types";
 import Api from "./axios-config/AxiosConfig";
 
+// Função para buscar todos os clientes
 const findAllClients = async (
   params?: {
     searchQuery?: string;
@@ -44,13 +46,13 @@ const findAllClients = async (
         } as GenericError;
       }
     }
+    console.error("Erro inesperado ao buscar clientes:", error);
     return {
-      message: "Ocorreu um erro inesperado ao tentar recuperar a lista de clientes do banco de dados. Verifique sua conexão e tente novamente.",
+      message: "Ocorreu um erro inesperado ao tentar recuperar a lista de clientes do banco de dados.",
       statusCode: 500,
     } as GenericError;
   }
 };
-
 
 // Função para buscar um cliente pelo ID
 const getClientById = async (clientId: number) => {
@@ -68,8 +70,9 @@ const getClientById = async (clientId: number) => {
         } as GenericError;
       }
     }
+    console.error("Erro inesperado ao buscar cliente:", error);
     return {
-      message: "Ocorreu um erro inesperado ao tentar buscar cliente no banco de dados. Verifique sua conexão e tente novamente.",
+      message: "Ocorreu um erro inesperado ao tentar buscar cliente no banco de dados.",
       statusCode: 500, 
     } as GenericError;
   }
@@ -90,15 +93,17 @@ const deleteClient = async (clientId: number) => {
         } as GenericError;
       }
     }
+    console.error("Erro inesperado ao deletar cliente:", error);
     return { 
-      message: "Ocorreu um erro inesperado ao tentar deletar o cliente. Verifique sua conexão e tente novamente.", 
+      message: "Ocorreu um erro inesperado ao tentar deletar o cliente.", 
       statusCode: 500 
     } as GenericError;
   }
 };
 
 // Função para salvar o cliente
-const saveClient = async (data: ClientRequest): Promise<ClientResponse | GenericError | ValidationErrorsResponse> => {
+const saveClient = async (data: AddClientRequest
+): Promise<ClientResponse | GenericError | ValidationErrorsResponse> => {
   try {
       const response = await Api.post<ClientResponse>("/clients", data);
       return response.data;
@@ -119,15 +124,46 @@ const saveClient = async (data: ClientRequest): Promise<ClientResponse | Generic
       } as GenericError;
       }
     }
+    console.error("Erro inesperado ao salvar cliente:", error);
     return {
-        message: "Ocorreu um erro inesperado ao tentar salvar o cliente. Verifique sua conexão e tente novamente.",
+        message: "Ocorreu um erro inesperado ao tentar salvar o cliente.",
         statusCode: 500,
     } as GenericError;
   }
 };
 
 // Função para atualizar cliente
+const updateClient = async (data: UpdateClientRequest, clientId: number
+): Promise<ClientResponse | GenericError | ValidationErrorsResponse> => {
+  try {
+    const url = `/clients/${clientId}`;
+    const response = await Api.put(url, data);
+    return response.data;
+  }
+  catch (error: any) {
+    if (error.response) {
+      console.error(error.response);
+      if (isValidationError(error.response.data)){
+        return {
+          message: error.response.data.message || "Erro na validação dos campos enviados",
+          statusCode: error.status,
+          errors: new Set(error.response.data.errors),
+        } as ValidationErrorsResponse;
+      }
+      if (isGenericError(error.response.data)) {
+        return {
+          message: error.response.data.message || `Não foi possível atualizar o cadastro do cliente com ID ${clientId}.`,
+          statusCode: error.status,
+        } as GenericError;
+      }
+    }
+    console.error("Erro inesperado ao atualizar cliente:", error);
+    return {  
+      message: "Ocorreu um erro inesperado ao tentar atualizar o cadastro do cliente.",
+      statusCode: 500,
+    } as GenericError;
+  }
+};
 
 
-
-export { findAllClients, getClientById, deleteClient, saveClient};
+export { findAllClients, getClientById, deleteClient, saveClient, updateClient};

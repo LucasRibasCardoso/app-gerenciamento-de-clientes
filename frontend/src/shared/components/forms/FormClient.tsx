@@ -10,17 +10,19 @@ import {
 import { ExpandMore, ExpandLess } from "@mui/icons-material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import Grid from "@mui/material/Grid2";
 import InputMask from "react-input-mask";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 
 
-import { ClientRequest } from "../../types/types";
+import { AddClientRequest, UpdateClientRequest } from "../../types/types";
 import { SaveButton } from "../buttons";
-import { useGetClientById, useSaveClient } from "../../hooks/ClientHook";
+import { useGetClientById, useAddClient, useUpdateClient } from "../../hooks/ClientHook";
 import { usePopUp } from "../../context/PopUpContext";
-import { AddClientSchema } from "./schemas";
+import { 
+    AddClientSchema, AddClientSchemaDefaultValues,
+    UpdateClientSchema, UpdateClientSchemaDefaultValues
+} from "./schemas";
 
 interface ClientFormModalProps {
     isOpen: boolean;
@@ -31,21 +33,82 @@ interface ClientFormModalProps {
 
 const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientId }) => {
 
-    const { control, reset, handleSubmit, formState: { errors }} = useForm<ClientRequest>({
-        resolver: yupResolver(AddClientSchema as unknown as yup.SchemaOf<ClientRequest>),
+    const { 
+        control, 
+        reset, 
+        handleSubmit, 
+        getValues,
+        formState: { errors }
+    } = useForm<AddClientRequest | UpdateClientRequest>({
+        resolver: yupResolver(
+            isEditing 
+                ? UpdateClientSchema 
+                : AddClientSchema
+        ),
+        defaultValues: isEditing ? UpdateClientSchemaDefaultValues : AddClientSchemaDefaultValues
     });
 
     const { showMessage } = usePopUp();
-
     const [passportCollapse, setPassportCollapse] = useState(false);
     const [addressCollapse, setAddressCollapse] = useState(false); 
 
-    // Hook para salvar o cliente
-    const { mutate: saveClient, isPending: isSaving } = useSaveClient(onClose);
+    // Hook para salvar e atualizar cliente 
+    const { mutate: saveClient, isPending: isSaving } = useAddClient(onClose);
+    const { mutate: updateClient, isPending: isUpdating } = useUpdateClient(onClose);
 
     // Busca os dados do cliente se estiver no modo de edição
-    const { data: clientData, isLoading, isError, error } = useGetClientById(clientId!);
+    const { data: clientData, isError, error } = useGetClientById(clientId!);
 
+    // Preenche o formulário com os dados do cliente quando eles são carregados
+    useEffect(() => {
+        if (isEditing && clientData) {
+            reset({
+                ...clientData,
+            });
+        }
+    }, [clientData, isEditing, reset]);
+    if (isError) {
+        showMessage(error.message, "error");
+    }
+
+    // Função para enviar os dados do formulário
+    const onSubmit = (data: AddClientRequest | UpdateClientRequest) => {
+        if (isEditing && clientId) {
+            const currentValues = getValues();
+            
+            const dataUpdate = {
+                completeName: currentValues.completeName != clientData?.completeName ? currentValues.completeName : null,
+                cpf: null,
+                birthDate: currentValues.birthDate != clientData?.birthDate ? currentValues.birthDate : null,
+                phone: currentValues.phone != clientData?.phone ? currentValues.phone : null,
+                email: currentValues.email !== clientData?.email ? currentValues.email : null,
+
+                passport: {
+                    number: currentValues.passport.number !== clientData?.passport?.number ? currentValues.passport.number : null,
+                    emissionDate: currentValues.passport.emissionDate !== clientData?.passport?.emissionDate ? currentValues.passport.emissionDate : null,
+                    expirationDate: currentValues.passport.expirationDate !== clientData?.passport?.expirationDate ? currentValues.passport.expirationDate : null,
+                },
+
+                address: {
+                    zipCode: currentValues.address.zipCode !== clientData?.address?.zipCode ? currentValues.address.zipCode : null,
+                    country: currentValues.address.country !== clientData?.address?.country ? currentValues.address.country : null,
+                    state: currentValues.address.state !== clientData?.address?.state ? currentValues.address.state : null,
+                    city: currentValues.address.city !== clientData?.address?.city ? currentValues.address.city : null,
+                    neighborhood: currentValues.address.neighborhood !== clientData?.address?.neighborhood ? currentValues.address.neighborhood : null,
+                    street: currentValues.address.street !== clientData?.address?.street ? currentValues.address.street : null,
+                    complement: currentValues.address.complement !== clientData?.address?.complement ? currentValues.address.complement : null,
+                    residentialNumber: currentValues.address.residentialNumber !== clientData?.address?.residentialNumber ? currentValues.address.residentialNumber : null,
+                }
+            };
+
+            updateClient({ clientId, data: dataUpdate as UpdateClientRequest});
+        } 
+        else {
+            saveClient(data as AddClientRequest);
+        }
+    };
+
+    // Funções para abrir as seções de Passaporte e Endereço
     const togglePassportCollapse = () => {
         setPassportCollapse(!passportCollapse);
     };
@@ -53,30 +116,6 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
     const toggleAddressCollapse = () => {
         setAddressCollapse(!addressCollapse);
     };
-
-    /// Preenche o formulário com os dados do cliente quando eles são carregados
-  useEffect(() => {
-    if (isEditing && clientData) {
-      reset({
-        ...clientData,
-        completeName: clientData.completeName, // Mapeia campos, se necessário
-      });
-    }
-  }, [clientData, isEditing, reset]);
-
-  // Função para enviar os dados do formulário
-  const onSubmit = (data: ClientRequest) => {
-    console.log(data);
-    saveClient(data);
-  };
-
-    if (isLoading) {
-        return <div>Carregando...</div>; 
-    }
-    if (isError) {
-        console.error(error);
-        showMessage(error.message, "error");
-    }
 
     return (
         <Box
@@ -149,6 +188,7 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                                     mask="999.999.999-99"
                                     value={field.value || ""}
                                     onChange={field.onChange}
+                                    disabled={isEditing}
                                 >
                                     {(inputProps: any) => (
                                         <TextField
@@ -164,6 +204,7 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                             )}
                         />
                     </Grid>
+
                     <Grid size={4}>
                         <Controller
                             name="birthDate"
@@ -188,6 +229,7 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                             )}
                         />
                     </Grid>
+
                     <Grid size={4}>
                         <Controller
                             name="phone"
@@ -216,25 +258,25 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
 
             {/* Seção de Passaporte */}
             <Box>
-                    <Button
-                        fullWidth
-                        variant="outlined"
-                        onClick={togglePassportCollapse}
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            textTransform: "none",
-                            padding: "10px",
-                            ...(passportCollapse && {
-                                border: "none"
-                              }),
-                        }}
-                        >
-                        <Typography variant="h6">Passaporte</Typography>
-                        {passportCollapse ? <ExpandLess /> : <ExpandMore />}
-                    </Button>
-                    <Collapse in={passportCollapse}>
+                <Button
+                    fullWidth
+                    variant="outlined"
+                    onClick={togglePassportCollapse}
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        textTransform: "none",
+                        padding: "10px",
+                        ...(passportCollapse && {
+                            border: "none"
+                          }),
+                    }}
+                    >
+                    <Typography variant="h6">Passaporte</Typography>
+                    {passportCollapse ? <ExpandLess /> : <ExpandMore />}
+                </Button>
+                <Collapse in={passportCollapse}>
                         <Grid container spacing={2}>
                             <Grid size={4}>
                                 <Controller
@@ -303,32 +345,32 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                                 />
                             </Grid>
                         </Grid>
-                    </Collapse>
+                </Collapse>
             </Box>
 
             {/* Seção de Endereço */}
             <Box>
-                    <Button
-                        fullWidth
-                        variant="outlined"
-                        onClick={toggleAddressCollapse}
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            textTransform: "none",
-                            padding: "10px",
-                            ...(addressCollapse && {
-                                border: "none"
-                              }),
-                        }}
-                    >
-                        <Typography variant="h6">Endereço</Typography>
-                        <IconButton onClick={toggleAddressCollapse}>
-                            {addressCollapse ? <ExpandLess /> : <ExpandMore />}
-                        </IconButton>
-                    </Button>
-                    <Collapse in={addressCollapse}>
+                <Button
+                    fullWidth
+                    variant="outlined"
+                    onClick={toggleAddressCollapse}
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        textTransform: "none",
+                        padding: "10px",
+                        ...(addressCollapse && {
+                            border: "none"
+                          }),
+                    }}
+                >
+                    <Typography variant="h6">Endereço</Typography>
+                    <IconButton onClick={toggleAddressCollapse}>
+                        {addressCollapse ? <ExpandLess /> : <ExpandMore />}
+                    </IconButton>
+                </Button>
+                <Collapse in={addressCollapse}>
                         <Grid container spacing={2}>
                             
                             <Grid size={4}>
@@ -475,10 +517,10 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                                 />
                             </Grid>
                         </Grid>
-                    </Collapse>
+                </Collapse>
             </Box>
 
-            <SaveButton disabled={isSaving}/>
+            <SaveButton disabled={isSaving || isUpdating}/>
         </Box>
     );
 }

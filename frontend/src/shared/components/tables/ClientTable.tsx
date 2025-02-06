@@ -55,6 +55,7 @@ const ClientsTable: React.FC<Props> = ({
           <TableHead sx={{ backgroundColor: "#616161", height: "45px"}}>
             <TableRow>
               <TableCell width={"75px"} />
+              <TableCell sx={{ color: "background.default", fontWeight: "bold", fontSize: "16px"}}>ID</TableCell>
               <TableCell sx={{ color: "background.default", fontWeight: "bold", fontSize: "16px"}}>Nome</TableCell>
               <TableCell sx={{ color: "background.default", fontWeight: "bold", fontSize: "16px"}} >CPF</TableCell>
               <TableCell sx={{ color: "background.default", fontWeight: "bold", fontSize: "16px"}} >Telefone</TableCell>
@@ -102,6 +103,7 @@ const ClientsTable: React.FC<Props> = ({
                         {openRows[client.id] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                       </IconButton>
                     </TableCell>
+                    <TableCell>{client.id}</TableCell>
                     <TableCell>{client.completeName}</TableCell>
                     <TableCell>{client.cpf || "-"}</TableCell>
                     <TableCell>{client.phone || "-"}</TableCell>

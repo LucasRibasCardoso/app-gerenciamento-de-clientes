@@ -1,12 +1,21 @@
 import * as yup from "yup";
+import { UpdateClientRequest } from "../../../types/types";
 
-export const UpdateClientSchema = yup.object().shape({
+export const UpdateClientSchema: yup.SchemaOf<UpdateClientRequest> = yup.object().shape({
     completeName: yup.string()
-        .nullable()
-        .max(100, "O nome completo deve ter no máximo 100 caracteres"),
+            .defined() // Garante que o campo não aceite `undefined`
+            .required("O nome completo é obrigatório")
+            .max(100, "O nome completo deve ter no máximo 100 caracteres"),
+    
+    cpf: yup.string()
+        .defined() // Garante que o campo não aceite `undefined`
+        .required("O CPF é obrigatório")
+        .max(14, "O CPF deve ter no máximo 14 caracteres")
+        .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido"),
 
     birthDate: yup.string()
-        .nullable()
+        .defined() // Garante que o campo não aceite `undefined`
+        .required("A data de nascimento é obrigatória")
         .matches(/^\d{2}\/\d{2}\/\d{4}$/, "Data de nascimento deve estar no formato dd/MM/yyyy")
         .test("is-valid-date", "Data de nascimento inválida", (value) => {
             if (!value) return true; // Permite valores nulos
@@ -16,33 +25,40 @@ export const UpdateClientSchema = yup.object().shape({
         }),
 
     phone: yup.string()
-        .nullable()
+        .nullable() // Permite valores nulos
+        .defined() // Garante que o campo não aceite `undefined`
         .transform((value) => value || null) // Converte strings vazias para null
         .matches(/\(\d{2}\) \d{4,5}-\d{4}/, "Formato inválido")
         .max(15, "O telefone deve ter no máximo 15 caracteres"),
 
     email: yup.string()
-        .nullable()
+        .nullable() // Permite valores nulos
+        .defined() // Garante que o campo não aceite `undefined`
         .transform((value) => value || null) // Converte strings vazias para null
         .email("E-mail inválido")
         .max(100, "O e-mail deve ter no máximo 100 caracteres"),
 
     passport: yup.object().shape({
         number: yup.string()
-            .nullable()
-            .transform((value) => value || null),
+            .nullable() // Permite valores nulos
+            .defined() // Garante que o campo não aceite `undefined`
+            .transform((value) => value || null), // Converte strings vazias para null
+
         emissionDate: yup.string()
-            .nullable()
-            .transform((value) => value || null)
+            .nullable() // Permite valores nulos
+            .defined() // Garante que o campo não aceite `undefined`
+            .transform((value) => value || null) // Converte strings vazias para null
             .test("is-valid-date", "Data de emissão inválida", (value) => {
                 if (!value) return true; // Permite valores nulos
                 const [day, month, year] = value.split("/");
                 const date = new Date(`${year}-${month}-${day}`);
                 return !isNaN(date.getTime()); // Verifica se a data é válida
             }),
+
         expirationDate: yup.string()
-            .nullable()
-            .transform((value) => value || null)
+            .nullable() // Permite valores nulos
+            .defined() // Garante que o campo não aceite `undefined`
+            .transform((value) => value || null) // Converte strings vazias para null
             .test("is-valid-date", "Data de validade inválida", (value) => {
                 if (!value) return true; // Permite valores nulos
                 const [day, month, year] = value.split("/");
@@ -53,34 +69,51 @@ export const UpdateClientSchema = yup.object().shape({
 
     address: yup.object().shape({
         zipCode: yup.string()
-            .nullable()
-            .transform((value) => value || null),
+            .nullable() // Permite valores nulos
+            .defined() // Garante que o campo não aceite `undefined`
+            .transform((value) => value || null), // Converte strings vazias para null
+
         country: yup.string()
-            .nullable()
-            .transform((value) => value || null),
+            .nullable() // Permite valores nulos
+            .defined() // Garante que o campo não aceite `undefined`
+            .transform((value) => value || null), // Converte strings vazias para null
+
         state: yup.string()
-            .nullable()
-            .transform((value) => value || null),
+            .nullable() // Permite valores nulos
+            .defined() // Garante que o campo não aceite `undefined`
+            .transform((value) => value || null), // Converte strings vazias para null
+
         city: yup.string()
-            .nullable()
-            .transform((value) => value || null),
+            .nullable() // Permite valores nulos
+            .defined() // Garante que o campo não aceite `undefined`
+            .transform((value) => value || null), // Converte strings vazias para null
+
         neighborhood: yup.string()
-            .nullable()
-            .transform((value) => value || null),
+            .nullable() // Permite valores nulos
+            .defined() // Garante que o campo não aceite `undefined`
+            .transform((value) => value || null), // Converte strings vazias para null
+
         street: yup.string()
-            .nullable()
-            .transform((value) => value || null),
+            .nullable() // Permite valores nulos
+            .defined() // Garante que o campo não aceite `undefined`
+            .transform((value) => value || null), // Converte strings vazias para null
+
         complement: yup.string()
-            .nullable()
-            .transform((value) => value || null),
+            .nullable() // Permite valores nulos
+            .defined() // Garante que o campo não aceite `undefined`
+            .transform((value) => value || null), // Converte strings vazias para null
+
         residentialNumber: yup.string()
-            .nullable()
-            .transform((value) => value || null),
+            .nullable() // Permite valores nulos
+            .defined() // Garante que o campo não aceite `undefined`
+            .transform((value) => value || null), // Converte strings vazias para null
+            
     }),
 });
 
 export const UpdateClientSchemaDefaultValues = {
     completeName: null,
+    cpf: null,
     birthDate: null,
     phone: null,
     email: null,

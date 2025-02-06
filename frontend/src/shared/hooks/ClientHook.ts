@@ -2,14 +2,15 @@ import { useMutation, useQuery, useQueryClient  } from "@tanstack/react-query";
 
 import { 
   ClientResponse, 
-  ClientRequest,
+  AddClientRequest,
   GenericError, 
   isGenericError, 
   PageResponse, 
   ValidationErrorsResponse,
   isValidationError,
+  UpdateClientRequest,
 } from "../types/types";
-import { findAllClients, deleteClient, saveClient, getClientById } from "../services/api/ClientService";
+import { findAllClients, deleteClient, saveClient, getClientById, updateClient } from "../services/api/ClientService";
 import { usePopUp } from "../context/PopUpContext";
 
 const useGetAllClients = (
@@ -68,11 +69,11 @@ const useDeleteClient = () => {
   });
 };
 
-const useSaveClient = (onClose?: () => void) => {
+const useAddClient = (onClose?: () => void) => {
   const queryClient = useQueryClient();
   const { showMessage } = usePopUp();
 
-  return useMutation<ClientResponse, GenericError | ValidationErrorsResponse, ClientRequest>({
+  return useMutation<ClientResponse, GenericError | ValidationErrorsResponse, AddClientRequest>({
     mutationFn: async (data) => {
       const response = await saveClient(data);
       
@@ -98,5 +99,33 @@ const useSaveClient = (onClose?: () => void) => {
   });
 };
 
+const useUpdateClient = (onClose?: () => void) => {
+  const queryClient = useQueryClient();
+  const { showMessage } = usePopUp();
 
-export { useGetAllClients, useDeleteClient, useSaveClient, useGetClientById };
+  return useMutation<
+    ClientResponse, 
+    GenericError | ValidationErrorsResponse, 
+    {clientId: number; data: UpdateClientRequest}
+  >({
+    mutationFn: async ({clientId, data}) => {
+      const response = await updateClient(data, clientId);
+      
+      if (isValidationError(response) || isGenericError(response)) {
+        throw response;
+      }
+      return response;
+    },
+    onSuccess: (clientId) => {
+      queryClient.invalidateQueries({ queryKey: ["clients", clientId] });
+      queryClient.invalidateQueries({queryKey: ["clients"]});
+      showMessage("Cliente atualizado com sucesso!", "success");
+      onClose?.(); 
+    },
+    onError: (error) => {
+      showMessage(error.message , "error");
+    },
+  });
+};
+
+export { useGetAllClients, useDeleteClient, useAddClient, useGetClientById, useUpdateClient };
