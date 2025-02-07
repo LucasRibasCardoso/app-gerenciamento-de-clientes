@@ -30,21 +30,35 @@ interface ClientFormModalProps {
     clientId: number | null;
 }
 
+// Função auxiliar para lidar com campos aninhados
+const getNestedFields = (dirtyFields: Record<string, any>, data: any) => {
+    const result: any = {};
+    
+    Object.keys(dirtyFields).forEach(key => {
+        if (typeof dirtyFields[key] === "object") {
+            const nested = getNestedFields(dirtyFields[key], data[key]);
+            if (Object.keys(nested).length > 0) {
+                result[key] = nested;
+            }
+        } else if (dirtyFields[key]) {
+            result[key] = data[key];
+        }
+    });
+    
+    return result;
+};
+
 const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientId }) => {
 
     const { 
         control, 
         reset, 
         handleSubmit, 
-        getValues,
-        formState: { errors }
+        formState: { errors, isDirty, dirtyFields } 
     } = useForm<AddClientRequest | UpdateClientRequest>({
-        resolver: yupResolver(
-            isEditing 
-                ? UpdateClientSchema 
-                : AddClientSchema
-        ),
-        defaultValues: isEditing ? UpdateClientSchemaDefaultValues : AddClientSchemaDefaultValues
+        resolver: yupResolver(isEditing ? UpdateClientSchema : AddClientSchema),
+        defaultValues: isEditing ? UpdateClientSchemaDefaultValues : AddClientSchemaDefaultValues,
+        mode: "onChange" // Garantir atualização imediata do estado dirty
     });
 
     const { showMessage } = usePopUp();
@@ -73,23 +87,16 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
     // Função para enviar os dados do formulário
     const onSubmit = (data: AddClientRequest | UpdateClientRequest) => {
         if (isEditing && clientId) {
-            const currentValues = getValues();
-            console.log("Editando cliente: " + clientId, currentValues);
+            if (!isDirty) {
+                showMessage("Nenhuma alteração foi detectada.", "info");
+                return;
+            }
 
-            //updateClient({ clientId, data: currentValues as UpdateClientRequest});
-        } 
-        else {
+            const updatedClient = getNestedFields(dirtyFields, data);
+            updateClient({ clientId, data: updatedClient });
+        } else {
             saveClient(data as AddClientRequest);
         }
-    };
-
-    // Funções para abrir as seções de Passaporte e Endereço
-    const togglePassportCollapse = () => {
-        setPassportCollapse(!passportCollapse);
-    };
-
-    const toggleAddressCollapse = () => {
-        setAddressCollapse(!addressCollapse);
     };
 
     return (
@@ -175,7 +182,7 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                 <Button
                     fullWidth
                     variant="outlined"
-                    onClick={togglePassportCollapse}
+                    onClick={() => setPassportCollapse(!passportCollapse)}
                     sx={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -229,7 +236,7 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                 <Button
                     fullWidth
                     variant="outlined"
-                    onClick={toggleAddressCollapse}
+                    onClick={() => setAddressCollapse(!addressCollapse)}
                     sx={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -242,7 +249,7 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                     }}
                 >
                     <Typography variant="h6">Endereço</Typography>
-                    <IconButton onClick={toggleAddressCollapse}>
+                    <IconButton>
                         {addressCollapse ? <ExpandLess /> : <ExpandMore />}
                     </IconButton>
                 </Button>
