@@ -3,9 +3,9 @@ import { UpdateClientRequest } from "../../../types/types";
 
 export const UpdateClientSchema: yup.SchemaOf<UpdateClientRequest> = yup.object().shape({
     completeName: yup.string()
-            .defined() // Garante que o campo não aceite `undefined`
-            .required("O nome completo é obrigatório")
-            .max(100, "O nome completo deve ter no máximo 100 caracteres"),
+        .defined() // Garante que o campo não aceite `undefined`
+        .required("O nome completo é obrigatório")
+        .max(100, "O nome completo deve ter no máximo 100 caracteres"),
     
     cpf: yup.string()
         .defined() // Garante que o campo não aceite `undefined`
@@ -111,9 +111,8 @@ export const UpdateClientSchema: yup.SchemaOf<UpdateClientRequest> = yup.object(
     }),
 });
 
-export const UpdateClientSchemaDefaultValues = {
+export const UpdateClientSchemaDefaultValues: UpdateClientRequest = {
     completeName: null,
-    cpf: null,
     birthDate: null,
     phone: null,
     email: null,

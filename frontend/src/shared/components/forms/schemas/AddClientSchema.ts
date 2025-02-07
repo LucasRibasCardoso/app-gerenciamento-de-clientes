@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { AddClientRequest } from "../../../types/types";
 
 export const AddClientSchema = yup.object().shape({
     completeName: yup.string()
@@ -84,7 +85,7 @@ export const AddClientSchema = yup.object().shape({
     }),
 });
 
-export const AddClientSchemaDefaultValues = {
+export const AddClientSchemaDefaultValues: AddClientRequest = {
     completeName: "",
     cpf: "",
     birthDate: "",

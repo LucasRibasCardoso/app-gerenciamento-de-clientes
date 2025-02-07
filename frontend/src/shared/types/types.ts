@@ -55,7 +55,6 @@ export type AddClientRequest = {
 // Formato utilizado para adicionar clientes 
 export type UpdateClientRequest = {
     completeName: string | null;
-    cpf: string | null;
     birthDate: string | null;
     phone: string | null;
     email: string | null;

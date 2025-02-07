@@ -136,6 +136,7 @@ const saveClient = async (data: AddClientRequest
 const updateClient = async (data: UpdateClientRequest, clientId: number
 ): Promise<ClientResponse | GenericError | ValidationErrorsResponse> => {
   try {
+    console.log(data)
     const url = `/clients/${clientId}`;
     const response = await Api.put(url, data);
     return response.data;
