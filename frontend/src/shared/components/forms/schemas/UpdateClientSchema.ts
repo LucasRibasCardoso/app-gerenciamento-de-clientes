@@ -7,12 +7,6 @@ export const UpdateClientSchema: yup.SchemaOf<UpdateClientRequest> = yup.object(
         .required("O nome completo é obrigatório")
         .max(100, "O nome completo deve ter no máximo 100 caracteres"),
     
-    cpf: yup.string()
-        .defined() // Garante que o campo não aceite `undefined`
-        .required("O CPF é obrigatório")
-        .max(14, "O CPF deve ter no máximo 14 caracteres")
-        .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido"),
-
     birthDate: yup.string()
         .defined() // Garante que o campo não aceite `undefined`
         .required("A data de nascimento é obrigatória")
@@ -113,7 +107,7 @@ export const UpdateClientSchema: yup.SchemaOf<UpdateClientRequest> = yup.object(
 
 export const UpdateClientSchemaDefaultValues: UpdateClientRequest = {
     completeName: null,
-    birthDate: null,
+    birthDate: "",
     phone: null,
     email: null,
     passport: {
