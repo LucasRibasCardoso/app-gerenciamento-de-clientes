@@ -83,7 +83,7 @@ const useAddClient = (onClose?: () => void) => {
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: "clients" }); // Atualiza a lista de clientes
+      queryClient.invalidateQueries({ queryKey: ["clients"] }); // Atualiza a lista de clientes
       showMessage("Cliente salvo com sucesso!", "success"); 
       onClose?.(); 
     },
@@ -93,7 +93,7 @@ const useAddClient = (onClose?: () => void) => {
             .map((err) => showMessage(err.message, "error"))
       } 
       else {
-        showMessage(error.message, "error"); // Exibe erros genéricos
+        showMessage(error.message, "error");
       }
     },
   });
@@ -118,7 +118,7 @@ const useUpdateClient = (onClose?: () => void) => {
     },
     onSuccess: (clientId) => {
       queryClient.invalidateQueries({ queryKey: ["clients", clientId] });
-      queryClient.invalidateQueries({queryKey: ["clients"]});
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
       showMessage("Cliente atualizado com sucesso!", "success");
       onClose?.(); 
     },
