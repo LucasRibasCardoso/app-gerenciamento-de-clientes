@@ -22,7 +22,7 @@ const MaskedInput = <T extends FieldValues>({ name, control, label, mask, errors
                     mask={mask}
                     value={field.value || ""}
                     onChange={field.onChange}
-                    disabled={isEditing}
+                    disabled={isEditing && name === "cpf"}
                 >
                     {(inputProps: any) => (
                         <TextField
