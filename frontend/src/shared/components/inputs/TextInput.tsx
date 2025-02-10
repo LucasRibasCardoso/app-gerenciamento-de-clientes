@@ -12,11 +12,12 @@ interface TextInputProps<T extends FieldValues> {
 const TextInput = <T extends FieldValues>({ name, control, label, errors, ...rest }: TextInputProps<T>) => {
     return (
         <Controller
-            name={name} // Não é mais necessário converter para string
+            name={name}
             control={control}
             render={({ field }) => (
                 <TextField
                     {...field}
+                    value={field.value || ""}
                     label={label}
                     variant="outlined"
                     fullWidth
