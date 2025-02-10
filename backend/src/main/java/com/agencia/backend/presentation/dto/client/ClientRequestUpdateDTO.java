@@ -22,7 +22,7 @@ public record ClientRequestUpdateDTO(
     @Pattern(regexp = "\\(\\d{2}\\) \\d{4,5}-\\d{4}", message = "O telefone deve estar no formato (XX) XXXXX-XXXX.")
     String phone,
 
-    @Email(message = "E-mail inválido. ")
+    @Email(message = "E-mail inválido.")
     @Size(max = 100, message = "O e-mail deve ter no máximo 100 caracteres.")
     String email,
 
