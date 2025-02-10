@@ -167,8 +167,8 @@ public class ClientControllerUpdateTest {
                   "message": "Erro de validação nos campos enviados",
                   "statusCode": 400,
                   "errors": [
-                    { "field": "email", "message": "E-mail inválido" },
-                    { "field": "birthDate", "message": "Data de nascimento deve estar no formato dd/MM/yyyy" }
+                    { "field": "email", "message": "E-mail inválido." },
+                    { "field": "birthDate", "message": "Data de nascimento deve estar no formato dd/MM/yyyy." }
                   ]
                 }
                 """));
