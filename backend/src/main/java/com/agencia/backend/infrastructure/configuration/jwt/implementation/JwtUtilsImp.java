@@ -12,14 +12,24 @@ import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class JwtUtilsImp implements JwtUtils {
 
   @Value(value = "${spring.app.jwtSecret}")
   private String jwtSecret;
+
+  @Value("${spring.app.jwt.issuer}")
+  private String jwtIssuer;
+
+  @Value("${spring.app.jwt.audience}")
+  private String jwtAudience;
+
 
   public String getJwtFromHeader(HttpServletRequest request) {
     String bearerToken = request.getHeader("Authorization");
@@ -31,16 +41,23 @@ public class JwtUtilsImp implements JwtUtils {
     return bearerToken.substring(7); // Remove Bearer prefix
   }
 
-  public String generateTokenFromUsername(UserDetails userDetails) {
-    String username = userDetails.getUsername();
-
+  public String generateToken(UserDetails userDetails) {
     Instant now = Instant.now();
-    Instant expirationTime = now.plus(1, ChronoUnit.DAYS); // 1 dia de validade
 
     return Jwts.builder()
-        .subject(username)
+        .header()
+        .add("typ", "JWT")
+        .add("alg", "HS512") // Header explícito
+        .and()
+        .subject(userDetails.getUsername())
+        .issuer(jwtIssuer)
+        .audience().add(jwtAudience).and()
+        .claim("roles", userDetails.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList()))
         .issuedAt(Date.from(now))
-        .expiration((Date.from(expirationTime)))
+        .expiration(Date.from(now.plus(15, ChronoUnit.MINUTES)))
+        .id(UUID.randomUUID().toString())
         .signWith(key())
         .compact();
   }
@@ -56,6 +73,8 @@ public class JwtUtilsImp implements JwtUtils {
     try {
       Jwts.parser()
           .verifyWith((SecretKey) key())
+          .requireIssuer(jwtIssuer)
+          .requireAudience(jwtAudience)
           .build()
           .parseSignedClaims(authToken);
       return true;

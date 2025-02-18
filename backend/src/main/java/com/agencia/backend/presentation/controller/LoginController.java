@@ -79,7 +79,7 @@ public class LoginController {
 
     UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-    String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
+    String jwtToken = jwtUtils.generateToken(userDetails);
 
     List<String> roles = userDetails.getAuthorities().stream()
         .map(item -> item.getAuthority())

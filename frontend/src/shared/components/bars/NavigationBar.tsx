@@ -7,8 +7,10 @@ import Button from "@mui/material/Button";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import SupervisorAccountOutlinedIcon from "@mui/icons-material/SupervisorAccountOutlined";
 
 import { LogoutButton } from "../buttons";
+import { useAuth } from "../../hooks/AuthHook";
 
 // Tipagem para as props do NavButton
 interface NavButtonProps {
@@ -17,25 +19,34 @@ interface NavButtonProps {
     label: string;
   }
   
-  const NavButton: React.FC<NavButtonProps> = ({ href, icon, label }) => (
-    <Button
-         sx={{ my: 2, color: "white", fontWeight: 600 ,
-             "&:hover": {
-                backgroundColor: "background.buttonHover",
-             },
-         }}
-         startIcon={icon}
-         href={href}
-         aria-label={label.toLowerCase()}
-         >
-         {label}
-    </Button>
-  );
+const NavButton: React.FC<NavButtonProps> = ({ href, icon, label }) => (
+  <Button
+       sx={{ my: 2, color: "white", fontWeight: 600 ,
+           "&:hover": {
+              backgroundColor: "background.buttonHover",
+           },
+       }}
+       startIcon={icon}
+       href={href}
+       aria-label={label.toLowerCase()}
+       >
+       {label}
+  </Button>
+);
 
 export default function NavigationBar() {
+    const { isAdmin } = useAuth();
+
     const navItems = [
         { label: "HOME", href: "/home", icon: <HomeOutlinedIcon /> },
         { label: "CLIENTES", href: "/clientes", icon: <GroupsOutlinedIcon /> },
+        ...(isAdmin ? [
+            { 
+              label: "ÁREA RESTRITA", 
+              href: "/admin", 
+              icon: <SupervisorAccountOutlinedIcon /> 
+            }
+          ] : [])
     ];
 
     return (
