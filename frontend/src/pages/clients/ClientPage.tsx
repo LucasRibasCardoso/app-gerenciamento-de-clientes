@@ -41,6 +41,13 @@ export default function Clients() {
     // Hook para deletar cliente
     const { mutate: deleteClient, isPending: isDeleting } = useDeleteClient();
 
+    const handleDeleteClient = () => {
+       if (selectedClient) {
+            deleteClient(Number(selectedClient));
+            setSelectedClient(null);
+       }
+    };
+
     // Função para abrir o modal de edição
     const handleEditClient = () => {
         if (selectedClient) {
@@ -82,9 +89,7 @@ export default function Clients() {
                 orderDirection={orderDirection}
                 onOrderDirectionChange={(value) => setOrderDirection(value as "asc" | "desc")}
                 selectedClient={selectedClient}
-                onDeleteClient={() => {
-                    if (selectedClient) deleteClient(Number(selectedClient));
-                }}
+                onDeleteClient={handleDeleteClient}
                 onEditClient={handleEditClient}
                 onCreateClient={handleCreateClient}
             />
