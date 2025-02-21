@@ -221,7 +221,7 @@ class ClientMapperTest {
     assertAll(
         () -> assertEquals(clientDomain.getId(), model.getId()),
         () -> assertEquals(clientDomain.getCompleteName(), model.getCompleteName()),
-        () -> assertEquals(clientDomain.getCpf(), model.getCpf()),
+        () -> assertEquals(clientDomain.getCpf(), model.getEncrytedCpf()),
         () -> assertEquals(clientDomain.getBirthDate(), model.getBirthDate()),
         () -> assertEquals(clientDomain.getPhone(), model.getPhone()),
         () -> assertEquals(clientDomain.getEmail(), model.getEmail()),
@@ -253,7 +253,7 @@ class ClientMapperTest {
     assertAll(
         () -> assertEquals(clientModel.getId(), domain.getId()),
         () -> assertEquals(clientModel.getCompleteName(), domain.getCompleteName()),
-        () -> assertEquals(clientModel.getCpf(), domain.getCpf()),
+        () -> assertEquals(clientModel.getEncrytedCpf(), domain.getCpf()),
         () -> assertEquals(clientModel.getBirthDate(), domain.getBirthDate()),
         () -> assertEquals(clientModel.getPhone(), domain.getPhone()),
         () -> assertEquals(clientModel.getEmail(), domain.getEmail()),

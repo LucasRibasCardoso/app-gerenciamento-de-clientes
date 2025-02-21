@@ -73,7 +73,7 @@ public class ClientMapperImp implements ClientMapper {
     return new Client(
         model.getId(),
         model.getCompleteName(),
-        model.getCpf(),
+        model.getRawCpf(),
         model.getBirthDate(),
         model.getPhone(),
         model.getEmail(),

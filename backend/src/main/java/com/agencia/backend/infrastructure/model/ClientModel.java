@@ -1,19 +1,22 @@
 package com.agencia.backend.infrastructure.model;
 
+import com.agencia.backend.infrastructure.configuration.encryption.CryptoService;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.LocalDate;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tb_clients")
 @Getter
-@NoArgsConstructor
 public class ClientModel {
 
   @Id
@@ -21,9 +24,6 @@ public class ClientModel {
   private Long id;
 
   private String completeName;
-
-  @Column(unique = true, nullable = false)
-  private String cpf;
 
   LocalDate birthDate;
   private String phone;
@@ -45,6 +45,21 @@ public class ClientModel {
   private String complement;
   private String residentialNumber;
 
+  // Campos criptografados e hasheados
+  @Column(name ="cpf_encrypted" , unique = true, nullable = false)
+  private String encryptedCpf;
+
+  @Column(name = "cpf_hashed", unique = true, nullable = false)
+  private String hashedCpf;
+
+
+  // Campos não persistentes
+  @Transient
+  private String rawCpf;
+
+
+
+  public ClientModel() {}
 
   public ClientModel(
       Long id,
@@ -63,11 +78,10 @@ public class ClientModel {
       String neighborhood,
       String street,
       String complement,
-      String residentialNumber
-  ) {
+      String residentialNumber) {
     this.id = id;
     this.completeName = completeName;
-    this.cpf = cpf;
+    this.rawCpf = cpf;
     this.birthDate = birthDate;
     this.phone = phone;
     this.email = email;
@@ -84,5 +98,19 @@ public class ClientModel {
     this.residentialNumber = residentialNumber;
   }
 
+  @PrePersist
+  @PreUpdate
+  public void encryptCpf() {
+    // Criptografa para armazenamento reversível
+    this.encryptedCpf = CryptoService.encrypt(this.rawCpf);
 
+    // Gera hash para comparações
+    this.hashedCpf = CryptoService.hash(this.rawCpf);
+  }
+
+  @PostLoad
+  public void decryptCpf() {
+    // Descriptografa apenas o campo criptografado para uso interno
+    this.rawCpf = CryptoService.decrypt(this.encryptedCpf);
+  }
 }

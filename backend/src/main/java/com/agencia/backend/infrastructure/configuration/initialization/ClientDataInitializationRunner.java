@@ -18,7 +18,7 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
   }
 
   @Override
-  public void run(String... args) throws Exception {
+  public void run(String... args) {
     insertClients();
   }
 
@@ -37,7 +37,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client2 = new Client(
         null,
         "Eduardo Pereira",
-        "567.890.123-45", LocalDate.of(1987, 6, 20),
+        "567.890.123-45",
+        LocalDate.of(1987, 6, 20),
         "(41) 99987-6543",
         "eduardo.pereira@example.com",
         new Passport("IJ456789", LocalDate.of(2020, 11, 12), LocalDate.of(2030, 11, 12)),
@@ -47,7 +48,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client3 = new Client(
         null,
         "Fernanda Costa",
-        "345.678.901-23", LocalDate.of(1992, 2, 15),
+        "345.678.901-23",
+        LocalDate.of(1992, 2, 15),
         "(62) 98877-6543",
         "fernanda.costa@example.com",
         new Passport("KL123456", LocalDate.of(2021, 3, 22), LocalDate.of(2031, 3, 22)),
@@ -57,7 +59,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client4 = new Client(
         null,
         "Felipe Martins",
-        "234.567.890-12", LocalDate.of(1994, 4, 5),
+        "234.567.890-12",
+        LocalDate.of(1994, 4, 5),
         "(71) 99876-4321",
         "felipe.martins@example.com",
         new Passport("MN654321", LocalDate.of(2019, 1, 1), LocalDate.of(2029, 1, 1)),
@@ -67,7 +70,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client5 = new Client(
         null,
         "Ana Souza",
-        "987.654.321-00", LocalDate.of(1990, 3, 12),
+        "987.654.321-00",
+        LocalDate.of(1990, 3, 12),
         "(11) 98765-4321",
         "ana.souza@example.com",
         new Passport("OP789012", LocalDate.of(2022, 5, 10), LocalDate.of(2032, 5, 10)),
@@ -77,7 +81,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client6 = new Client(
         null,
         "Carlos Mendes",
-        "654.321.987-00", LocalDate.of(1988, 9, 18),
+        "654.321.987-00",
+        LocalDate.of(1988, 9, 18),
         "(31) 99876-5432",
         "carlos.mendes@example.com",
         new Passport("QR123456", LocalDate.of(2020, 7, 20), LocalDate.of(2030, 7, 20)),
@@ -87,7 +92,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client7 = new Client(
         null,
         "Juliana Almeida",
-        "321.654.987-00", LocalDate.of(1995, 11, 30),
+        "321.654.987-00",
+        LocalDate.of(1995, 11, 30),
         "(51) 98765-4321",
         "juliana.almeida@example.com",
         new Passport("ST789012", LocalDate.of(2021, 9, 15), LocalDate.of(2031, 9, 15)),
@@ -97,7 +103,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client8 = new Client(
         null,
         "Ricardo Nunes",
-        "456.789.123-00", LocalDate.of(1983, 5, 22),
+        "456.789.123-00",
+        LocalDate.of(1983, 5, 22),
         "(81) 99876-5432",
         "ricardo.nunes@example.com",
         new Passport("UV123456", LocalDate.of(2018, 12, 1), LocalDate.of(2028, 12, 1)),
@@ -107,7 +114,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client9 = new Client(
         null,
         "Patrícia Lima",
-        "789.123.456-00", LocalDate.of(1991, 8, 14),
+        "789.123.456-00",
+        LocalDate.of(1991, 8, 14),
         "(48) 98765-4321",
         "patricia.lima@example.com",
         new Passport("WX789012", LocalDate.of(2023, 2, 28), LocalDate.of(2033, 2, 28)),
@@ -117,7 +125,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client10 = new Client(
         null,
         "Marcos Silva",
-        "123.789.456-00", LocalDate.of(1989, 12, 3),
+        "123.789.456-00",
+        LocalDate.of(1989, 12, 3),
         "(85) 99876-5432",
         "marcos.silva@example.com",
         new Passport("YZ123456", LocalDate.of(2019, 6, 10), LocalDate.of(2029, 6, 10)),
@@ -127,7 +136,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client11 = new Client(
         null,
         "Camila Rocha",
-        "987.123.654-00", LocalDate.of(1993, 4, 17),
+        "987.123.654-00",
+        LocalDate.of(1993, 4, 17),
         "(61) 98765-4321",
         "camila.rocha@example.com",
         new Passport("AB789012", LocalDate.of(2022, 8, 5), LocalDate.of(2032, 8, 5)),
@@ -137,7 +147,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client12 = new Client(
         null,
         "Gustavo Santos",
-        "654.987.321-00", LocalDate.of(1986, 7, 9),
+        "654.987.321-00",
+        LocalDate.of(1986, 7, 9),
         "(62) 99876-5432",
         "gustavo.santos@example.com",
         new Passport("CD123456", LocalDate.of(2020, 4, 20), LocalDate.of(2030, 4, 20)),
@@ -147,7 +158,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client13 = new Client(
         null,
         "Larissa Fernandes",
-        "321.987.654-00", LocalDate.of(1996, 10, 25),
+        "321.987.654-00",
+        LocalDate.of(1996, 10, 25),
         "(71) 98765-4321",
         "larissa.fernandes@example.com",
         new Passport("EF789012", LocalDate.of(2021, 11, 30), LocalDate.of(2031, 11, 30)),
@@ -157,7 +169,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     Client client14 = new Client(
         null,
         "Roberto Alves",
-        "456.123.789-00", LocalDate.of(1984, 1, 8),
+        "456.123.789-00",
+        LocalDate.of(1984, 1, 8),
         "(31) 99876-5432",
         "roberto.alves@example.com",
         new Passport("GH123456", LocalDate.of(2018, 3, 15), LocalDate.of(2028, 3, 15)),

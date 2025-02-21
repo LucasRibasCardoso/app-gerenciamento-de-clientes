@@ -148,7 +148,7 @@ class ClientRepositoryImpTest {
         () -> assertTrue(client.isPresent()),
         () -> assertEquals(clientModel.getId(), client.get().getId()),
         () -> assertEquals(clientModel.getCompleteName(), client.get().getCompleteName()),
-        () -> assertEquals(clientModel.getCpf(), client.get().getCpf()),
+        () -> assertEquals(clientModel.getEncrytedCpf(), client.get().getCpf()),
         () -> assertEquals(clientModel.getBirthDate(), client.get().getBirthDate()),
         () -> assertEquals(clientModel.getPhone(), client.get().getPhone()),
         () -> assertEquals(clientModel.getEmail(), client.get().getEmail()),

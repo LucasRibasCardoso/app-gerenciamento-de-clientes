@@ -2,13 +2,12 @@ package com.agencia.backend.infrastructure.repository.client.implementation;
 
 import com.agencia.backend.domain.entity.Client;
 import com.agencia.backend.domain.repository.ClientRepository;
+import com.agencia.backend.infrastructure.configuration.encryption.CryptoService;
 import com.agencia.backend.infrastructure.model.ClientModel;
 import com.agencia.backend.infrastructure.repository.client.ClientJpaRepository;
 import com.agencia.backend.infrastructure.specifications.SpecificationBuilder;
 import com.agencia.backend.presentation.mapper.client.ClientMapper;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -62,7 +61,8 @@ public class ClientRepositoryImp implements ClientRepository {
 
   @Override
   public boolean existsByCpf(String cpf) {
-    return jpaRepository.existsByCpf(cpf);
+    String hashedCpf = CryptoService.hash(cpf);
+    return jpaRepository.existsByHashedCpf(hashedCpf);
   }
 
   @Override
