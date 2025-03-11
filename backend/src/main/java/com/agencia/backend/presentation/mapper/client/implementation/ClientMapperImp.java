@@ -54,20 +54,20 @@ public class ClientMapperImp implements ClientMapper {
   @Override
   public Client toDomain(ClientModel model) {
     Passport passport = new Passport(
-        model.getPassportNumber(),
+        model.getRawPassportNumber(),
         model.getPassportEmissionDate(),
         model.getPassportExpirationDate()
     );
 
     Address address = new Address(
-        model.getZipCode(),
-        model.getCountry(),
-        model.getState(),
-        model.getCity(),
-        model.getNeighborhood(),
-        model.getStreet(),
-        model.getComplement(),
-        model.getResidentialNumber()
+        model.getRawZipCode(),
+        model.getRawCountry(),
+        model.getRawState(),
+        model.getRawCity(),
+        model.getRawNeighborhood(),
+        model.getRawStreet(),
+        model.getRawComplement(),
+        model.getRawResidentialNumber()
     );
 
     return new Client(
@@ -75,7 +75,7 @@ public class ClientMapperImp implements ClientMapper {
         model.getCompleteName(),
         model.getRawCpf(),
         model.getBirthDate(),
-        model.getPhone(),
+        model.getRawPhone(),
         model.getEmail(),
         passport,
         address

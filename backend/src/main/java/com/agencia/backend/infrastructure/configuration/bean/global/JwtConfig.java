@@ -1,4 +1,4 @@
-package com.agencia.backend.infrastructure.configuration.bean.user;
+package com.agencia.backend.infrastructure.configuration.bean.global;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.agencia.backend.infrastructure.configuration.jwt.AuthTokenFilter;

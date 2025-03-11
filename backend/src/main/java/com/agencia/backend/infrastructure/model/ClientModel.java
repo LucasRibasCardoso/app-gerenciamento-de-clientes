@@ -1,116 +1,151 @@
 package com.agencia.backend.infrastructure.model;
 
-import com.agencia.backend.infrastructure.configuration.encryption.CryptoService;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PostLoad;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.time.LocalDate;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_clients")
 @Getter
+@Setter
 public class ClientModel {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(nullable = false)
   private String completeName;
 
+  @Column(nullable = false)
   LocalDate birthDate;
-  private String phone;
 
   @Column(unique = true)
   private String email;
 
-  @Column(unique = true)
-  private String passportNumber;
-
   private LocalDate passportEmissionDate;
   private LocalDate passportExpirationDate;
-  private String zipCode;
-  private String country;
-  private String state;
-  private String city;
-  private String neighborhood;
-  private String street;
-  private String complement;
-  private String residentialNumber;
 
-  // Campos criptografados e hasheados
-  @Column(name ="cpf_encrypted" , unique = true, nullable = false)
+  // Campos com criptografia e hash
+  @Column(name = "cpf_encrypted", unique = true, nullable = false)
   private String encryptedCpf;
 
   @Column(name = "cpf_hashed", unique = true, nullable = false)
   private String hashedCpf;
 
+  @Column(name = "passport_number_encrypted", unique = true)
+  private String encryptedPassportNumber;
+
+  @Column(name = "passport_number_hashed", unique = true)
+  private String hashedPassportNumber;
+
+  @Column(name = "phone_encrypted")
+  private String encryptedPhone;
+
+  @Column(name = "zip_code_encrypted")
+  private String encryptedZipCode;
+
+  @Column(name = "country_encrypted")
+  private String encryptedCountry;
+
+  @Column(name = "state_encrypted")
+  private String encryptedState;
+
+  @Column(name = "city_encrypted")
+  private String encryptedCity;
+
+  @Column(name = "neighborhood_encrypted")
+  private String encryptedNeighborhood;
+
+  @Column(name = "street_encrypted")
+  private String encryptedStreet;
+
+  @Column(name = "complement_encrypted")
+  private String encryptedComplement;
+
+  @Column(name = "residencial_number_encrypted")
+  private String encryptedResidencialNumber;
 
   // Campos não persistentes
   @Transient
   private String rawCpf;
 
+  @Transient
+  private String rawPassportNumber;
 
+  @Transient
+  private String rawPhone;
 
-  public ClientModel() {}
+  @Transient
+  private String rawZipCode;
+
+  @Transient
+  private String rawCountry;
+
+  @Transient
+  private String rawState;
+
+  @Transient
+  private String rawCity;
+
+  @Transient
+  private String rawNeighborhood;
+
+  @Transient
+  private String rawStreet;
+
+  @Transient
+  private String rawComplement;
+
+  @Transient
+  private String rawResidentialNumber;
+
+  public ClientModel() {
+  }
 
   public ClientModel(
       Long id,
       String completeName,
-      String cpf,
+      String rawCpf,
       LocalDate birthDate,
-      String phone,
+      String rawPhone,
       String email,
-      String passportNumber,
+      String rawPassportNumber,
       LocalDate passportEmissionDate,
       LocalDate passportExpirationDate,
-      String zipCode,
-      String country,
-      String state,
-      String city,
-      String neighborhood,
-      String street,
-      String complement,
-      String residentialNumber) {
+      String rawZipCode,
+      String rawCountry,
+      String rawState,
+      String rawCity,
+      String rawNeighborhood,
+      String rawStreet,
+      String rawComplement,
+      String rawResidentialNumber
+  ) {
     this.id = id;
     this.completeName = completeName;
-    this.rawCpf = cpf;
+    this.rawCpf = rawCpf;
     this.birthDate = birthDate;
-    this.phone = phone;
+    this.rawPhone = rawPhone;
     this.email = email;
-    this.passportNumber = passportNumber;
+    this.rawPassportNumber = rawPassportNumber;
     this.passportEmissionDate = passportEmissionDate;
     this.passportExpirationDate = passportExpirationDate;
-    this.zipCode = zipCode;
-    this.country = country;
-    this.state = state;
-    this.city = city;
-    this.neighborhood = neighborhood;
-    this.street = street;
-    this.complement = complement;
-    this.residentialNumber = residentialNumber;
+    this.rawZipCode = rawZipCode;
+    this.rawCountry = rawCountry;
+    this.rawState = rawState;
+    this.rawCity = rawCity;
+    this.rawNeighborhood = rawNeighborhood;
+    this.rawStreet = rawStreet;
+    this.rawComplement = rawComplement;
+    this.rawResidentialNumber = rawResidentialNumber;
   }
 
-  @PrePersist
-  @PreUpdate
-  public void encryptCpf() {
-    // Criptografa para armazenamento reversível
-    this.encryptedCpf = CryptoService.encrypt(this.rawCpf);
-
-    // Gera hash para comparações
-    this.hashedCpf = CryptoService.hash(this.rawCpf);
-  }
-
-  @PostLoad
-  public void decryptCpf() {
-    // Descriptografa apenas o campo criptografado para uso interno
-    this.rawCpf = CryptoService.decrypt(this.encryptedCpf);
-  }
 }

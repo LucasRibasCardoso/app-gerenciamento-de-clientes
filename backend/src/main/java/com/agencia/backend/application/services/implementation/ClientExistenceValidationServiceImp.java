@@ -21,7 +21,8 @@ public class ClientExistenceValidationServiceImp implements ClientExistenceValid
 
   @Override
   public void validatePassportNumber(Client clientRequest) {
-    if (clientRequest.getPassport() != null && clientRequest.getPassport().getNumber() != null
+    if (clientRequest.getPassport() != null
+        && clientRequest.getPassport().getNumber() != null
         && clientRepository.existsByPassportNumber(clientRequest.getPassport().getNumber())) {
       throw new ClientAlreadyExistsException("Esse número de passaporte já está em uso.");
     }

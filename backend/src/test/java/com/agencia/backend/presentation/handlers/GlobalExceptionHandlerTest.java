@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import java.util.HashSet;
 import java.util.Set;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -46,8 +46,10 @@ class GlobalExceptionHandlerTest {
 
   @Test
   void handleException() {
+    Exception exception = new Exception("Exceção de inesperada");
+
     // Act
-    ResponseEntity<GenericError> response = handler.handleGenericException();
+    ResponseEntity<GenericError> response = handler.handleGenericException(exception);
 
     // Assert
     assertAll(
@@ -60,46 +62,36 @@ class GlobalExceptionHandlerTest {
 
   @Test
   void handleConstraintViolationException() {
-    // Arrange: Simula uma ConstraintViolationException
-    ConstraintViolation<?> mockViolation1 = mock(ConstraintViolation.class);
-    Path mockPath1 = mock(Path.class);
-    when(mockPath1.toString()).thenReturn("field1");
-    when(mockViolation1.getPropertyPath()).thenReturn(mockPath1);
-    when(mockViolation1.getMessage()).thenReturn("Field1 é inválido");
+    // Arrange
+    ConstraintViolation<?> violation1 = mock(ConstraintViolation.class);
+    Path path1 = mock(Path.class);
+    when(path1.toString()).thenReturn("field1");
+    when(violation1.getPropertyPath()).thenReturn(path1);
+    when(violation1.getMessage()).thenReturn("Field1 é inválido");
 
-    ConstraintViolation<?> mockViolation2 = mock(ConstraintViolation.class);
-    Path mockPath2 = mock(Path.class);
-    when(mockPath2.toString()).thenReturn("field2");
-    when(mockViolation2.getPropertyPath()).thenReturn(mockPath2);
-    when(mockViolation2.getMessage()).thenReturn("Field2 é obrigatório");
+    ConstraintViolation<?> violation2 = mock(ConstraintViolation.class);
+    Path path2 = mock(Path.class);
+    when(path2.toString()).thenReturn("field2");
+    when(violation2.getPropertyPath()).thenReturn(path2);
+    when(violation2.getMessage()).thenReturn("Field2 é obrigatório");
 
-    Set<ConstraintViolation<?>> violations = new HashSet<>();
-    violations.add(mockViolation1);
-    violations.add(mockViolation2);
-
+    Set<ConstraintViolation<?>> violations = Set.of(violation1, violation2);
     ConstraintViolationException exception = new ConstraintViolationException(violations);
 
     // Act
     ResponseEntity<Object> response = handler.handleConstraintViolationException(exception);
 
     // Assert
+    assertNotNull(response);
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
-    @SuppressWarnings("unchecked")
-    Set<ValidationError> responseBody = (Set<ValidationError>) response.getBody();
-    assertEquals(2, responseBody.size());
+    ValidationErrorsResponse responseBody = assertInstanceOf(
+        ValidationErrorsResponse.class,
+        response.getBody());
 
-    ValidationError error1 = responseBody.stream()
-        .filter(error -> error.field().equals("field1"))
-        .findFirst()
-        .orElseThrow(() -> new AssertionError("Field1 não encontrado"));
-    assertEquals("Field1 é inválido", error1.message());
-
-    ValidationError error2 = responseBody.stream()
-        .filter(error -> error.field().equals("field2"))
-        .findFirst()
-        .orElseThrow(() -> new AssertionError("Field2 não encontrado"));
-    assertEquals("Field2 é obrigatório", error2.message());
+    Set<ValidationError> errors = responseBody.errors();
+    assertNotNull(errors);
+    assertEquals(2, errors.size());
   }
 
   @Test

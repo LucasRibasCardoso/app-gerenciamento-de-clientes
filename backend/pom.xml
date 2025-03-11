@@ -114,11 +114,29 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!-- Criptografia -->
     <dependency>
       <groupId>org.jasypt</groupId>
       <artifactId>jasypt</artifactId>
       <version>1.9.3</version>
     </dependency>
+
+    <!-- Spring cloud -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-vault-config</artifactId>
+      <version>4.2.0</version>
+    </dependency>
+
+
+    <!-- KeePassXC -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-exec</artifactId>
+      <version>1.3</version>
+    </dependency>
+
+
   </dependencies>
 
   <build>

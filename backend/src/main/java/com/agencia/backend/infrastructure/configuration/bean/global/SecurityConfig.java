@@ -1,4 +1,4 @@
-package com.agencia.backend.infrastructure.configuration.bean.user;
+package com.agencia.backend.infrastructure.configuration.bean.global;
 
 import com.agencia.backend.infrastructure.configuration.jwt.AuthTokenFilter;
 import java.util.List;
@@ -66,7 +66,7 @@ public class SecurityConfig {
         .requestMatchers("/auth/register").hasRole("ADMIN")
 
         // H2 Database utilizado para desenvolvimento
-        .requestMatchers("/h2-console/**").hasRole("ADMIN")
+        .requestMatchers("/h2-console/**").permitAll()
 
         // Qualquer outro endpoint requer autenticação
         .anyRequest().authenticated()

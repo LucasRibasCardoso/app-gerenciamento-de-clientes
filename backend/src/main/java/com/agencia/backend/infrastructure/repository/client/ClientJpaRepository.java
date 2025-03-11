@@ -8,7 +8,7 @@ public interface ClientJpaRepository extends JpaRepository<ClientModel, Long>, J
 
   boolean existsByHashedCpf(String hashedCpf);
 
-  boolean existsByPassportNumber(String email);
+  boolean existsByHashedPassportNumber(String email);
 
   boolean existsByEmail(String email);
 }

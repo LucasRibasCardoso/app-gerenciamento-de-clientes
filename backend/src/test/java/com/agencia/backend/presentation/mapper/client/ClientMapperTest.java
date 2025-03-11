@@ -221,23 +221,23 @@ class ClientMapperTest {
     assertAll(
         () -> assertEquals(clientDomain.getId(), model.getId()),
         () -> assertEquals(clientDomain.getCompleteName(), model.getCompleteName()),
-        () -> assertEquals(clientDomain.getCpf(), model.getEncrytedCpf()),
+        () -> assertEquals(clientDomain.getCpf(), model.getRawCpf()),
         () -> assertEquals(clientDomain.getBirthDate(), model.getBirthDate()),
-        () -> assertEquals(clientDomain.getPhone(), model.getPhone()),
+        () -> assertEquals(clientDomain.getPhone(), model.getRawPhone()),
         () -> assertEquals(clientDomain.getEmail(), model.getEmail()),
 
-        () -> assertEquals(clientDomain.getPassport().getNumber(), model.getPassportNumber()),
+        () -> assertEquals(clientDomain.getPassport().getNumber(), model.getRawPassportNumber()),
         () -> assertEquals(clientDomain.getPassport().getEmissionDate(), model.getPassportEmissionDate()),
         () -> assertEquals(clientDomain.getPassport().getExpirationDate(), model.getPassportExpirationDate()),
 
-        () -> assertEquals(clientDomain.getAddress().getZipCode(), model.getZipCode()),
-        () -> assertEquals(clientDomain.getAddress().getCountry(), model.getCountry()),
-        () -> assertEquals(clientDomain.getAddress().getState(), model.getState()),
-        () -> assertEquals(clientDomain.getAddress().getCity(), model.getCity()),
-        () -> assertEquals(clientDomain.getAddress().getNeighborhood(), model.getNeighborhood()),
-        () -> assertEquals(clientDomain.getAddress().getStreet(), model.getStreet()),
-        () -> assertEquals(clientDomain.getAddress().getComplement(), model.getComplement()),
-        () -> assertEquals(clientDomain.getAddress().getResidentialNumber(), model.getResidentialNumber())
+        () -> assertEquals(clientDomain.getAddress().getZipCode(), model.getRawZipCode()),
+        () -> assertEquals(clientDomain.getAddress().getCountry(), model.getRawCountry()),
+        () -> assertEquals(clientDomain.getAddress().getState(), model.getRawState()),
+        () -> assertEquals(clientDomain.getAddress().getCity(), model.getRawCity()),
+        () -> assertEquals(clientDomain.getAddress().getNeighborhood(), model.getRawNeighborhood()),
+        () -> assertEquals(clientDomain.getAddress().getStreet(), model.getRawStreet()),
+        () -> assertEquals(clientDomain.getAddress().getComplement(), model.getRawComplement()),
+        () -> assertEquals(clientDomain.getAddress().getResidentialNumber(), model.getRawResidentialNumber())
     );
   }
 
@@ -253,23 +253,23 @@ class ClientMapperTest {
     assertAll(
         () -> assertEquals(clientModel.getId(), domain.getId()),
         () -> assertEquals(clientModel.getCompleteName(), domain.getCompleteName()),
-        () -> assertEquals(clientModel.getEncrytedCpf(), domain.getCpf()),
+        () -> assertEquals(clientModel.getRawCpf(), domain.getCpf()),
         () -> assertEquals(clientModel.getBirthDate(), domain.getBirthDate()),
-        () -> assertEquals(clientModel.getPhone(), domain.getPhone()),
+        () -> assertEquals(clientModel.getRawPhone(), domain.getPhone()),
         () -> assertEquals(clientModel.getEmail(), domain.getEmail()),
 
-        () -> assertEquals(clientModel.getPassportNumber(), domain.getPassport().getNumber()),
+        () -> assertEquals(clientModel.getRawPassportNumber(), domain.getPassport().getNumber()),
         () -> assertEquals(clientModel.getPassportEmissionDate(), domain.getPassport().getEmissionDate()),
         () -> assertEquals(clientModel.getPassportExpirationDate(), domain.getPassport().getExpirationDate()),
 
-        () -> assertEquals(clientModel.getZipCode(), domain.getAddress().getZipCode()),
-        () -> assertEquals(clientModel.getCountry(), domain.getAddress().getCountry()),
-        () -> assertEquals(clientModel.getState(), domain.getAddress().getState()),
-        () -> assertEquals(clientModel.getCity(), domain.getAddress().getCity()),
-        () -> assertEquals(clientModel.getNeighborhood(), domain.getAddress().getNeighborhood()),
-        () -> assertEquals(clientModel.getStreet(), domain.getAddress().getStreet()),
-        () -> assertEquals(clientModel.getComplement(), domain.getAddress().getComplement()),
-        () -> assertEquals(clientModel.getResidentialNumber(), domain.getAddress().getResidentialNumber())
+        () -> assertEquals(clientModel.getRawZipCode(), domain.getAddress().getZipCode()),
+        () -> assertEquals(clientModel.getRawCountry(), domain.getAddress().getCountry()),
+        () -> assertEquals(clientModel.getRawState(), domain.getAddress().getState()),
+        () -> assertEquals(clientModel.getRawCity(), domain.getAddress().getCity()),
+        () -> assertEquals(clientModel.getRawNeighborhood(), domain.getAddress().getNeighborhood()),
+        () -> assertEquals(clientModel.getRawStreet(), domain.getAddress().getStreet()),
+        () -> assertEquals(clientModel.getRawComplement(), domain.getAddress().getComplement()),
+        () -> assertEquals(clientModel.getRawResidentialNumber(), domain.getAddress().getResidentialNumber())
     );
   }
 

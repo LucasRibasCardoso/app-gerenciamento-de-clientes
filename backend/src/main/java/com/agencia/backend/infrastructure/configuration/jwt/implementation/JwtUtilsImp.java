@@ -13,11 +13,13 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import javax.crypto.SecretKey;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class JwtUtilsImp implements JwtUtils {
 
-  private static final String JWT_KEY = System.getenv("JWT_SECRET");
+  @Value("${jwt_key}")
+  private static String jwt_key;
 
   public String getJwtFromHeader(HttpServletRequest request) {
     String bearerToken = request.getHeader("Authorization");
@@ -35,19 +37,22 @@ public class JwtUtilsImp implements JwtUtils {
     Instant now = Instant.now();
     Instant expirationTime = now.plus(1, ChronoUnit.DAYS); // 1 dia de validade
 
-    return Jwts.builder()
+    String token = Jwts.builder()
         .subject(username)
         .issuedAt(Date.from(now))
         .expiration((Date.from(expirationTime)))
         .signWith(key())
         .compact();
+
+    return token;
   }
 
   public String getUsernameFromJwtToken(String token) {
     return Jwts.parser()
         .verifyWith((SecretKey) key())
         .build().parseSignedClaims(token)
-        .getPayload().getSubject();
+        .getPayload()
+        .getSubject();
   }
 
   public boolean validateJwtToken(String authToken) {
@@ -64,7 +69,7 @@ public class JwtUtilsImp implements JwtUtils {
   }
 
   private Key key() {
-    return Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_KEY));
+    return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwt_key));
   }
 
 }
