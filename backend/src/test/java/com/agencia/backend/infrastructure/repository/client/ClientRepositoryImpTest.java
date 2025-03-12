@@ -2,13 +2,11 @@ package com.agencia.backend.infrastructure.repository.client;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.agencia.backend.application.services.EncryptionService;
 import com.agencia.backend.domain.entity.Address;
 import com.agencia.backend.domain.entity.Client;
 import com.agencia.backend.domain.entity.Passport;
@@ -38,29 +36,13 @@ class ClientRepositoryImpTest {
   @InjectMocks
   private ClientRepositoryImp clientRepositoryImp;
   @Mock
-  private ClientJpaRepository jpaRepository;
+  private ClientJpaRepository clientJpaRepository;
   @Mock
   private ClientMapper clientMapper;
   @Mock
   private SpecificationBuilder<ClientModel> specificationBuilder;
-  @Mock
-  private EncryptionService encryptionService;
 
   // Métodos auxiliares
-  private void mockDecryptionForAllFields(ClientModel model) {
-    when(encryptionService.decrypt(model.getRawCpf())).thenReturn("123.456.789-00");
-    when(encryptionService.decrypt(model.getRawPhone())).thenReturn("(11) 99999-9999");
-    when(encryptionService.decrypt(model.getRawPassportNumber())).thenReturn("ABC123");
-    when(encryptionService.decrypt(model.getRawZipCode())).thenReturn("12345-678");
-    when(encryptionService.decrypt(model.getRawCountry())).thenReturn("Brasil");
-    when(encryptionService.decrypt(model.getRawState())).thenReturn("SP");
-    when(encryptionService.decrypt(model.getRawCity())).thenReturn("São Paulo");
-    when(encryptionService.decrypt(model.getRawNeighborhood())).thenReturn("Centro");
-    when(encryptionService.decrypt(model.getRawStreet())).thenReturn("Rua Principal");
-    when(encryptionService.decrypt(model.getRawComplement())).thenReturn("Apto 101");
-    when(encryptionService.decrypt(model.getRawResidentialNumber())).thenReturn("123");
-  }
-
   private ClientModel createClientModel() {
     return new ClientModel(
         1L,
@@ -109,47 +91,16 @@ class ClientRepositoryImpTest {
     );
   }
 
-  private ClientModel createEncryptedClientModel() {
-    ClientModel model = createClientModel();
-    model.setRawCpf("encryptedCpf");
-    model.setRawPhone("encryptedPhone");
-    model.setRawPassportNumber("encryptedPassport");
-    model.setRawZipCode("encryptedZip");
-    model.setRawCountry("encryptedCountry");
-    model.setRawState("encryptedState");
-    model.setRawCity("encryptedCity");
-    model.setRawNeighborhood("encryptedNeighborhood");
-    model.setRawStreet("encryptedStreet");
-    model.setRawComplement("encryptedComplement");
-    model.setRawResidentialNumber("encryptedNumber");
-    return model;
-  }
 
   @Test
-  void ShouldSaveClientWithAllEncryptedFields() {
+  void ShouldSaveAClientInDatabase() {
     // Arrange
     Client clientDomain = createClientDomain();
-    ClientModel decryptedModel = createClientModel();
-    ClientModel encryptedModel = createEncryptedClientModel();
+    ClientModel clientModel = createClientModel();
 
-    when(clientMapper.toModel(clientDomain)).thenReturn(decryptedModel);
-    when(jpaRepository.save(decryptedModel)).thenReturn(encryptedModel);
-    when(clientMapper.toDomain(encryptedModel)).thenReturn(clientDomain);
-
-    // Mockar todas as operações de criptografia
-    when(encryptionService.encrypt(clientDomain.getCpf())).thenReturn("encryptedCpf");
-    when(encryptionService.hash(clientDomain.getCpf())).thenReturn("hashedCpf");
-    when(encryptionService.encrypt(clientDomain.getPhone())).thenReturn("encryptedPhone");
-    when(encryptionService.encrypt(clientDomain.getPassport().getNumber())).thenReturn("encryptedPassport");
-    when(encryptionService.hash(clientDomain.getPassport().getNumber())).thenReturn("hashedPassport");
-    when(encryptionService.encrypt(clientDomain.getAddress().getZipCode())).thenReturn("encryptedZip");
-    when(encryptionService.encrypt(clientDomain.getAddress().getCountry())).thenReturn("encryptedCountry");
-    when(encryptionService.encrypt(clientDomain.getAddress().getState())).thenReturn("encryptedState");
-    when(encryptionService.encrypt(clientDomain.getAddress().getCity())).thenReturn("encryptedCity");
-    when(encryptionService.encrypt(clientDomain.getAddress().getNeighborhood())).thenReturn("encryptedNeighborhood");
-    when(encryptionService.encrypt(clientDomain.getAddress().getStreet())).thenReturn("encryptedStreet");
-    when(encryptionService.encrypt(clientDomain.getAddress().getComplement())).thenReturn("encryptedComplement");
-    when(encryptionService.encrypt(clientDomain.getAddress().getResidentialNumber())).thenReturn("encryptedResidentialNumber");
+    when(clientMapper.toModel(clientDomain)).thenReturn(clientModel);
+    when(clientMapper.toDomain(clientModel)).thenReturn(clientDomain);
+    when(clientJpaRepository.save(any(ClientModel.class))).thenReturn(clientModel);
 
     // Act
     Client savedClient = clientRepositoryImp.save(clientDomain);
@@ -157,63 +108,65 @@ class ClientRepositoryImpTest {
     // Assert
     assertAll(
         () -> assertNotNull(savedClient),
-        () -> assertEquals(decryptedModel.getId(), savedClient.getId()),
-        () -> assertEquals(decryptedModel.getCompleteName(), savedClient.getCompleteName()),
-        () -> assertEquals(decryptedModel.getRawCpf(), savedClient.getCpf()),
-        () -> assertEquals(decryptedModel.getBirthDate(), savedClient.getBirthDate()),
-        () -> assertEquals(decryptedModel.getRawPhone(), savedClient.getPhone()),
-        () -> assertEquals(decryptedModel.getEmail(), savedClient.getEmail()),
-        () -> assertEquals(decryptedModel.getRawPassportNumber(), savedClient.getPassport().getNumber()),
-        () -> assertEquals(decryptedModel.getPassportEmissionDate(), savedClient.getPassport().getEmissionDate()),
-        () -> assertEquals(decryptedModel.getPassportExpirationDate(), savedClient.getPassport().getExpirationDate()),
-        () -> assertEquals(decryptedModel.getRawZipCode(), savedClient.getAddress().getZipCode()),
-        () -> assertEquals(decryptedModel.getRawCountry(), savedClient.getAddress().getCountry()),
-        () -> assertEquals(decryptedModel.getRawState(), savedClient.getAddress().getState()),
-        () -> assertEquals(decryptedModel.getRawCity(), savedClient.getAddress().getCity()),
-        () -> assertEquals(decryptedModel.getRawNeighborhood(), savedClient.getAddress().getNeighborhood()),
-        () -> assertEquals(decryptedModel.getRawStreet(), savedClient.getAddress().getStreet()),
-        () -> assertEquals(decryptedModel.getRawComplement(), savedClient.getAddress().getComplement()),
-        () -> assertEquals(decryptedModel.getRawResidentialNumber(), savedClient.getAddress().getResidentialNumber())
+        () -> assertEquals(clientDomain.getId(), savedClient.getId()),
+        () -> assertEquals(clientDomain.getCompleteName(), savedClient.getCompleteName()),
+        () -> assertEquals(clientDomain.getCpf(), savedClient.getCpf()),
+        () -> assertEquals(clientDomain.getBirthDate(), savedClient.getBirthDate()),
+        () -> assertEquals(clientDomain.getPhone(), savedClient.getPhone()),
+        () -> assertEquals(clientDomain.getEmail(), savedClient.getEmail()),
+        () -> assertEquals(clientDomain.getPassport().getNumber(), savedClient.getPassport().getNumber()),
+        () -> assertEquals(clientDomain.getPassport().getEmissionDate(), savedClient.getPassport().getEmissionDate()),
+        () -> assertEquals(clientDomain.getPassport().getExpirationDate(), savedClient.getPassport().getExpirationDate()),
+        () -> assertEquals(clientDomain.getAddress().getZipCode(), savedClient.getAddress().getZipCode()),
+        () -> assertEquals(clientDomain.getAddress().getCountry(), savedClient.getAddress().getCountry()),
+        () -> assertEquals(clientDomain.getAddress().getState(), savedClient.getAddress().getState()),
+        () -> assertEquals(clientDomain.getAddress().getCity(), savedClient.getAddress().getCity()),
+        () -> assertEquals(clientDomain.getAddress().getNeighborhood(), savedClient.getAddress().getNeighborhood()),
+        () -> assertEquals(clientDomain.getAddress().getStreet(), savedClient.getAddress().getStreet()),
+        () -> assertEquals(clientDomain.getAddress().getComplement(), savedClient.getAddress().getComplement()),
+        () -> assertEquals(clientDomain.getAddress().getResidentialNumber(), savedClient.getAddress().getResidentialNumber())
     );
-
-    verify(jpaRepository).save(decryptedModel);
-
-    verify(encryptionService, times(11)).encrypt(anyString());
-    verify(encryptionService, times(2)).hash(anyString());
+    verify(clientJpaRepository).save(any(ClientModel.class));
+    verify(clientMapper).toModel(clientDomain);
   }
 
-
   @Test
-  void ShouldReturnClient_WhenClientExists() {
+  void ShouldReturnOptionalClient_WhenClientExists() {
     // Arrange
-    Long existentId = 1L;
-    ClientModel encryptedModel = createEncryptedClientModel();
-    Client expectedClient = createClientDomain();
+    Long clientId = 1L;
+    ClientModel clientModel = createClientModel();
+    Client clientDomain = createClientDomain();
 
-    when(jpaRepository.findById(existentId))
-        .thenReturn(Optional.of(encryptedModel));
-
-    // Configurar descriptografia para todos os campos
-    mockDecryptionForAllFields(encryptedModel);
-
-    when(clientMapper.toDomain(any(ClientModel.class)))
-        .thenReturn(expectedClient);
+    when(clientJpaRepository.findById(clientId)).thenReturn(Optional.of(clientModel));
+    when(clientMapper.toDomain(clientModel)).thenReturn(clientDomain);
 
     // Act
-    Optional<Client> result = clientRepositoryImp.findById(existentId);
+    Optional<Client> client = clientRepositoryImp.findById(clientId);
 
     // Assert
     assertAll(
-        () -> assertTrue(result.isPresent()),
-        () -> assertEquals(expectedClient, result.get())
+        () -> assertTrue(client.isPresent()),
+        () -> assertEquals(clientModel.getId(), client.get().getId()),
+        () -> assertEquals(clientModel.getCompleteName(), client.get().getCompleteName()),
+        () -> assertEquals(clientModel.getCpf(), client.get().getCpf()),
+        () -> assertEquals(clientModel.getBirthDate(), client.get().getBirthDate()),
+        () -> assertEquals(clientModel.getPhone(), client.get().getPhone()),
+        () -> assertEquals(clientModel.getEmail(), client.get().getEmail()),
+        () -> assertEquals(clientModel.getPassportNumber(), client.get().getPassport().getNumber()),
+        () -> assertEquals(clientModel.getPassportEmissionDate(), client.get().getPassport().getEmissionDate()),
+        () -> assertEquals(clientModel.getPassportExpirationDate(), client.get().getPassport().getExpirationDate()),
+        () -> assertEquals(clientModel.getZipCode(), client.get().getAddress().getZipCode()),
+        () -> assertEquals(clientModel.getCountry(), client.get().getAddress().getCountry()),
+        () -> assertEquals(clientModel.getState(), client.get().getAddress().getState()),
+        () -> assertEquals(clientModel.getCity(), client.get().getAddress().getCity()),
+        () -> assertEquals(clientModel.getNeighborhood(), client.get().getAddress().getNeighborhood()),
+        () -> assertEquals(clientModel.getStreet(), client.get().getAddress().getStreet()),
+        () -> assertEquals(clientModel.getComplement(), client.get().getAddress().getComplement()),
+        () -> assertEquals(clientModel.getResidentialNumber(), client.get().getAddress().getResidentialNumber())
+
     );
-
-    // Verificação de interações
-    verify(jpaRepository).findById(existentId);
-    verify(clientMapper).toDomain(encryptedModel);
-
-    // 11 chamadas de descriptografia no método toDecryptedClient na classe ClientRepositoryImp
-    verify(encryptionService, times(11)).decrypt(anyString());
+    verify(clientJpaRepository).findById(clientId);
+    verify(clientMapper).toDomain(clientModel);
   }
 
   @Test
@@ -221,7 +174,8 @@ class ClientRepositoryImpTest {
     // Arrange
     Long clientId = 1L;
 
-    when(jpaRepository.findById(clientId)).thenReturn(Optional.empty());
+
+    when(clientJpaRepository.findById(clientId)).thenReturn(Optional.empty());
 
     // Act
     Optional<Client> client = clientRepositoryImp.findById(clientId);
@@ -231,29 +185,50 @@ class ClientRepositoryImpTest {
         () -> assertNotNull(client),
         () -> assertTrue(client.isEmpty())
     );
-    verify(jpaRepository).findById(clientId);
+    verify(clientJpaRepository).findById(clientId);
     verify(clientMapper, never()).toDomain(any(ClientModel.class));
   }
 
   @Test
-  void ShouldReturnListOfClients_WhenClientsExist() {
-    ClientModel encryptedModel = createEncryptedClientModel();
-    Page<ClientModel> page = new PageImpl<>(List.of(encryptedModel));
+  void ShouldFindAllClients_WhenClientsExist() {
+    // Arrange
+    String search = "completeName:John";
+    String orderBy = "completeName";
+    String sortOrder = "ASC";
+    int page = 0;
+    int size = 5;
 
-    when(specificationBuilder.build(any())).thenReturn((root, query, cb) -> cb.conjunction());
+    // Configuração do Sort e Pageable
+    Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), orderBy);
+    Pageable pageable = PageRequest.of(page, size, sort);
 
-    // Corrigindo a linha ambígua
-    when(jpaRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
+    // Configuração da Specification
+    Specification<ClientModel> specification = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
 
-    when(encryptionService.decrypt(any())).thenAnswer(inv -> inv.getArgument(0)
-        .toString()
-        .replace("encrypted", ""));
+    // Criação dos objetos de teste
+    ClientModel clientModel = createClientModel();
+    Client client = createClientDomain();
 
-    Page<Client> result = clientRepositoryImp.findAll("query", "name", "ASC", 0, 10);
+    // Configuração do Page<ClientModel>
+    Page<ClientModel> pageResult = new PageImpl<>(List.of(clientModel));
 
-    assertEquals(1, result.getContent()
-        .size());
-    verify(jpaRepository).findAll(any(Specification.class), any(Pageable.class));
+    // Mocking dos comportamentos esperados
+    when(specificationBuilder.build(search)).thenReturn(specification);
+    when(clientJpaRepository.findAll(specification, pageable)).thenReturn(pageResult);
+    when(clientMapper.toDomain(clientModel)).thenReturn(client);
+
+    // Act
+    Page<Client> result = clientRepositoryImp.findAll(search, orderBy, sortOrder, page, size);
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(1, result.getTotalElements());
+    assertEquals(client, result.getContent().get(0));
+
+    // Verificação dos mocks
+    verify(specificationBuilder).build(search);
+    verify(clientJpaRepository).findAll(specification, pageable);
+    verify(clientMapper).toDomain(clientModel);
   }
 
   @Test
@@ -277,7 +252,7 @@ class ClientRepositoryImpTest {
 
     // Mocking dos comportamentos esperados
     when(specificationBuilder.build(search)).thenReturn(specification);
-    when(jpaRepository.findAll(specification, pageable)).thenReturn(pageResult);
+    when(clientJpaRepository.findAll(specification, pageable)).thenReturn(pageResult);
 
     // Act
     Page<Client> result = clientRepositoryImp.findAll(search, orderBy, sortOrder, page, size);
@@ -289,7 +264,7 @@ class ClientRepositoryImpTest {
 
     // Verificação dos mocks
     verify(specificationBuilder).build(search);
-    verify(jpaRepository).findAll(specification, pageable);
+    verify(clientJpaRepository).findAll(specification, pageable);
     verify(clientMapper, never()).toDomain(any(ClientModel.class));
   }
 
@@ -297,36 +272,30 @@ class ClientRepositoryImpTest {
   void ShouldReturnTrue_WhenClientByCpfExists() {
     // Arrange
     String cpf = "12345678901";
-    String hashedCpf = "hashedCpf";
 
     // Act
-    when(encryptionService.hash(cpf)).thenReturn(hashedCpf);
-    when(jpaRepository.existsByHashedCpf(hashedCpf)).thenReturn(true);
+    when(clientJpaRepository.existsByCpf(cpf)).thenReturn(true);
 
-    boolean isExist = clientRepositoryImp.existsByCpf(cpf);
+    boolean exists = clientRepositoryImp.existsByCpf(cpf);
 
     // Assert
-    assertTrue(isExist);
-    verify(jpaRepository).existsByHashedCpf(hashedCpf);
-
+    assertTrue(exists);
+    verify(clientJpaRepository).existsByCpf(cpf);
   }
 
   @Test
   void ShouldReturnTrue_WhenClientByPassportNumberExists() {
     // Arrange
     String passportNumber = "ABC123456";
-    String hashedPassportNumber = "hashedPassportNumber";
 
     // Act
-    when(encryptionService.hash(passportNumber)).thenReturn(hashedPassportNumber);
-    when(jpaRepository.existsByHashedPassportNumber(hashedPassportNumber)).thenReturn(true);
+    when(clientJpaRepository.existsByPassportNumber(passportNumber)).thenReturn(true);
 
-    boolean isExist = clientRepositoryImp.existsByPassportNumber(passportNumber);
+    boolean exists = clientRepositoryImp.existsByPassportNumber(passportNumber);
 
     // Assert
-    assertTrue(isExist);
-    verify(jpaRepository).existsByHashedPassportNumber(hashedPassportNumber);
-    verify(encryptionService).hash(passportNumber);
+    assertTrue(exists);
+    verify(clientJpaRepository).existsByPassportNumber(passportNumber);
   }
 
   @Test
@@ -335,13 +304,13 @@ class ClientRepositoryImpTest {
     String email = "example@gmail.com";
 
     // Act
-    when(jpaRepository.existsByEmail(email)).thenReturn(true);
+    when(clientJpaRepository.existsByEmail(email)).thenReturn(true);
 
     boolean exists = clientRepositoryImp.existsByEmail(email);
 
     // Assert
     assertTrue(exists);
-    verify(jpaRepository).existsByEmail(email);
+    verify(clientJpaRepository).existsByEmail(email);
   }
 
   @Test
@@ -350,13 +319,13 @@ class ClientRepositoryImpTest {
     Long id = 1L;
 
     // Act
-    when(jpaRepository.existsById(id)).thenReturn(true);
+    when(clientJpaRepository.existsById(id)).thenReturn(true);
 
     boolean exists = clientRepositoryImp.existsById(id);
 
     // Assert
     assertTrue(exists);
-    verify(jpaRepository).existsById(id);
+    verify(clientJpaRepository).existsById(id);
   }
 
   @Test
@@ -368,6 +337,6 @@ class ClientRepositoryImpTest {
     clientRepositoryImp.deleteById(id);
 
     // Assert
-    verify(jpaRepository, times(1)).deleteById(id);
+    verify(clientJpaRepository, times(1)).deleteById(id);
   }
 }

@@ -1,7 +1,7 @@
 package com.agencia.backend.infrastructure.configuration.bean.user;
 
 import com.agencia.backend.presentation.mapper.user.UserMapper;
-import com.agencia.backend.infrastructure.services.UserDetailsServiceImp;
+import com.agencia.backend.application.services.implementation.UserDetailsServiceImp;
 import com.agencia.backend.application.useCase.user.FindUserByUsernameUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

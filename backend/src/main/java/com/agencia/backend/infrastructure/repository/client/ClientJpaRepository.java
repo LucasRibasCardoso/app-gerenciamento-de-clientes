@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface ClientJpaRepository extends JpaRepository<ClientModel, Long>, JpaSpecificationExecutor<ClientModel> {
 
-  boolean existsByHashedCpf(String hashedCpf);
+  boolean existsByCpf(String cpf);
 
-  boolean existsByHashedPassportNumber(String email);
+  boolean existsByPassportNumber(String email);
 
   boolean existsByEmail(String email);
 }
