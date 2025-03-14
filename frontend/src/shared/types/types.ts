@@ -1,3 +1,7 @@
+export interface User {
+    username: string | null;
+    roles: string[];
+}
 
 // Formato retornado ao buscar usuários
 export type UserResponse = {

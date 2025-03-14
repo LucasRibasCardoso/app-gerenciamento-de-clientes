@@ -31,20 +31,18 @@ public class JwtUtilsImp implements JwtUtils {
     return bearerToken.substring(7); // Remove Bearer prefix
   }
 
-  public String generateTokenFromUsername(UserDetails userDetails) {
+  public String generateToken(UserDetails userDetails) {
     String username = userDetails.getUsername();
 
     Instant now = Instant.now();
     Instant expirationTime = now.plus(1, ChronoUnit.DAYS); // 1 dia de validade
 
-    String token = Jwts.builder()
+    return Jwts.builder()
         .subject(username)
         .issuedAt(Date.from(now))
         .expiration((Date.from(expirationTime)))
         .signWith(key())
         .compact();
-
-    return token;
   }
 
   public String getUsernameFromJwtToken(String token) {

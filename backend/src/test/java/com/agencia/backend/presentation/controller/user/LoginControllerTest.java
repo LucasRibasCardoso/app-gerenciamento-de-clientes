@@ -74,7 +74,7 @@ public class LoginControllerTest {
         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
     when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(authentication);
-    when(jwtUtils.generateTokenFromUsername(userDetails)).thenReturn("mocked-jwt-token");
+    when(jwtUtils.generateToken(userDetails)).thenReturn("mocked-jwt-token");
 
     String requestBody = objectMapper.writeValueAsString(loginRequestDTO);
     String responseBody = objectMapper.writeValueAsString(loginResponseDTO);
