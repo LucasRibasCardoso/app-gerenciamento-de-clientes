@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class JwtUtilsImp implements JwtUtils {
 
-  @Value("${api.security.token.secret}")
+  @Value("${api.security.token.jwt}")
   private String secretKey;
 
   public String getJwtFromHeader(HttpServletRequest request) {
