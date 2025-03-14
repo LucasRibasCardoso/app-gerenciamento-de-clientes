@@ -13,9 +13,13 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import javax.crypto.SecretKey;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class JwtUtilsImp implements JwtUtils {
+
+  @Value("${api.security.token.secret}")
+  private String secretKey;
 
   public String getJwtFromHeader(HttpServletRequest request) {
     String bearerToken = request.getHeader("Authorization");
@@ -65,8 +69,7 @@ public class JwtUtilsImp implements JwtUtils {
   }
 
   private Key key() {
-    String jwt_key = System.getenv("JWT_KEY");
-    return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwt_key));
+    return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
   }
 
 }
