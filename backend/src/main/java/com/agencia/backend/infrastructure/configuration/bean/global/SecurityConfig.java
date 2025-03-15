@@ -52,7 +52,7 @@ public class SecurityConfig {
       return corsConfiguration;
     }));
 
-    // Habilita o CSRF para o formulário de login
+    // Desabilita o CSRF para o formulário de login
     http.csrf(csrf -> csrf.disable());
 
     http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
@@ -66,7 +66,7 @@ public class SecurityConfig {
         .requestMatchers("/auth/register").hasRole("ADMIN")
 
         // H2 Database utilizado para desenvolvimento
-        .requestMatchers("/h2-console/**").permitAll()
+        .requestMatchers("/h2-console/**").hasRole("ADMIN")
 
         // Qualquer outro endpoint requer autenticação
         .anyRequest().authenticated()
