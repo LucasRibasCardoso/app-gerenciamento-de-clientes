@@ -53,7 +53,6 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<GenericError> handleGenericException(Exception ex) {
-    ex.printStackTrace();
     GenericError error = new GenericError("Ocorreu um erro inesperado. Se persistir, reinicie o sistema.", HttpStatus.INTERNAL_SERVER_ERROR.value());
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
   }
