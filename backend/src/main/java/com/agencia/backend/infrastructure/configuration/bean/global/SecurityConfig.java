@@ -44,7 +44,7 @@ public class SecurityConfig {
     // Configuração de CORS
     http.cors(cors -> cors.configurationSource(request -> {
       var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
-      corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
+      corsConfiguration.setAllowedOrigins(List.of("https://frontend-production-490b.up.railway.app"));
       corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT"));
       corsConfiguration.setAllowedHeaders(List.of("*"));
       corsConfiguration.setExposedHeaders(List.of("Authorization", "Content-Type"));
