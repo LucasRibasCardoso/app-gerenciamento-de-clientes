@@ -22,6 +22,7 @@ export type Passport = {
     emissionDate: string | null;
     expirationDate: string | null;
 };
+
 export type Address = {
     zipCode: string | null;
     country: string | null;
@@ -32,6 +33,18 @@ export type Address = {
     complement: string | null;
     residentialNumber: string | null;
 };
+
+// Formato utilizado para adicionar e editar clientes
+export type ClientFormData = {
+    completeName: string;
+    birthDate: string;
+    phone: string | null;
+    email: string | null;
+    passport: Passport;
+    address: Address;
+} & Partial<{
+    cpf: string;
+}>;
 
 // Formato de cliente retornado quando buscado na api
 export type ClientResponse = {
@@ -56,9 +69,9 @@ export type AddClientRequest = {
     address: Address;
 }
 
-// Formato utilizado para adicionar clientes 
+// Formato utilizado para atualizar clientes 
 export type UpdateClientRequest = {
-    completeName: string | null;
+    completeName: string;
     birthDate: string;
     phone: string | null;
     email: string | null;

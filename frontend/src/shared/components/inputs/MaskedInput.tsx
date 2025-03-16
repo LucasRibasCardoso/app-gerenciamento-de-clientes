@@ -3,26 +3,26 @@ import { TextField } from "@mui/material";
 import InputMask from "react-input-mask";
 
 interface MaskedInputProps<T extends FieldValues> {
-    name: Path<T>; // Usamos Path<T> para garantir que o name seja uma chave válida de T
+    name: Path<T>; 
     control: Control<T, any>;
     label: string;
     mask: string;
     errors: FieldErrors<T>;
     isEditing?: boolean;
-    [key: string]: any; // Para permitir outras props
+    [key: string]: any; 
 }
 
 const MaskedInput = <T extends FieldValues>({ name, control, label, mask, errors, isEditing, ...rest }: MaskedInputProps<T>) => {
     return (
         <Controller
-            name={name} // Não é mais necessário converter para string
+            name={name} 
             control={control}
             render={({ field }) => (
                 <InputMask
                     mask={mask}
                     value={field.value || ""}
                     onChange={field.onChange}
-                    disabled={isEditing && name === "cpf"}
+                    disabled={isEditing && (name as string) === "cpf"}
                 >
                     {(inputProps: any) => (
                         <TextField

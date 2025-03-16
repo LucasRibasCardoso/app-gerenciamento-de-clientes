@@ -13,7 +13,7 @@ import Grid from "@mui/material/Grid2";
 import CloseIcon from "@mui/icons-material/Close";
 
 
-import { AddClientRequest, UpdateClientRequest } from "../../types/types";
+import { ClientFormData, AddClientRequest, UpdateClientRequest } from "../../types/types";
 import { SaveButton } from "../buttons";
 import { useGetClientById, useAddClient, useUpdateClient } from "../../hooks/ClientHook";
 import { usePopUp } from "../../context/PopUpContext";
@@ -50,15 +50,19 @@ const getNestedFields = (dirtyFields: Record<string, any>, data: any) => {
 
 const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientId }) => {
 
+    // Seleciona o schema e os valores padrão de acordo com o modo
+    const schema = isEditing ? UpdateClientSchema : AddClientSchema;
+    const defaultValues = isEditing ? UpdateClientSchemaDefaultValues : AddClientSchemaDefaultValues;
+
     const { 
         control, 
         reset, 
         handleSubmit, 
         formState: { errors, isDirty, dirtyFields } 
-    } = useForm<AddClientRequest | UpdateClientRequest>({
-        resolver: yupResolver(isEditing ? UpdateClientSchema : AddClientSchema),
-        defaultValues: isEditing ? UpdateClientSchemaDefaultValues : AddClientSchemaDefaultValues,
-        mode: "onChange" // Garantir atualização imediata do estado dirty
+    } = useForm<ClientFormData>({
+        resolver: yupResolver(schema) as any, 
+        defaultValues,
+        mode: "onChange" 
     });
 
     const { showMessage } = usePopUp();
@@ -75,9 +79,7 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
     // Preenche o formulário com os dados do cliente quando eles são carregados
     useEffect(() => {
         if (isEditing && clientData) {
-            reset({
-                ...clientData,
-            });
+            reset(clientData);
         }
     }, [clientData, isEditing, reset]);
     if (isError) {
@@ -91,9 +93,10 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                 showMessage("Nenhuma alteração foi detectada.", "info");
                 return;
             }
-
-            const updatedClient = getNestedFields(dirtyFields, data);
-            updateClient({ clientId, data: updatedClient });
+            const updatedData = getNestedFields(dirtyFields, data);
+            delete updatedData.cpf;
+            
+            updateClient({ clientId, data: updatedData });
         } else {
             saveClient(data as AddClientRequest);
         }
