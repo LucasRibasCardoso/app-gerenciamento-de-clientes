@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 
 import { useCurrencyQuotes } from "../../hooks/useCurrencyQuotes";
-import { useCurrencyQuotesMock } from "../../../mocks/useCurrencyQuotesMock";
 import { usePopUp } from "../../context/PopUpContext";
 import {
     ArgentinaFlag, 
@@ -33,13 +32,13 @@ const flagSVGs: { [key: string]: string } = {
 };
 
 const CurrencyTable = () => {
-    const { data, isLoading, isError, error } = useCurrencyQuotesMock(); // Alterar entre mock
+    const { data, isLoading, isError, error } = useCurrencyQuotes(); // Alterar entre mock
     const { showMessage } = usePopUp();
 
     // Exibe o PopUp se houver um erro
     useEffect(() => {
         if (isError) {
-            showMessage(error || "Erro ao carregar cotações", "error");
+            showMessage(error?.message || "Erro inesperado ao tentar buscar as cotações atualizadas", "error");
         }
     }, [isError, error, showMessage]);
 
