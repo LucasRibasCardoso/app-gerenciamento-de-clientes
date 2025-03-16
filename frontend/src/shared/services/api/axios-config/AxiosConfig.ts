@@ -3,7 +3,7 @@ import {errorInterceptor} from "./interceptors/ErrorInterceptor";
 
 
 const Api = axios.create({
-    baseURL: "client-management-system-production.up.railway.app",
+    baseURL: "https://client-management-system-production.up.railway.app",
 });
 
 // Interceptor de requisição: adiciona o token ao cabeçalho
