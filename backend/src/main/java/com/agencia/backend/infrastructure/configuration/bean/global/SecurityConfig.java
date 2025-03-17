@@ -2,6 +2,7 @@ package com.agencia.backend.infrastructure.configuration.bean.global;
 
 import com.agencia.backend.infrastructure.configuration.jwt.AuthTokenFilter;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -24,6 +25,9 @@ import org.springframework.security.web.header.writers.XXssProtectionHeaderWrite
 @EnableMethodSecurity
 public class SecurityConfig {
 
+  @Value("${url.frontend}")
+  private String urlFrontend;
+
   private final AuthenticationEntryPoint authenticationEntryPoint;
   private final AuthTokenFilter authTokenFilter;
 
@@ -44,7 +48,7 @@ public class SecurityConfig {
     // Configuração de CORS
     http.cors(cors -> cors.configurationSource(request -> {
       var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
-      corsConfiguration.setAllowedOrigins(List.of("https://frontend-production-490b.up.railway.app"));
+      corsConfiguration.setAllowedOrigins(List.of(urlFrontend));
       corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT"));
       corsConfiguration.setAllowedHeaders(List.of("*"));
       corsConfiguration.setExposedHeaders(List.of("Authorization", "Content-Type"));
