@@ -27,7 +27,7 @@ public class ClientModel {
   @Column(unique = true, nullable = false)
   private String cpf;
 
-  @Column(nullable = false)
+  @Column(name = "birthDate", nullable = false)
   private LocalDate birthDate;
 
   private String phone;
@@ -39,7 +39,10 @@ public class ClientModel {
   @Column(unique = true)
   private String passportNumber;
 
+  @Column(name = "passportEmissionDate")
   private LocalDate passportEmissionDate;
+
+  @Column(name = "passportExpirationDate")
   private LocalDate passportExpirationDate;
 
   // Endereço
