@@ -48,15 +48,34 @@ public class SecurityConfig {
     // Configuração de CORS
     http.cors(cors -> cors.configurationSource(request -> {
       var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
+
       corsConfiguration.setAllowedOrigins(List.of(urlFrontend));
-      corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT"));
-      corsConfiguration.setAllowedHeaders(List.of("*"));
-      corsConfiguration.setExposedHeaders(List.of("Authorization", "Content-Type"));
+
+      corsConfiguration.setAllowedMethods(List.of(
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE"
+      ));
+
+      corsConfiguration.setAllowedHeaders(List.of(
+          "Authorization",
+          "Content-Type",
+          "Accept"
+      ));
+
+      corsConfiguration.setExposedHeaders(List.of(
+          "Authorization"
+      ));
+
+      corsConfiguration.setMaxAge(3600L);
+
       corsConfiguration.setAllowCredentials(true);
+
       return corsConfiguration;
     }));
 
-    // Desabilita o CSRF para o formulário de login
+    // Desabilita o CSRF
     http.csrf(csrf -> csrf.disable());
 
     http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
