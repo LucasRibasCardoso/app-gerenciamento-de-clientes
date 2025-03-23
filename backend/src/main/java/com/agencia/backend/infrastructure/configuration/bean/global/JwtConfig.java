@@ -19,21 +19,15 @@ public class JwtConfig {
   }
 
   @Bean
-  public AuthenticationEntryPoint authenticationEntryPoint() {
-    return new AuthEntryPointJwtImp(objectMapper());
+  public AuthenticationEntryPoint authenticationEntryPoint(ObjectMapper objectMapper) {
+    return new AuthEntryPointJwtImp(objectMapper);
   }
 
   @Bean
   public AuthTokenFilter authenticationJwtTokenFilter(
-      UserDetailsService userDetailsService
+      JwtUtils jwtUtils, UserDetailsService userDetailsService
   ) {
-    return new AuthTokenFilter(jwtUtils(), userDetailsService);
+    return new AuthTokenFilter(jwtUtils, userDetailsService);
   }
 
-  @Bean
-  public ObjectMapper objectMapper() {
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.findAndRegisterModules();
-    return mapper;
-  }
 }
