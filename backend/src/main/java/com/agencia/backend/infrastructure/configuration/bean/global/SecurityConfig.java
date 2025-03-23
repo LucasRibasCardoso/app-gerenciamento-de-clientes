@@ -1,6 +1,7 @@
 package com.agencia.backend.infrastructure.configuration.bean.global;
 
 import com.agencia.backend.infrastructure.configuration.jwt.AuthTokenFilter;
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,11 @@ public class SecurityConfig {
   @Value("${url.frontend}")
   private String urlFrontend;
 
+  @PostConstruct
+  public void init() {
+    System.out.println("================= URL Frontend: " + urlFrontend);
+  }
+
   @Autowired
   private AuthenticationEntryPoint authenticationEntryPoint;
 
@@ -52,7 +58,7 @@ public class SecurityConfig {
     http.cors(cors -> cors.configurationSource(request -> {
       var corsConfiguration = new CorsConfiguration();
 
-      corsConfiguration.setAllowedOrigins(List.of(urlFrontend));
+      corsConfiguration.setAllowedOrigins(List.of("https://frontend-production-490b.up.railway.app"));
 
       corsConfiguration.setAllowedMethods(List.of(
           "GET",
