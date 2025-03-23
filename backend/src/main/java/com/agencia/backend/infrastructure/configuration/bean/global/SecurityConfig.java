@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -57,13 +58,16 @@ public class SecurityConfig {
           "GET",
           "POST",
           "PUT",
-          "DELETE"
+          "DELETE",
+          "OPTIONS"
       ));
 
       corsConfiguration.setAllowedHeaders(List.of(
           "Authorization",
           "Content-Type",
-          "Accept"
+          "Accept",
+          "Origin",
+          "X-Requested-With"
       ));
 
       corsConfiguration.setExposedHeaders(List.of(
@@ -81,6 +85,10 @@ public class SecurityConfig {
     http.csrf(csrf -> csrf.disable());
 
     http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+
+        // Libera o preflight request
+        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
         // Usuários e administradores podem acessar os endpoints abaixo
         .requestMatchers("/clients/**").hasAnyRole("USER", "ADMIN")
         .requestMatchers("/auth/logout").permitAll()
