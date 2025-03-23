@@ -5,7 +5,6 @@ import com.agencia.backend.domain.entity.enuns.Role;
 import com.agencia.backend.domain.repository.UserRepository;
 import java.util.Set;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
