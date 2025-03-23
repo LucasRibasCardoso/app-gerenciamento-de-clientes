@@ -20,7 +20,7 @@ public class UserDataInitializationRunner implements CommandLineRunner {
   }
 
   @Override
-  public void run(String... args) throws Exception {
+  public void run(String... args) {
     User user1 = new User(null, "userCommon", passwordEncoder.encode("12345678@"), Set.of(Role.USER));
     User user2 = new User(null, "userAdmin", passwordEncoder.encode("12345678@"), Set.of(Role.ADMIN));
 
