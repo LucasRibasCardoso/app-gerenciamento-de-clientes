@@ -32,11 +32,6 @@ public class SecurityConfig {
   @Value("${url.frontend}")
   private String urlFrontend;
 
-  @PostConstruct
-  public void init() {
-    System.out.println("================= URL Frontend: " + urlFrontend);
-  }
-
   @Autowired
   private AuthenticationEntryPoint authenticationEntryPoint;
 
@@ -58,7 +53,7 @@ public class SecurityConfig {
     http.cors(cors -> cors.configurationSource(request -> {
       var corsConfiguration = new CorsConfiguration();
 
-      corsConfiguration.setAllowedOrigins(List.of("https://frontend-production-490b.up.railway.app"));
+      corsConfiguration.setAllowedOrigins(List.of(urlFrontend));
 
       corsConfiguration.setAllowedMethods(List.of(
           "GET",
