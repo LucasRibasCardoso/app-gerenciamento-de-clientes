@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtilsImp implements JwtUtils {
 
-  @Value("${api.security.token.jwt}")
+  @Value("${api.security.token.jwt.secret}")
   private String secretKey;
 
   public String getJwtFromHeader(HttpServletRequest request) {

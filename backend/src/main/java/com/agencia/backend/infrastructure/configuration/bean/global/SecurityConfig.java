@@ -19,6 +19,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
@@ -47,7 +48,7 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     // Configuração de CORS
     http.cors(cors -> cors.configurationSource(request -> {
-      var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
+      var corsConfiguration = new CorsConfiguration();
 
       corsConfiguration.setAllowedOrigins(List.of(urlFrontend));
 
