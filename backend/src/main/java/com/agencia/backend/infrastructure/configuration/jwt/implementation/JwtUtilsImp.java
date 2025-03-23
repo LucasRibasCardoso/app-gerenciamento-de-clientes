@@ -15,14 +15,13 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
-@Component
 public class JwtUtilsImp implements JwtUtils {
 
   @Value("${api.security.token.jwt.secret}")
   private String secretKey;
 
+  @Override
   public String getJwtFromHeader(HttpServletRequest request) {
     String bearerToken = request.getHeader("Authorization");
 
@@ -33,6 +32,7 @@ public class JwtUtilsImp implements JwtUtils {
     return bearerToken.substring(7); // Remove Bearer prefix
   }
 
+  @Override
   public String generateToken(UserDetails userDetails) {
     String username = userDetails.getUsername();
 
@@ -47,6 +47,7 @@ public class JwtUtilsImp implements JwtUtils {
         .compact();
   }
 
+  @Override
   public String getUsernameFromJwtToken(String token) {
     return Jwts.parser()
         .verifyWith((SecretKey) key())
@@ -55,6 +56,7 @@ public class JwtUtilsImp implements JwtUtils {
         .getSubject();
   }
 
+  @Override
   public boolean validateJwtToken(String authToken) {
     try {
       Jwts.parser()
