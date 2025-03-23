@@ -1,7 +1,6 @@
 package com.agencia.backend.infrastructure.configuration.bean.global;
 
 import com.agencia.backend.infrastructure.configuration.jwt.AuthTokenFilter;
-import jakarta.annotation.PostConstruct;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,13 +54,7 @@ public class SecurityConfig {
 
       corsConfiguration.setAllowedOrigins(List.of(urlFrontend));
 
-      corsConfiguration.setAllowedMethods(List.of(
-          "GET",
-          "POST",
-          "PUT",
-          "DELETE",
-          "OPTIONS"
-      ));
+      corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
       corsConfiguration.setAllowedHeaders(List.of(
           "Authorization",
