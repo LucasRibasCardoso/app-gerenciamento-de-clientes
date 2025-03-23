@@ -90,7 +90,7 @@ public class SecurityConfig {
 
         // Somente administradores pode acessar os endpoints abaixo
         .requestMatchers("/users/**").hasRole("ADMIN")
-        .requestMatchers("/auth/register").permitAll()
+        .requestMatchers("/auth/register").hasRole("ADMIN")
 
         // H2 Database utilizado para desenvolvimento
         .requestMatchers("/h2-console/**").hasRole("ADMIN")
