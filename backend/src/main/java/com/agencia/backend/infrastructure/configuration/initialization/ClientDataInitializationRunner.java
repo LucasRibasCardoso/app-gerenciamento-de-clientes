@@ -7,8 +7,11 @@ import com.agencia.backend.domain.repository.ClientRepository;
 import java.time.LocalDate;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
-@SpringBootApplication
+@Component
+@Profile("dev")
 public class ClientDataInitializationRunner implements CommandLineRunner {
 
   private ClientRepository clientRepository;
