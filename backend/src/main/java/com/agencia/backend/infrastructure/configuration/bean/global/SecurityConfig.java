@@ -2,6 +2,7 @@ package com.agencia.backend.infrastructure.configuration.bean.global;
 
 import com.agencia.backend.infrastructure.configuration.jwt.AuthTokenFilter;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,13 +30,13 @@ public class SecurityConfig {
   @Value("${url.frontend}")
   private String urlFrontend;
 
-  private final AuthenticationEntryPoint authenticationEntryPoint;
-  private final AuthTokenFilter authTokenFilter;
+  @Autowired
+  private AuthenticationEntryPoint authenticationEntryPoint;
 
-  public SecurityConfig(AuthenticationEntryPoint authenticationEntryPoint, AuthTokenFilter authTokenFilter) {
-    this.authenticationEntryPoint = authenticationEntryPoint;
-    this.authTokenFilter = authTokenFilter;
-  }
+  @Autowired
+  private AuthTokenFilter authTokenFilter;
+
+  public SecurityConfig() {}
 
   @Bean
   public RoleHierarchy roleHierarchy() {
