@@ -26,6 +26,7 @@ public class UserModel {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
+  @Column(columnDefinition = "BINARY(16)")
   UUID id;
 
   @Column(nullable = false, unique = true)
