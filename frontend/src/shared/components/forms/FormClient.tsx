@@ -192,13 +192,14 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                         alignItems: "center",
                         textTransform: "none",
                         padding: "10px",
+                        height: "50px",
                         ...(passportCollapse && {
                             border: "none"
                         }),
                     }}
                 >
                     <Typography variant="h6">Passaporte</Typography>
-                    {passportCollapse ? <ExpandLess /> : <ExpandMore />}
+                    {passportCollapse ? <ExpandLess sx={{ width: "45px" }}/> : <ExpandMore sx={{ width: "45px" }}/>}
                 </Button>
                 <Collapse in={passportCollapse}>
                     <Grid container spacing={2}>
@@ -246,6 +247,7 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                         alignItems: "center",
                         textTransform: "none",
                         padding: "10px",
+                        height: "50px",
                         ...(addressCollapse && {
                             border: "none"
                         }),
@@ -253,7 +255,7 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                 >
                     <Typography variant="h6">Endereço</Typography>
                     <IconButton>
-                        {addressCollapse ? <ExpandLess /> : <ExpandMore />}
+                        {addressCollapse ? <ExpandLess/> : <ExpandMore/>}
                     </IconButton>
                 </Button>
                 <Collapse in={addressCollapse}>
