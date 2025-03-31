@@ -110,6 +110,23 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
             display: "flex",
             flexDirection: "column",
             gap: "25px",
+
+            maxHeight: "90vh", 
+            overflowY: "auto", 
+            padding: "20px", 
+            "&::-webkit-scrollbar": {
+                width: "8px",
+            },
+            "&::-webkit-scrollbar-track": {
+                background: "#f1f1f1",
+            },
+            "&::-webkit-scrollbar-thumb": {
+                background: "#888",
+                borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+                background: "#555",
+            },
         }}>
             {/* Botão de fechar */}
             <IconButton

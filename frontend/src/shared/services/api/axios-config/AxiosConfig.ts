@@ -4,7 +4,7 @@ import {errorInterceptor} from "./interceptors/ErrorInterceptor";
 
 const Api = axios.create({
     baseURL: import.meta.env.VITE_API_BACKEND_URL,
-});
+  });
 
 // Interceptor de requisição: adiciona o token ao cabeçalho
 Api.interceptors.request.use(
