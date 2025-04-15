@@ -6,7 +6,6 @@ import com.agencia.backend.domain.exceptions.user.InvalidRoleException;
 import com.agencia.backend.domain.exceptions.user.InvalidUUIDException;
 import com.agencia.backend.domain.exceptions.user.InvalidUsernameException;
 import com.agencia.backend.presentation.validators.user.ValidateUserRequest;
-import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -23,16 +22,15 @@ public class ValidateUserRequestImp implements ValidateUserRequest {
   }
 
   @Override
-  public void validateRoles(Set<String> roles) {
-    if (roles == null || roles.isEmpty()) {
-      throw new InvalidRoleException("A lista de permissões não pode estar vazia ou nula.");
+  public void validateRole(String role) {
+    if (role == null || role.isEmpty()) {
+      throw new InvalidRoleException("A permissão não pode estar vazia ou nula.");
     }
 
     try {
-      roles.forEach(role -> Role.valueOf(role));
-    }
-    catch (IllegalArgumentException e) {
-      throw new InvalidRoleException("Permissões inválidas: " + roles);
+      Role.valueOf(role);
+    } catch (IllegalArgumentException e) {
+      throw new InvalidRoleException("Permissão inválida: " + role);
     }
   }
 

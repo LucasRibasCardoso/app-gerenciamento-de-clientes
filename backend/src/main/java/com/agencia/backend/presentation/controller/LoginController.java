@@ -1,18 +1,12 @@
 package com.agencia.backend.presentation.controller;
 
-import com.agencia.backend.domain.entity.User;
 import com.agencia.backend.infrastructure.configuration.jwt.JwtUtils;
 import com.agencia.backend.presentation.dto.user.LoginRequestDTO;
 import com.agencia.backend.presentation.dto.user.LoginResponseDTO;
-import com.agencia.backend.presentation.dto.user.UserRequestDTO;
-import com.agencia.backend.presentation.dto.user.UserResponseDTO;
 import com.agencia.backend.presentation.mapper.user.UserMapper;
 import com.agencia.backend.application.useCase.user.RegisterUserUseCase;
 import com.agencia.backend.presentation.validators.user.ValidateUserRequest;
 import jakarta.validation.Valid;
-import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/auth")
@@ -50,22 +43,6 @@ public class LoginController {
     this.jwtUtils = jwtUtils;
   }
 
-  @PostMapping("/register")
-  public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO dto) {
-    validateUserRequest.validateUsername(dto.username());
-    validateUserRequest.validatePassword(dto.password());
-    validateUserRequest.validateRoles(dto.roles());
-
-    User userSaved = createUserUseCase.register(userMapper.toDomain(dto));
-
-    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{id}")
-        .buildAndExpand(userSaved.getId())
-        .toUri();
-
-    return ResponseEntity.status(HttpStatus.CREATED).location(location).body(userMapper.toDTO(userSaved));
-  }
-
   @PostMapping("/login")
   public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto) {
     validateUserRequest.validateUsername(dto.username());
@@ -81,11 +58,13 @@ public class LoginController {
 
     String jwtToken = jwtUtils.generateToken(userDetails);
 
-    List<String> roles = userDetails.getAuthorities().stream()
+    // Extrai a primeira (e única) autoridade como uma string
+    String role = userDetails.getAuthorities().stream()
+        .findFirst()
         .map(item -> item.getAuthority())
-        .collect(Collectors.toList());
+        .orElse("ROLE_USER"); // Valor padrão caso não tenha role
 
-    LoginResponseDTO response = new LoginResponseDTO(userDetails.getUsername(), roles, jwtToken);
+    LoginResponseDTO response = new LoginResponseDTO(userDetails.getUsername(), role, jwtToken);
 
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }

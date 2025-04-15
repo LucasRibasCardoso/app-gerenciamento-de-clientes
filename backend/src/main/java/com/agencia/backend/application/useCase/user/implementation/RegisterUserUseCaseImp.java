@@ -22,7 +22,7 @@ public class RegisterUserUseCaseImp implements RegisterUserUseCase {
   public User register(User user) {
     String encodedPassword = passwordEncoder.encode(user.getPassword());
 
-    User userWithEncodedPassword = new User(null, user.getUsername(), encodedPassword, user.getRoles());
+    User userWithEncodedPassword = new User(null, user.getUsername(), encodedPassword, user.getRole());
     return userRepository.save(userWithEncodedPassword);
   }
 

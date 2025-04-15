@@ -1,8 +1,10 @@
 package com.agencia.backend.presentation.dto.user;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record UserRequestDTO (
+public record UserRequestUpdateDTO(
+    @NotBlank(message = "O username precisa ser informado")
     @Size(max = 100, min = 6, message = "O nome de usuário deve ter entre 6 e 100 caracteres")
     String username,
 
@@ -10,5 +12,4 @@ public record UserRequestDTO (
     String password,
 
     String role
-) {
-}
+) {}

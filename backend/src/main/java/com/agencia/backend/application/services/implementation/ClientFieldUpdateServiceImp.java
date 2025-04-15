@@ -4,31 +4,27 @@ import com.agencia.backend.domain.entity.Address;
 import com.agencia.backend.domain.entity.Client;
 import com.agencia.backend.domain.entity.Passport;
 import com.agencia.backend.application.services.ClientFieldUpdateService;
+import java.time.LocalDate;
 
 public class ClientFieldUpdateServiceImp implements ClientFieldUpdateService {
 
-  @Override
-  public String updateName(String existingName, String newName) {
+  private String updateName(String existingName, String newName) {
     return newName != null ? newName : existingName;
   }
 
-  @Override
-  public String updateBirthDate(String existingBirthDate, String newBirthDate) {
+  private LocalDate updateBirthDate(LocalDate existingBirthDate, LocalDate newBirthDate) {
     return newBirthDate != null ? newBirthDate : existingBirthDate;
   }
 
-  @Override
-  public String updatePhone(String existingPhone, String newPhone) {
+  private String updatePhone(String existingPhone, String newPhone) {
     return newPhone != null ? newPhone : existingPhone;
   }
 
-  @Override
-  public String updateEmail(String existingEmail, String newEmail) {
+  private String updateEmail(String existingEmail, String newEmail) {
     return newEmail != null ? newEmail : existingEmail;
   }
 
-  @Override
-  public Passport updatePassport(Passport existingPassport, Passport newPassport) {
+  private Passport updatePassport(Passport existingPassport, Passport newPassport) {
     return new Passport(
         newPassport.getNumber() != null ? newPassport.getNumber() : existingPassport.getNumber(),
         newPassport.getEmissionDate() != null ? newPassport.getEmissionDate() : existingPassport.getEmissionDate(),
@@ -36,8 +32,7 @@ public class ClientFieldUpdateServiceImp implements ClientFieldUpdateService {
     );
   }
 
-  @Override
-  public Address updateAddress(Address existingAddress, Address newAddress) {
+  private Address updateAddress(Address existingAddress, Address newAddress) {
     return new Address(
         newAddress.getZipCode() != null ? newAddress.getZipCode() : existingAddress.getZipCode(),
         newAddress.getCountry() != null ? newAddress.getCountry() : existingAddress.getCountry(),
@@ -56,7 +51,7 @@ public class ClientFieldUpdateServiceImp implements ClientFieldUpdateService {
         existingClient.getId(), // ID não pode ser alterado
         updateName(existingClient.getCompleteName(), clientRequest.getCompleteName()),
         existingClient.getCpf(), // CPF não pode ser alterado
-        clientRequest.getBirthDate() != null ? clientRequest.getBirthDate() : existingClient.getBirthDate(),
+        updateBirthDate(existingClient.getBirthDate(), clientRequest.getBirthDate()),
         updatePhone(existingClient.getPhone(), clientRequest.getPhone()),
         updateEmail(existingClient.getEmail(), clientRequest.getEmail()),
         updatePassport(existingClient.getPassport(), clientRequest.getPassport()),

@@ -2,6 +2,7 @@ package com.agencia.backend.infrastructure.model;
 
 import com.agencia.backend.domain.entity.enuns.Role;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,21 +22,18 @@ public class UserDetailsImp implements UserDetails {
   private UUID id;
   private String username;
   private String password;
-  private Set<Role> roles;
+  private Role role;
 
-  public UserDetailsImp(UUID id, String username, String password, Set<Role> roles) {
+  public UserDetailsImp(UUID id, String username, String password, Role role) {
     this.id = id;
     this.username = username;
     this.password = password;
-    this.roles = roles;
+    this.role = role;
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    // Convertendo roles para authorities (ROLE_USER, ROLE_ADMIN)
-    return roles.stream()
-        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
-        .collect(Collectors.toSet());
+    return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + role.name()));
   }
 
   @Override

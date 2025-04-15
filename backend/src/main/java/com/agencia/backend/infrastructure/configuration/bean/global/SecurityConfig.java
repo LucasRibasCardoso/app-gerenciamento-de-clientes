@@ -1,9 +1,9 @@
 package com.agencia.backend.infrastructure.configuration.bean.global;
 
 import com.agencia.backend.infrastructure.configuration.jwt.AuthTokenFilter;
+import java.time.Duration;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,16 +20,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
-  @Value("${url.frontend}")
-  private String urlFrontend;
 
   @Autowired
   private AuthenticationEntryPoint authenticationEntryPoint;
@@ -52,7 +48,7 @@ public class SecurityConfig {
     http.cors(cors -> cors.configurationSource(request -> {
       var corsConfiguration = new CorsConfiguration();
 
-      corsConfiguration.setAllowedOrigins(List.of(urlFrontend));
+      corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
 
       corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
@@ -68,9 +64,9 @@ public class SecurityConfig {
           "Authorization"
       ));
 
-      corsConfiguration.setMaxAge(3600L);
+      corsConfiguration.setMaxAge(Duration.ofDays(1));
 
-      corsConfiguration.setAllowCredentials(true);
+      corsConfiguration.setAllowCredentials(Boolean.TRUE);
 
       return corsConfiguration;
     }));
@@ -78,33 +74,35 @@ public class SecurityConfig {
     // Desabilita o CSRF
     http.csrf(csrf -> csrf.disable());
 
+    // Permite iframes para o console H2
+    http.headers(headers ->
+        headers.frameOptions(frameOptions -> frameOptions.disable())
+    );
+
     http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
 
         // Libera o preflight request
         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-        // Usuários e administradores podem acessar os endpoints abaixo
-        .requestMatchers("/clients/**").hasAnyRole("USER", "ADMIN")
-        .requestMatchers("/auth/logout").permitAll()
+        // Endpoints públicos - não requerem autenticação
         .requestMatchers("/auth/login").permitAll()
+        .requestMatchers("/auth/logout").permitAll()
 
-        // Somente administradores pode acessar os endpoints abaixo
+        // Endpoints somente para administradores
         .requestMatchers("/users/**").hasRole("ADMIN")
-        .requestMatchers("/auth/register").hasRole("ADMIN")
+        .requestMatchers("/h2-console/**").permitAll() // .hasRole("ADMIN")
 
-        // H2 Database utilizado para desenvolvimento
-        .requestMatchers("/h2-console/**").hasRole("ADMIN")
+        // Endpoints para administradores - controle granular
+        .requestMatchers(HttpMethod.POST, "/clients/**").hasRole("ADMIN")
+        .requestMatchers(HttpMethod.PUT, "/clients/**").hasRole("ADMIN")
+        .requestMatchers(HttpMethod.DELETE, "/clients/**").hasRole("ADMIN")
+
+        // Endpoints para leitura - disponíveis para todos os usuários autenticados
+        .requestMatchers(HttpMethod.GET, "/clients/**").hasAnyRole("USER", "ADMIN")
 
         // Qualquer outro endpoint requer autenticação
         .anyRequest().authenticated()
     );
-
-    // Ativando o XSS Protection
-    http.headers(headers -> headers.xssProtection(
-        xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)));
-
-    // Permite o uso de iframes somente para o mesmo domínio
-    http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
     // Configuração de sessão
     http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -1,7 +1,6 @@
 package com.agencia.backend.domain.entity;
 
 import com.agencia.backend.domain.entity.enuns.Role;
-import java.util.Set;
 import java.util.UUID;
 
 public class User {
@@ -10,13 +9,13 @@ public class User {
   private String username;
   private String password;
 
-  private Set<Role> roles;
+  private Role role;
 
-  public User(UUID id, String username, String password, Set<Role> roles) {
+  public User(UUID id, String username, String password, Role role) {
     this.id = id;
     this.username = username;
     this.password = password;
-    this.roles = roles;
+    this.role = role;
   }
 
   public UUID getId() {
@@ -31,8 +30,8 @@ public class User {
     return password;
   }
 
-  public Set<Role> getRoles() {
-    return roles;
+  public Role getRole() {
+    return role;
   }
 
 }

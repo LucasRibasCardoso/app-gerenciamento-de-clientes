@@ -1,5 +1,7 @@
 package com.agencia.backend.infrastructure.configuration.bean.client;
 
+import com.agencia.backend.application.services.implementation.ClientExistenceValidationServiceImp;
+import com.agencia.backend.application.services.implementation.ClientFieldUpdateServiceImp;
 import com.agencia.backend.domain.repository.ClientRepository;
 import com.agencia.backend.application.services.ClientExistenceValidationService;
 import com.agencia.backend.application.services.ClientFieldUpdateService;
@@ -18,6 +20,16 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ClientUseCaseConfig {
+
+  @Bean
+  public ClientExistenceValidationService clientExistenceValidationService(ClientRepository clientRepository) {
+    return new ClientExistenceValidationServiceImp(clientRepository);
+  }
+
+  @Bean
+  public ClientFieldUpdateService clientFieldUpdateService() {
+    return new ClientFieldUpdateServiceImp();
+  }
 
   @Bean
   public CreateClientUseCase createClientUseCase(

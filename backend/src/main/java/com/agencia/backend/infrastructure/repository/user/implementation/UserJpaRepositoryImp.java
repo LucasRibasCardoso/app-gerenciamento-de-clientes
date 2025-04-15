@@ -42,9 +42,13 @@ public class UserJpaRepositoryImp implements UserRepository {
   }
 
   @Override
+  public Optional<User> findUserById(UUID id) {
+    return userJpaRepository.findById(id).map(userMapper::toDomain);
+  }
+
+  @Override
   public User save(User user) {
-    UserModel userModel = userMapper.toModel(user);
-    UserModel userSaved = userJpaRepository.save(userModel);
+    UserModel userSaved = userJpaRepository.save(userMapper.toModel(user));
     return userMapper.toDomain(userSaved);
   }
 

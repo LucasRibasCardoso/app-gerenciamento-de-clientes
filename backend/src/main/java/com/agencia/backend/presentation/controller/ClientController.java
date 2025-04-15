@@ -61,6 +61,8 @@ public class ClientController {
     this.clientMapper = clientMapper;
   }
 
+
+  // CREATE
   @PostMapping
   public ResponseEntity<ClientResponseDTO> createClient(@Valid @RequestBody ClientRequestDTO request) {
     Client clientSaved = createClientUseCase.createClient(clientMapper.toDomain(request));
@@ -73,6 +75,8 @@ public class ClientController {
     return ResponseEntity.status(HttpStatus.CREATED).location(location).body(clientMapper.toDTO(clientSaved));
   }
 
+
+  // READ
   @GetMapping
   public ResponseEntity<PaginatedResponse<ClientResponseDTO>> getAllClients(
       @RequestParam(required = false) String search,
@@ -103,6 +107,7 @@ public class ClientController {
     ));
   }
 
+  // READ
   @GetMapping("/{id}")
   public ResponseEntity<ClientResponseDTO> getClientById(@PathVariable Long id) {
     urlParametersValidator.validateID(id);
@@ -111,13 +116,7 @@ public class ClientController {
     return ResponseEntity.ok(clientMapper.toDTO(client));
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
-    urlParametersValidator.validateID(id);
-    deleteClientUseCase.deleteClient(id);
-    return ResponseEntity.noContent().build();
-  }
-
+  // UPDATE
   @PutMapping("/{id}")
   public ResponseEntity<ClientResponseDTO> updateClient(
       @PathVariable Long id,
@@ -126,6 +125,14 @@ public class ClientController {
     urlParametersValidator.validateID(id);
     Client clientUpdated = updateClientUseCase.update(id, clientMapper.toDomain(request));
     return ResponseEntity.status(HttpStatus.OK).body(clientMapper.toDTO(clientUpdated));
+  }
+
+  // DELETE
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
+    urlParametersValidator.validateID(id);
+    deleteClientUseCase.deleteClient(id);
+    return ResponseEntity.noContent().build();
   }
 
 }

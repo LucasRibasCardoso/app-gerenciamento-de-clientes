@@ -17,7 +17,7 @@ public class UserMapperImp implements UserMapper {
         model.getId(),
         model.getUsername(),
         model.getPassword(),
-        model.getRoles()
+        model.getRole()
     );
   }
 
@@ -27,7 +27,7 @@ public class UserMapperImp implements UserMapper {
         domain.getId(),
         domain.getUsername(),
         domain.getPassword(),
-        domain.getRoles()
+        domain.getRole()
     );
   }
 
@@ -37,7 +37,7 @@ public class UserMapperImp implements UserMapper {
         domain.getId(),
         domain.getUsername(),
         domain.getPassword(),
-        domain.getRoles()
+        domain.getRole()
     );
   }
 
@@ -46,7 +46,7 @@ public class UserMapperImp implements UserMapper {
     return new UserResponseDTO(
         domain.getId(),
         domain.getUsername(),
-        domain.getRoles()
+        domain.getRole()
     );
   }
 
@@ -56,7 +56,7 @@ public class UserMapperImp implements UserMapper {
         null,
         dto.username(),
         dto.password(),
-        dto.roles().stream().map(Role::valueOf).collect(Collectors.toSet())
+        Role.valueOf(dto.role().toUpperCase())
     );
   }
 

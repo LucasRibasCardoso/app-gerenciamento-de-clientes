@@ -35,16 +35,15 @@ public class UserModel {
   @Column(nullable = false)
   private String password;
 
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
-  private Set<Role> roles;
+  private Role role;
 
-  public UserModel(UUID id, String username, String password, Set<Role> roles) {
+  public UserModel(UUID id, String username, String password, Role role) {
     this.id = id;
     this.username = username;
     this.password = password;
-    this.roles = roles;
+    this.role = role;
   }
 
 }
