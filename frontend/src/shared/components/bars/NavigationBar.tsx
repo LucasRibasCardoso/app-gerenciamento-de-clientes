@@ -17,21 +17,24 @@ interface NavButtonProps {
     href: string;
     icon: React.ReactNode;
     label: string;
-  }
-  
+}
+
 const NavButton: React.FC<NavButtonProps> = ({ href, icon, label }) => (
-  <Button
-       sx={{ my: 2, color: "white", fontWeight: 600 ,
-           "&:hover": {
-              backgroundColor: "background.buttonHover",
-           },
-       }}
-       startIcon={icon}
-       href={href}
-       aria-label={label.toLowerCase()}
-       >
-       {label}
-  </Button>
+    <Button
+        sx={{
+            my: 2,
+            color: "white",
+            fontWeight: 600,
+            "&:hover": {
+                backgroundColor: "background.buttonHover",
+            },
+        }}
+        startIcon={icon}
+        href={href}
+        aria-label={label.toLowerCase()}
+    >
+        {label}
+    </Button>
 );
 
 export default function NavigationBar() {
@@ -40,44 +43,51 @@ export default function NavigationBar() {
     const navItems = [
         { label: "HOME", href: "/home", icon: <HomeOutlinedIcon /> },
         { label: "CLIENTES", href: "/clientes", icon: <GroupsOutlinedIcon /> },
-        ...(isAdmin ? [
-            { 
-              label: "ÁREA RESTRITA", 
-              href: "/admin", 
-              icon: <SupervisorAccountOutlinedIcon /> 
-            }
-          ] : [])
+        ...(isAdmin
+            ? [
+                  {
+                      label: "USUÁRIOS",
+                      href: "/usuarios",
+                      icon: <SupervisorAccountOutlinedIcon />,
+                  },
+              ]
+            : []),
     ];
 
     return (
-        <AppBar 
+        <AppBar
             sx={{
                 backgroundColor: "background.darkGreen",
                 position: "fixed",
                 height: "70px",
             }}
         >
-            <Container disableGutters maxWidth={false}>
-                <Toolbar 
-                    sx={{ 
-                        display: "flex", 
+            <Container
+                disableGutters
+                maxWidth={false}
+            >
+                <Toolbar
+                    sx={{
+                        display: "flex",
                         justifyContent: "space-between",
-                        width: "100%"
+                        width: "100%",
                     }}
                 >
                     {/* Logo e título */}
-                    <Box 
-                        sx={{ 
-                            display: "flex", 
-                            alignItems: "center"
-                        }}>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                        }}
+                    >
                         <AirplanemodeActiveIcon sx={{ mr: 1 }} />
                         <Typography
                             variant="h6"
                             noWrap
                             sx={{
                                 letterSpacing: "0.2rem",
-                            }}>
+                            }}
+                        >
                             CR VIAGENS E TURISMO
                         </Typography>
                     </Box>
@@ -85,12 +95,17 @@ export default function NavigationBar() {
                     {/* Navegação */}
                     <Box sx={{ display: "flex", gap: "15px" }}>
                         {navItems.map((item, index) => (
-                        <NavButton key={index} href={item.href} icon={item.icon} label={item.label} />
+                            <NavButton
+                                key={index}
+                                href={item.href}
+                                icon={item.icon}
+                                label={item.label}
+                            />
                         ))}
                     </Box>
 
                     {/* Logout */}
-                    <LogoutButton/>
+                    <LogoutButton />
                 </Toolbar>
             </Container>
         </AppBar>

@@ -15,7 +15,15 @@ export const fetchCurrencyQuotes = async (): Promise<CurrencyQuote[]> => {
     }
 
     // Lista de moedas que você deseja buscar
-    const currencies = ["USD-BRLT", "USD-BRL", "CAD-BRL", "ARS-BRL", "GBP-BRL", "CHF-BRL", "EUR-BRL"];
+    const currencies = [
+        "USD-BRLT",
+        "USD-BRL",
+        "CAD-BRL",
+        "ARS-BRL",
+        "GBP-BRL",
+        "CHF-BRL",
+        "EUR-BRL",
+    ];
 
     // Constrói a URL com as moedas separadas por vírgula
     const currencyPairs = currencies.join(",");
@@ -42,6 +50,8 @@ export const fetchCurrencyQuotes = async (): Promise<CurrencyQuote[]> => {
         });
     } catch (error) {
         console.error("Erro ao buscar cotações:", error);
-        throw new Error("Erro ao buscar cotações. Verifique a chave de API e a conexão com a internet.");
+        throw new Error(
+            "Erro ao buscar cotações. Verifique a chave de API e a conexão com a internet."
+        );
     }
 };

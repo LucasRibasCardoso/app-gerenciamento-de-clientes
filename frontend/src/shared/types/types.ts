@@ -1,21 +1,23 @@
-export interface User {
-    username: string | null;
-    roles: string[];
-}
+// Formato utilizado para adicionar usuários
+export type UserRequest = {
+    username: string;
+    password: string;
+    role: string;
+};
 
 // Formato retornado ao buscar usuários
 export type UserResponse = {
     id: string;
     username: string;
-    roles: Set<string>;
-}; 
+    role: string;
+};
 
 // Formato retornando ao fazer busca paginada na api
 export type PageResponse<T> = {
-    data: T[]; 
+    data: T[];
     totalPages: number;
     totalElements: number;
-  };
+};
 
 export type Passport = {
     number: string | null;
@@ -58,7 +60,7 @@ export type ClientResponse = {
     address: Address;
 };
 
-// Formato utilizado para adicionar clientes 
+// Formato utilizado para adicionar clientes
 export type AddClientRequest = {
     completeName: string;
     cpf: string;
@@ -67,9 +69,9 @@ export type AddClientRequest = {
     email: string | null;
     passport: Passport;
     address: Address;
-}
+};
 
-// Formato utilizado para atualizar clientes 
+// Formato utilizado para atualizar clientes
 export type UpdateClientRequest = {
     completeName: string;
     birthDate: string;
@@ -77,7 +79,7 @@ export type UpdateClientRequest = {
     email: string | null;
     passport: Passport;
     address: Address;
-}
+};
 
 // Formato retornado ao fazer login
 export type LoginResponse = {
