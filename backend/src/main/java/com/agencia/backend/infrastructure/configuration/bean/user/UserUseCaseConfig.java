@@ -30,8 +30,8 @@ public class UserUseCaseConfig {
   }
 
   @Bean
-  public UserFieldUpdateService userFieldUpdateService(PasswordEncoder passwordEncoder) {
-    return new UserFieldUpdateServiceImp(passwordEncoder);
+  public UserFieldUpdateService userFieldUpdateService() {
+    return new UserFieldUpdateServiceImp();
   }
 
   @Bean
