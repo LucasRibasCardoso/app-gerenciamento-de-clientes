@@ -5,11 +5,19 @@ import java.time.LocalDate;
 
 public class Passport {
 
+  private final Long id;
   private final String number;
   private final LocalDate emissionDate;
   private final LocalDate expirationDate;
 
   public Passport(String number, LocalDate emissionDate, LocalDate expirationDate) {
+    this(null, number, emissionDate, expirationDate);
+
+    validateDates();
+  }
+
+  public Passport(Long id, String number, LocalDate emissionDate, LocalDate expirationDate) {
+    this.id = id;
     this.number = number;
     this.emissionDate = emissionDate;
     this.expirationDate = expirationDate;
@@ -32,6 +40,10 @@ public class Passport {
     if (expirationDate != null && expirationDate.isBefore(LocalDate.now())) {
       throw new InvalidPassportDatesException("A data de validade não pode ser anterior à data atual. O passaporte está vencido.");
     }
+  }
+
+  public Long getId() {
+    return id;
   }
 
   public LocalDate getEmissionDate() {

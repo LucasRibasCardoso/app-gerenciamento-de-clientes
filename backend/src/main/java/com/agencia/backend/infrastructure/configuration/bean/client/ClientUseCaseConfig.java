@@ -15,6 +15,7 @@ import com.agencia.backend.application.useCase.client.implementation.DeleteClien
 import com.agencia.backend.application.useCase.client.implementation.FindAllClientUseCaseImp;
 import com.agencia.backend.application.useCase.client.implementation.FindClientByIdUseCaseImp;
 import com.agencia.backend.application.useCase.client.implementation.UpdateClientUseCaseImp;
+import com.agencia.backend.domain.repository.PassportRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,8 +23,8 @@ import org.springframework.context.annotation.Configuration;
 public class ClientUseCaseConfig {
 
   @Bean
-  public ClientExistenceValidationService clientExistenceValidationService(ClientRepository clientRepository) {
-    return new ClientExistenceValidationServiceImp(clientRepository);
+  public ClientExistenceValidationService clientExistenceValidationService(ClientRepository clientRepository, PassportRepository passportRepository) {
+    return new ClientExistenceValidationServiceImp(clientRepository, passportRepository);
   }
 
   @Bean

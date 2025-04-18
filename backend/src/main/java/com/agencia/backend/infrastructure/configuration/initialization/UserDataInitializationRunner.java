@@ -24,9 +24,11 @@ public class UserDataInitializationRunner implements CommandLineRunner {
   public void run(String... args) {
     User user1 = new User(null, "userCommon", passwordEncoder.encode("12345678@"), Role.USER);
     User user2 = new User(null, "userAdmin", passwordEncoder.encode("12345678@"), Role.ADMIN);
+    User user3 = new User(null, "userManager", passwordEncoder.encode("12345678@"), Role.MANAGER);
 
     userRepository.save(user1);
     userRepository.save(user2);
+    userRepository.save(user3);
   }
 
 }

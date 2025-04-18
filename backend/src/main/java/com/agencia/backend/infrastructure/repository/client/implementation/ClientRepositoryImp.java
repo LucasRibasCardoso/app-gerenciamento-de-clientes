@@ -64,11 +64,6 @@ public class ClientRepositoryImp implements ClientRepository {
   }
 
   @Override
-  public boolean existsByPassportNumber(String passportNumber) {
-    return jpaRepository.existsByPassportNumber(passportNumber);
-  }
-
-  @Override
   public boolean existsByEmail(String email) {
     return jpaRepository.existsByEmail(email);
   }

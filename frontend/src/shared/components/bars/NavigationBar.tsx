@@ -88,7 +88,7 @@ export default function NavigationBar() {
                                 letterSpacing: "0.2rem",
                             }}
                         >
-                            CR VIAGENS E TURISMO
+                            CARDOSO VIAGENS E TURISMO
                         </Typography>
                     </Box>
 

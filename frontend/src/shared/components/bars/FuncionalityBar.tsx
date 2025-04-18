@@ -1,11 +1,8 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-
-import { ActionButton, SelectButton } from "../buttons";
+import { Box } from "@mui/material";
+import { SelectButton } from "../buttons";
 import { SearchBar } from "./";
+import { ActionsBar } from "./ActionsBar";
 import { useAuth } from "../../hooks/AuthHook";
 
 interface FunctionalityBarProps {
@@ -44,10 +41,8 @@ const FunctionalityBar: React.FC<FunctionalityBarProps> = ({
             }}
         >
             <Box sx={{ display: "flex", gap: "15px" }}>
-                {/* Barra de pesquisa */}
                 <SearchBar onSearch={onSearch} />
 
-                {/* Seleção de campo de ordenação */}
                 <SelectButton
                     label="Ordenar"
                     value={orderBy}
@@ -58,7 +53,6 @@ const FunctionalityBar: React.FC<FunctionalityBarProps> = ({
                     onChange={onOrderByChange}
                 />
 
-                {/* Seleção de direção da ordenação */}
                 <SelectButton
                     label="Direção"
                     value={orderDirection}
@@ -71,36 +65,13 @@ const FunctionalityBar: React.FC<FunctionalityBarProps> = ({
             </Box>
 
             {hasPermission && (
-                <Box sx={{ display: "flex", gap: "15px" }}>
-                    <ActionButton
-                        icon={<DeleteIcon sx={{ mr: 1 }} />}
-                        text="DELETAR"
-                        hoverColor="#b00020"
-                        borderColor="primary.main"
-                        iconColor="primary.main"
-                        onClick={onDeleteClient}
-                        disabled={!selectedClient}
-                    />
-
-                    <ActionButton
-                        icon={<EditIcon sx={{ mr: 1 }} />}
-                        text="EDITAR"
-                        hoverColor="#0A5C5A"
-                        borderColor="#404040"
-                        iconColor="primary"
-                        onClick={onEditClient}
-                        disabled={!selectedClient}
-                    />
-
-                    <Button
-                        startIcon={<PersonAddIcon />}
-                        disableElevation
-                        variant="contained"
-                        onClick={onCreateClient}
-                    >
-                        CADASTRAR CLIENTE
-                    </Button>
-                </Box>
+                <ActionsBar
+                    onDelete={onDeleteClient}
+                    onEdit={onEditClient}
+                    onCreate={onCreateClient}
+                    isDisabled={!selectedClient}
+                    entityName="CLIENTE"
+                />
             )}
         </Box>
     );

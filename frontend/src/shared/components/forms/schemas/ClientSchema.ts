@@ -11,79 +11,96 @@ const validateDate = (value: string | null | undefined): boolean => {
 
 // Schema para Passport
 const PassportSchema = yup.object().shape({
-    number: yup.string()
+    number: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
         ),
-    emissionDate: yup.string()
+    emissionDate: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
         )
         .test("date", "Data de emissão inválida", validateDate),
-    expirationDate: yup.string()
+    expirationDate: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
         )
-        .test("date", "Data de validade inválida", validateDate)
+        .test("date", "Data de validade inválida", validateDate),
 });
 
 // Schema para Address
 const AddressSchema = yup.object().shape({
-    zipCode: yup.string()
+    zipCode: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
         ),
-    country: yup.string()
+    country: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
         ),
-    state: yup.string()
+    state: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
         ),
-    city: yup.string()
+    city: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
         ),
-    neighborhood: yup.string()
+    neighborhood: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
         ),
-    street: yup.string()
+    street: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
         ),
-    complement: yup.string()
+    complement: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
         ),
-    residentialNumber: yup.string()
+    residentialNumber: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
-        )
+        ),
 });
 
 // Schema base dos campos comuns
 const baseSchema = {
-    completeName: yup.string()
+    completeName: yup
+        .string()
         .required("O nome completo é obrigatório")
         .max(100, "O nome completo deve ter no máximo 100 caracteres"),
-    birthDate: yup.string()
+    birthDate: yup
+        .string()
         .required("A data de nascimento é obrigatória")
-        .matches(/^\d{2}\/\d{2}\/\d{4}$/, "Data de nascimento deve estar no formato dd/MM/yyyy")
+        .matches(
+            /^\d{2}\/\d{2}\/\d{4}$/,
+            "Data de nascimento deve estar no formato dd/MM/yyyy"
+        )
         .test("date", "Data de nascimento inválida", validateDate),
-    phone: yup.string()
+    phone: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
@@ -91,7 +108,8 @@ const baseSchema = {
         .matches(/\(\d{2}\) \d{4,5}-\d{4}/, "Formato de telefone inválido")
         .max(15, "O telefone deve ter no máximo 15 caracteres")
         .default(null),
-    email: yup.string()
+    email: yup
+        .string()
         .nullable()
         .transform((value, originalValue) =>
             originalValue === undefined || originalValue === "" ? null : value
@@ -100,31 +118,37 @@ const baseSchema = {
         .max(100, "O e-mail deve ter no máximo 100 caracteres")
         .default(null),
     passport: PassportSchema,
-    address: AddressSchema
+    address: AddressSchema,
 };
 
 // Schema para cadastro (cpf requerido)
-export const AddClientSchema = yup.object({
-    ...baseSchema,
-    cpf: yup.string()
-        .required("O CPF é obrigatório")
-        .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido")
-}).required();
+export const AddClientSchema = yup
+    .object({
+        ...baseSchema,
+        cpf: yup
+            .string()
+            .required("O CPF é obrigatório")
+            .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido"),
+    })
+    .required();
 
 // Schema para atualização (cpf opcional)
-export const UpdateClientSchema = yup.object({
-    ...baseSchema,
-    cpf: yup.string()
-        .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido")
-        .optional()
-}).required();
+export const UpdateClientSchema = yup
+    .object({
+        ...baseSchema,
+        cpf: yup
+            .string()
+            .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido")
+            .optional(),
+    })
+    .required();
 
 // Valores padrão compartilhados
 const defaultValues = {
     passport: {
         number: null,
         emissionDate: null,
-        expirationDate: null
+        expirationDate: null,
     },
     address: {
         zipCode: null,
@@ -134,8 +158,8 @@ const defaultValues = {
         neighborhood: null,
         street: null,
         complement: null,
-        residentialNumber: null
-    }
+        residentialNumber: null,
+    },
 };
 
 // Valores padrão para novo cliente
@@ -146,7 +170,7 @@ export const AddClientSchemaDefaultValues: AddClientRequest = {
     phone: null,
     email: null,
     passport: defaultValues.passport,
-    address: defaultValues.address
+    address: defaultValues.address,
 };
 
 // Valores padrão para atualização de cliente
@@ -156,5 +180,5 @@ export const UpdateClientSchemaDefaultValues: UpdateClientRequest = {
     phone: null,
     email: null,
     passport: defaultValues.passport,
-    address: defaultValues.address
+    address: defaultValues.address,
 };

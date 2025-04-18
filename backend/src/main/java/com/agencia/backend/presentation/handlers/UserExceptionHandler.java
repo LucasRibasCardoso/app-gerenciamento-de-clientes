@@ -1,5 +1,6 @@
 package com.agencia.backend.presentation.handlers;
 
+import com.agencia.backend.domain.exceptions.user.SelfDeletionException;
 import com.agencia.backend.presentation.dto.error.GenericError;
 import com.agencia.backend.domain.exceptions.user.InvalidPasswordException;
 import com.agencia.backend.domain.exceptions.user.InvalidRoleException;
@@ -30,6 +31,7 @@ public class UserExceptionHandler {
       InvalidUsernameException.class,
       InvalidRoleException.class,
       InvalidUUIDException.class,
+      SelfDeletionException.class
   })
   public ResponseEntity<GenericError> handlerUserBadRequest(Exception ex) {
     GenericError error = new GenericError(ex.getMessage(), HttpStatus.BAD_REQUEST.value());

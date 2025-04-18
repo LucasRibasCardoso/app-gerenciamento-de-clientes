@@ -1,5 +1,7 @@
 package com.agencia.backend.presentation.mapper.client.implementation;
 
+import com.agencia.backend.infrastructure.model.AddressModel;
+import com.agencia.backend.infrastructure.model.PassportModel;
 import com.agencia.backend.presentation.dto.address.AddressDTO;
 import com.agencia.backend.presentation.dto.client.ClientRequestDTO;
 import com.agencia.backend.presentation.dto.client.ClientRequestUpdateDTO;
@@ -53,22 +55,8 @@ public class ClientMapperImp implements ClientMapper {
 
   @Override
   public Client toDomain(ClientModel model) {
-    Passport passport = new Passport(
-        model.getPassportNumber(),
-        model.getPassportEmissionDate(),
-        model.getPassportExpirationDate()
-    );
-
-    Address address = new Address(
-        model.getZipCode(),
-        model.getCountry(),
-        model.getState(),
-        model.getCity(),
-        model.getNeighborhood(),
-        model.getStreet(),
-        model.getComplement(),
-        model.getResidentialNumber()
-    );
+    Passport passport = passportMapper.toDomain(model.getPassport());
+    Address address = addressMapper.toDomain(model.getAddress());
 
     return new Client(
         model.getId(),
@@ -117,6 +105,9 @@ public class ClientMapperImp implements ClientMapper {
 
   @Override
   public ClientModel toModel(Client domain) {
+    PassportModel passportModel = passportMapper.toModel(domain.getPassport());
+    AddressModel addressModel = addressMapper.toModel(domain.getAddress());
+
     return new ClientModel(
         domain.getId(),
         domain.getCompleteName(),
@@ -124,17 +115,8 @@ public class ClientMapperImp implements ClientMapper {
         domain.getBirthDate(),
         domain.getPhone(),
         domain.getEmail(),
-        domain.getPassport().getNumber(),
-        domain.getPassport().getEmissionDate(),
-        domain.getPassport().getExpirationDate(),
-        domain.getAddress().getZipCode(),
-        domain.getAddress().getCountry(),
-        domain.getAddress().getState(),
-        domain.getAddress().getCity(),
-        domain.getAddress().getNeighborhood(),
-        domain.getAddress().getStreet(),
-        domain.getAddress().getComplement(),
-        domain.getAddress().getResidentialNumber()
+        passportModel,
+        addressModel
     );
   }
 

@@ -56,7 +56,7 @@ public class UserMapperImp implements UserMapper {
         null,
         dto.username(),
         dto.password(),
-        Role.valueOf(dto.role().toUpperCase())
+        dto.role() != null ? Role.valueOf(dto.role().toUpperCase()) : null
     );
   }
 

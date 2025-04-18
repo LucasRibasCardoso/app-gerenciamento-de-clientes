@@ -36,11 +36,17 @@ public class JwtUtilsImp implements JwtUtils {
   public String generateToken(UserDetails userDetails) {
     String username = userDetails.getUsername();
 
+    String role = userDetails.getAuthorities().stream()
+        .findFirst()
+        .map(grantedAuthority -> grantedAuthority.getAuthority())
+        .orElse("ROLE_USER");
+
     Instant now = Instant.now();
     Instant expirationTime = now.plus(1, ChronoUnit.DAYS); // 1 dia de validade
 
     return Jwts.builder()
         .subject(username)
+        .claim("role", role)
         .issuedAt(Date.from(now))
         .expiration((Date.from(expirationTime)))
         .signWith(key())

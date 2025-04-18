@@ -38,7 +38,7 @@ public class SecurityConfig {
   @Bean
   public RoleHierarchy roleHierarchy() {
     RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-    roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
+    roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_MANAGER > ROLE_USER");
     return roleHierarchy;
   }
 
@@ -48,7 +48,7 @@ public class SecurityConfig {
     http.cors(cors -> cors.configurationSource(request -> {
       var corsConfiguration = new CorsConfiguration();
 
-      corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
+      corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173/"));
 
       corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
@@ -93,9 +93,9 @@ public class SecurityConfig {
         .requestMatchers("/h2-console/**").permitAll() // .hasRole("ADMIN")
 
         // Endpoints para administradores - controle granular
-        .requestMatchers(HttpMethod.POST, "/clients/**").hasRole("ADMIN")
-        .requestMatchers(HttpMethod.PUT, "/clients/**").hasRole("ADMIN")
-        .requestMatchers(HttpMethod.DELETE, "/clients/**").hasRole("ADMIN")
+      .requestMatchers(HttpMethod.POST, "/clients/**").hasAnyRole("ADMIN", "MANAGER")
+        .requestMatchers(HttpMethod.PUT, "/clients/**").hasAnyRole("ADMIN", "MANAGER")
+        .requestMatchers(HttpMethod.DELETE, "/clients/**").hasAnyRole("ADMIN", "MANAGER")
 
         // Endpoints para leitura - disponíveis para todos os usuários autenticados
         .requestMatchers(HttpMethod.GET, "/clients/**").hasAnyRole("USER", "ADMIN")

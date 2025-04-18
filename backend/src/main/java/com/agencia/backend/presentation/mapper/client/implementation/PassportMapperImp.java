@@ -1,5 +1,6 @@
 package com.agencia.backend.presentation.mapper.client.implementation;
 
+import com.agencia.backend.infrastructure.model.PassportModel;
 import com.agencia.backend.presentation.dto.passport.PassportDTO;
 import com.agencia.backend.domain.entity.Passport;
 import com.agencia.backend.presentation.mapper.client.PassportMapper;
@@ -35,6 +36,25 @@ public class PassportMapperImp implements PassportMapper {
     );
   }
 
+  @Override
+  public PassportModel toModel(Passport domain) {
+    PassportModel model = new PassportModel(
+        domain.getId(),
+        domain.getNumber(),
+        domain.getEmissionDate(),
+        domain.getExpirationDate()
+    );
+    return model;
+  }
 
+  @Override
+  public Passport toDomain(PassportModel model) {
+    return new Passport(
+        model.getId(),
+        model.getPassportNumber(),
+        model.getEmissionDate(),
+        model.getExpirationDate()
+    );
+  }
 
 }

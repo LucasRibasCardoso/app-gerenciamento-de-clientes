@@ -26,6 +26,7 @@ public class ClientFieldUpdateServiceImp implements ClientFieldUpdateService {
 
   private Passport updatePassport(Passport existingPassport, Passport newPassport) {
     return new Passport(
+        existingPassport.getId(), // mantém o ID original
         newPassport.getNumber() != null ? newPassport.getNumber() : existingPassport.getNumber(),
         newPassport.getEmissionDate() != null ? newPassport.getEmissionDate() : existingPassport.getEmissionDate(),
         newPassport.getExpirationDate() != null ? newPassport.getExpirationDate() : existingPassport.getExpirationDate()
@@ -34,6 +35,7 @@ public class ClientFieldUpdateServiceImp implements ClientFieldUpdateService {
 
   private Address updateAddress(Address existingAddress, Address newAddress) {
     return new Address(
+        existingAddress.getId(), // mantém o ID original
         newAddress.getZipCode() != null ? newAddress.getZipCode() : existingAddress.getZipCode(),
         newAddress.getCountry() != null ? newAddress.getCountry() : existingAddress.getCountry(),
         newAddress.getState() != null ? newAddress.getState() : existingAddress.getState(),
@@ -50,7 +52,7 @@ public class ClientFieldUpdateServiceImp implements ClientFieldUpdateService {
     return new Client(
         existingClient.getId(), // ID não pode ser alterado
         updateName(existingClient.getCompleteName(), clientRequest.getCompleteName()),
-        existingClient.getCpf(), // CPF não pode ser alterado
+        existingClient.getCpf(), // mantém o cpf original
         updateBirthDate(existingClient.getBirthDate(), clientRequest.getBirthDate()),
         updatePhone(existingClient.getPhone(), clientRequest.getPhone()),
         updateEmail(existingClient.getEmail(), clientRequest.getEmail()),

@@ -1,9 +1,24 @@
 // Formato utilizado para adicionar usuários
-export type UserRequest = {
+export type AddUserRequest = {
     username: string;
     password: string;
     role: string;
 };
+
+// Formato utilizado para editar usuários
+export type UpdateUserRequest = {
+    username: string | null;
+    password: string | null;
+    role: string | null;
+};
+
+// Formato utilizado para o formulário de usuários (senha é opcional na edição)
+export type UserFormData = {
+    username: string | null;
+    role: string | null;
+} & Partial<{
+    password: string | null;
+}>;
 
 // Formato retornado ao buscar usuários
 export type UserResponse = {

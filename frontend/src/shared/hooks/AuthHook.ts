@@ -19,7 +19,7 @@ export function useAuth() {
         if (token) {
             try {
                 const decoded: DecodedToken = jwtDecode(token);
-                console.log("Decoded token:", decoded);
+
                 // Verifica se o token expirou
                 if (decoded.exp * 1000 < Date.now()) {
                     localStorage.removeItem("token");

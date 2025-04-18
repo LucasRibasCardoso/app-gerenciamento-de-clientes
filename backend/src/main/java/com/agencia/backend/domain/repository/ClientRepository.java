@@ -14,8 +14,6 @@ public interface ClientRepository {
 
   boolean existsByCpf(String cpf);
 
-  boolean existsByPassportNumber(String passportNumber);
-
   boolean existsByEmail(String email);
 
   boolean existsById(Long id);

@@ -4,12 +4,15 @@ import com.agencia.backend.domain.entity.Client;
 import com.agencia.backend.domain.exceptions.client.ClientAlreadyExistsException;
 import com.agencia.backend.domain.repository.ClientRepository;
 import com.agencia.backend.application.services.ClientExistenceValidationService;
+import com.agencia.backend.domain.repository.PassportRepository;
 
 public class ClientExistenceValidationServiceImp implements ClientExistenceValidationService {
   private final ClientRepository clientRepository;
+  private final PassportRepository passportRepository;
 
-  public ClientExistenceValidationServiceImp(ClientRepository clientRepository) {
+  public ClientExistenceValidationServiceImp(ClientRepository clientRepository, PassportRepository passportRepository) {
     this.clientRepository = clientRepository;
+    this.passportRepository = passportRepository;
   }
 
   @Override
@@ -23,7 +26,7 @@ public class ClientExistenceValidationServiceImp implements ClientExistenceValid
   public void validatePassportNumber(Client clientRequest) {
     if (clientRequest.getPassport() != null
         && clientRequest.getPassport().getNumber() != null
-        && clientRepository.existsByPassportNumber(clientRequest.getPassport().getNumber())) {
+        && passportRepository.existsByPassportNumber(clientRequest.getPassport().getNumber())) {
       throw new ClientAlreadyExistsException("Esse número de passaporte já está em uso.");
     }
   }

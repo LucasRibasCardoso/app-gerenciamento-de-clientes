@@ -1,5 +1,6 @@
 package com.agencia.backend.presentation.mapper.client.implementation;
 
+import com.agencia.backend.infrastructure.model.AddressModel;
 import com.agencia.backend.presentation.dto.address.AddressDTO;
 import com.agencia.backend.domain.entity.Address;
 import com.agencia.backend.presentation.mapper.client.AddressMapper;
@@ -42,6 +43,36 @@ public class AddressMapperImp implements AddressMapper {
         address.getStreet(),
         address.getComplement(),
         address.getResidentialNumber()
+    );
+  }
+
+  @Override
+  public AddressModel toModel(Address domain) {
+    return new AddressModel(
+        domain.getId(),
+        domain.getZipCode(),
+        domain.getCountry(),
+        domain.getState(),
+        domain.getCity(),
+        domain.getNeighborhood(),
+        domain.getStreet(),
+        domain.getComplement(),
+        domain.getResidentialNumber()
+    );
+  }
+
+  @Override
+  public Address toDomain(AddressModel model) {
+    return new Address(
+        model.getId(),
+        model.getZipCode(),
+        model.getCountry(),
+        model.getState(),
+        model.getCity(),
+        model.getNeighborhood(),
+        model.getStreet(),
+        model.getComplement(),
+        model.getResidentialNumber()
     );
   }
 

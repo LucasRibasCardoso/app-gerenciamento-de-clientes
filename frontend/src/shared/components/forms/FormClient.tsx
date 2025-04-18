@@ -1,25 +1,20 @@
 import { useState, useEffect } from "react";
-import { 
-    Box, 
-    Typography, 
-    Button, 
-    Collapse, 
-    IconButton,
-} from "@mui/material";
+import { Box, Typography, Button, Collapse, IconButton } from "@mui/material";
 import { ExpandMore, ExpandLess } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Grid from "@mui/material/Grid2";
 import CloseIcon from "@mui/icons-material/Close";
 
-
 import { ClientFormData, AddClientRequest, UpdateClientRequest } from "../../types/types";
 import { SaveButton } from "../buttons";
-import { useGetClientById, useAddClient, useUpdateClient } from "../../hooks/ClientHook";
+import { useGetClientById, useSaveUser, useUpdateClient } from "../../hooks/ClientHook";
 import { usePopUp } from "../../context/PopUpContext";
-import { 
-    AddClientSchema, AddClientSchemaDefaultValues,
-    UpdateClientSchema, UpdateClientSchemaDefaultValues
+import {
+    AddClientSchema,
+    AddClientSchemaDefaultValues,
+    UpdateClientSchema,
+    UpdateClientSchemaDefaultValues,
 } from "./schemas";
 import { TextInput, MaskedInput } from "../inputs";
 
@@ -33,8 +28,8 @@ interface ClientFormModalProps {
 // Função auxiliar para lidar com campos aninhados
 const getNestedFields = (dirtyFields: Record<string, any>, data: any) => {
     const result: any = {};
-    
-    Object.keys(dirtyFields).forEach(key => {
+
+    Object.keys(dirtyFields).forEach((key) => {
         if (typeof dirtyFields[key] === "object") {
             const nested = getNestedFields(dirtyFields[key], data[key]);
             if (Object.keys(nested).length > 0) {
@@ -44,44 +39,47 @@ const getNestedFields = (dirtyFields: Record<string, any>, data: any) => {
             result[key] = data[key];
         }
     });
-    
+
     return result;
 };
 
-const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientId }) => {
-
+const FormClient: React.FC<ClientFormModalProps> = ({ onClose, isEditing, clientId }) => {
     // Seleciona o schema e os valores padrão de acordo com o modo
     const schema = isEditing ? UpdateClientSchema : AddClientSchema;
-    const defaultValues = isEditing ? UpdateClientSchemaDefaultValues : AddClientSchemaDefaultValues;
+    const defaultValues = isEditing
+        ? UpdateClientSchemaDefaultValues
+        : AddClientSchemaDefaultValues;
 
-    const { 
-        control, 
-        reset, 
-        handleSubmit, 
-        formState: { errors, isDirty, dirtyFields } 
+    const {
+        control,
+        reset,
+        handleSubmit,
+        formState: { errors, isDirty, dirtyFields },
     } = useForm<ClientFormData>({
-        resolver: yupResolver(schema) as any, 
+        resolver: yupResolver(schema) as any,
         defaultValues,
-        mode: "onChange" 
+        mode: "onChange",
     });
 
     const { showMessage } = usePopUp();
     const [passportCollapse, setPassportCollapse] = useState(false);
-    const [addressCollapse, setAddressCollapse] = useState(false); 
+    const [addressCollapse, setAddressCollapse] = useState(false);
 
-    // Hook para salvar e atualizar cliente 
-    const { mutate: saveClient, isPending: isSaving } = useAddClient(onClose);
+    // Hook para salvar usuário
+    const { mutate: saveClient, isPending: isSaving } = useSaveUser(onClose);
+
+    // Hook para atualizar usuário
     const { mutate: updateClient, isPending: isUpdating } = useUpdateClient(onClose);
 
     // Busca os dados do cliente se estiver no modo de edição
-    const { data: clientData, isError, error } = useGetClientById(clientId!);
+    const { data: selectedClient, isError, error } = useGetClientById(clientId!);
 
     // Preenche o formulário com os dados do cliente quando eles são carregados
     useEffect(() => {
-        if (isEditing && clientData) {
-            reset(clientData);
+        if (isEditing && selectedClient) {
+            reset(selectedClient);
         }
-    }, [clientData, isEditing, reset]);
+    }, [selectedClient, isEditing, reset]);
     if (isError) {
         showMessage(error.message, "error");
     }
@@ -95,7 +93,7 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
             }
             const updatedData = getNestedFields(dirtyFields, data);
             delete updatedData.cpf;
-            
+
             updateClient({ clientId, data: updatedData });
         } else {
             saveClient(data as AddClientRequest);
@@ -104,30 +102,31 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
 
     return (
         <Box
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-        sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "25px",
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "25px",
 
-            maxHeight: "90vh", 
-            overflowY: "auto", 
-            padding: "20px", 
-            "&::-webkit-scrollbar": {
-                width: "8px",
-            },
-            "&::-webkit-scrollbar-track": {
-                background: "#f1f1f1",
-            },
-            "&::-webkit-scrollbar-thumb": {
-                background: "#888",
-                borderRadius: "4px",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-                background: "#555",
-            },
-        }}>
+                maxHeight: "90vh",
+                overflowY: "auto",
+                padding: "20px",
+                "&::-webkit-scrollbar": {
+                    width: "8px",
+                },
+                "&::-webkit-scrollbar-track": {
+                    background: "#f1f1f1",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                    background: "#888",
+                    borderRadius: "4px",
+                },
+                "&::-webkit-scrollbar-thumb:hover": {
+                    background: "#555",
+                },
+            }}
+        >
             {/* Botão de fechar */}
             <IconButton
                 aria-label="fechar"
@@ -142,11 +141,18 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                 <CloseIcon />
             </IconButton>
 
-            <Typography variant="h1" textAlign="center" mb={"30px"}>
+            <Typography
+                variant="h1"
+                textAlign="center"
+                mb={"30px"}
+            >
                 {isEditing ? "Editar Cliente" : "Cadastrar Cliente"}
             </Typography>
 
-            <Grid container spacing={2}>
+            <Grid
+                container
+                spacing={2}
+            >
                 <Grid size={6}>
                     <TextInput
                         name="completeName"
@@ -211,15 +217,22 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                         padding: "10px",
                         height: "50px",
                         ...(passportCollapse && {
-                            border: "none"
+                            border: "none",
                         }),
                     }}
                 >
                     <Typography variant="h6">Passaporte</Typography>
-                    {passportCollapse ? <ExpandLess sx={{ width: "45px" }}/> : <ExpandMore sx={{ width: "45px" }}/>}
+                    {passportCollapse ? (
+                        <ExpandLess sx={{ width: "45px" }} />
+                    ) : (
+                        <ExpandMore sx={{ width: "45px" }} />
+                    )}
                 </Button>
                 <Collapse in={passportCollapse}>
-                    <Grid container spacing={2}>
+                    <Grid
+                        container
+                        spacing={2}
+                    >
                         <Grid size={4}>
                             <TextInput
                                 name="passport.number"
@@ -266,17 +279,20 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
                         padding: "10px",
                         height: "50px",
                         ...(addressCollapse && {
-                            border: "none"
+                            border: "none",
                         }),
                     }}
                 >
                     <Typography variant="h6">Endereço</Typography>
                     <IconButton>
-                        {addressCollapse ? <ExpandLess/> : <ExpandMore/>}
+                        {addressCollapse ? <ExpandLess /> : <ExpandMore />}
                     </IconButton>
                 </Button>
                 <Collapse in={addressCollapse}>
-                    <Grid container spacing={2}>
+                    <Grid
+                        container
+                        spacing={2}
+                    >
                         <Grid size={4}>
                             <TextInput
                                 name="address.country"
@@ -356,6 +372,6 @@ const FormClient: React.FC<ClientFormModalProps> = ({onClose, isEditing, clientI
             <SaveButton disabled={isSaving || isUpdating} />
         </Box>
     );
-}
+};
 
 export default FormClient;

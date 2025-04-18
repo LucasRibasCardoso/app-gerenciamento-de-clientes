@@ -2,6 +2,7 @@ package com.agencia.backend.domain.entity;
 
 public class Address {
 
+  private final Long id;
   private final String zipCode;
   private final String country;
   private final String state;
@@ -21,6 +22,21 @@ public class Address {
       String complement,
       String residentialNumber
   ) {
+    this(null, zipCode, country, state, city, neighborhood, street, complement, residentialNumber);
+  }
+
+  public Address(
+      Long id,
+      String zipCode,
+      String country,
+      String state,
+      String city,
+      String neighborhood,
+      String street,
+      String complement,
+      String residentialNumber
+  ) {
+    this.id = id;
     this.zipCode = zipCode;
     this.country = country;
     this.state = state;
@@ -29,6 +45,10 @@ public class Address {
     this.street = street;
     this.complement = complement;
     this.residentialNumber = residentialNumber;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   public String getZipCode() {

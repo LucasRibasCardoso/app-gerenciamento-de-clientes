@@ -4,7 +4,8 @@ import {
     findAllUsers,
     deleteUser,
     updateUser,
-    createUser,
+    useSaveUser,
+    findUserById,
 } from "../services/api/UserService";
 import {
     UserResponse,
@@ -12,11 +13,11 @@ import {
     isGenericError,
     ValidationErrorsResponse,
     isValidationError,
-    UserRequest,
+    UpdateUserRequest,
+    AddUserRequest,
 } from "../types/types";
 import { usePopUp } from "../context/PopUpContext";
 
-// Hook para deletar um usuário
 const useDeleteUser = () => {
     const queryClient = useQueryClient();
     const { showMessage } = usePopUp();
@@ -35,12 +36,10 @@ const useDeleteUser = () => {
         },
         onError: (error) => {
             showMessage(error.message || "Erro ao deletar usuário", "error");
-            console.error("Erro ao deletar usuário: ", error);
         },
     });
 };
 
-// Hook para buscar todos os usuários
 const useGetAllUsers = () => {
     return useQuery<UserResponse[], GenericError>({
         queryKey: ["users"], // Chave única para cache
@@ -56,7 +55,22 @@ const useGetAllUsers = () => {
     });
 };
 
-// Hook para cadastrar um usuário
+const useGetUserById = (userId?: string | null) => {
+    return useQuery<UserResponse, GenericError, UserResponse>({
+        queryKey: ["users", userId],
+        queryFn: async ({ queryKey }) => {
+            const [, id] = queryKey;
+            const response = await findUserById(id as string);
+
+            if (isGenericError(response)) {
+                throw response;
+            }
+            return response;
+        },
+        enabled: !!userId, // Só executa a query se userId existir
+    });
+};
+
 const useCreateUser = (onClose?: () => void) => {
     const queryClient = useQueryClient();
     const { showMessage } = usePopUp();
@@ -64,10 +78,10 @@ const useCreateUser = (onClose?: () => void) => {
     return useMutation<
         UserResponse,
         GenericError | ValidationErrorsResponse,
-        UserRequest
+        AddUserRequest
     >({
         mutationFn: async (data) => {
-            const response = await createUser(data);
+            const response = await useSaveUser(data);
 
             if (isValidationError(response) || isGenericError(response)) {
                 throw response;
@@ -89,7 +103,6 @@ const useCreateUser = (onClose?: () => void) => {
     });
 };
 
-// Hook para editar um usuário
 const useUpdateUser = (onClose?: () => void) => {
     const queryClient = useQueryClient();
     const { showMessage } = usePopUp();
@@ -97,7 +110,7 @@ const useUpdateUser = (onClose?: () => void) => {
     return useMutation<
         UserResponse,
         GenericError | ValidationErrorsResponse,
-        { userId: string; data: UserRequest }
+        { userId: string; data: UpdateUserRequest }
     >({
         mutationFn: async ({ userId, data }) => {
             const response = await updateUser(data, userId);
@@ -123,4 +136,4 @@ const useUpdateUser = (onClose?: () => void) => {
     });
 };
 
-export { useDeleteUser, useGetAllUsers, useCreateUser, useUpdateUser };
+export { useDeleteUser, useGetAllUsers, useCreateUser, useUpdateUser, useGetUserById };
