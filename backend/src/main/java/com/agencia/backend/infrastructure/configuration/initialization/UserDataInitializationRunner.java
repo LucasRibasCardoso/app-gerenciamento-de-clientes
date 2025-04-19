@@ -1,5 +1,7 @@
 package com.agencia.backend.infrastructure.configuration.initialization;
 
+
+
 import com.agencia.backend.domain.entity.User;
 import com.agencia.backend.domain.entity.enuns.Role;
 import com.agencia.backend.domain.repository.UserRepository;

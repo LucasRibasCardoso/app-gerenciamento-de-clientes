@@ -1,6 +1,7 @@
 package com.agencia.backend.presentation.controller;
 
 import com.agencia.backend.application.useCase.client.FindClientByIdUseCase;
+import com.agencia.backend.infrastructure.configuration.log4jConfig.ApplicationLogger;
 import com.agencia.backend.presentation.dto.client.ClientRequestDTO;
 import com.agencia.backend.presentation.dto.client.ClientRequestUpdateDTO;
 import com.agencia.backend.presentation.dto.client.ClientResponseDTO;
@@ -34,6 +35,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/clients")
 public class ClientController {
 
+  private final ApplicationLogger applicationLogger;
   private final CreateClientUseCase createClientUseCase;
   private final FindAllClientUseCase findAllClientUseCase;
   private final FindClientByIdUseCase findClientByIdUseCase;
@@ -44,6 +46,7 @@ public class ClientController {
   private final ClientMapper clientMapper;
 
   public ClientController(
+      ApplicationLogger applicationLogger,
       CreateClientUseCase createClientUseCase,
       FindAllClientUseCase findAllClientUseCase,
       FindClientByIdUseCase findClientByIdUseCase,
@@ -52,6 +55,7 @@ public class ClientController {
       UrlParametersValidator urlParametersValidator,
       ClientMapper clientMapper
   ) {
+    this.applicationLogger = applicationLogger;
     this.createClientUseCase = createClientUseCase;
     this.findAllClientUseCase = findAllClientUseCase;
     this.findClientByIdUseCase = findClientByIdUseCase;
@@ -71,6 +75,10 @@ public class ClientController {
         .path("/{id}")
         .buildAndExpand(clientSaved.getId())
         .toUri();
+
+    // Adiciona log de criação de cliente
+    applicationLogger.logAction("CRIAÇÃO_CLIENTE",
+        "Novo cliente criado: " + clientSaved.getCompleteName() + " (ID: " + clientSaved.getId() + ")");
 
     return ResponseEntity.status(HttpStatus.CREATED).location(location).body(clientMapper.toDTO(clientSaved));
   }
@@ -124,6 +132,11 @@ public class ClientController {
   {
     urlParametersValidator.validateID(id);
     Client clientUpdated = updateClientUseCase.update(id, clientMapper.toDomain(request));
+
+    // Log de atualização de cliente
+    applicationLogger.logAction("ATUALIZAÇÃO_CLIENTE",
+        "Cliente atualizado: " + clientUpdated.getCompleteName() + " (ID: " + clientUpdated.getId() + ")");
+
     return ResponseEntity.status(HttpStatus.OK).body(clientMapper.toDTO(clientUpdated));
   }
 
@@ -131,7 +144,13 @@ public class ClientController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
     urlParametersValidator.validateID(id);
+    String clientName = findClientByIdUseCase.getClient(id).getCompleteName();
+
     deleteClientUseCase.deleteClient(id);
+
+    // Log de exclusão de cliente
+    applicationLogger.logAction("EXCLUSÃO_CLIENTE", "Cliente excluído: " + clientName + " (ID: " + id + ")");
+
     return ResponseEntity.noContent().build();
   }
 

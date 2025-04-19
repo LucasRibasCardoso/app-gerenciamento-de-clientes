@@ -1,10 +1,9 @@
 package com.agencia.backend.presentation.controller;
 
 import com.agencia.backend.infrastructure.configuration.jwt.JwtUtils;
+import com.agencia.backend.infrastructure.configuration.log4jConfig.ApplicationLogger;
 import com.agencia.backend.presentation.dto.user.LoginRequestDTO;
 import com.agencia.backend.presentation.dto.user.LoginResponseDTO;
-import com.agencia.backend.presentation.mapper.user.UserMapper;
-import com.agencia.backend.application.useCase.user.RegisterUserUseCase;
 import com.agencia.backend.presentation.validators.user.ValidateUserRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,21 +22,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class LoginController {
 
-  private final RegisterUserUseCase createUserUseCase;
-  private final UserMapper userMapper;
+  private final ApplicationLogger applicationLogger;
   private final ValidateUserRequest validateUserRequest;
   private final AuthenticationManager authenticationManager;
   private final JwtUtils jwtUtils;
 
   public LoginController(
-      RegisterUserUseCase createUserUseCase,
-      UserMapper userMapper,
+      ApplicationLogger applicationLogger,
       ValidateUserRequest validateUserRequest,
       AuthenticationManager authenticationManager,
       JwtUtils jwtUtils
   ) {
-    this.createUserUseCase = createUserUseCase;
-    this.userMapper = userMapper;
+    this.applicationLogger = applicationLogger;
     this.validateUserRequest = validateUserRequest;
     this.authenticationManager = authenticationManager;
     this.jwtUtils = jwtUtils;
@@ -66,12 +62,15 @@ public class LoginController {
 
     LoginResponseDTO response = new LoginResponseDTO(userDetails.getUsername(), role, jwtToken);
 
+    applicationLogger.logLogin(dto.username());
+
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
   @PostMapping("/logout")
   public ResponseEntity<Void> logout() {
     SecurityContextHolder.clearContext();
+
     return ResponseEntity.noContent().build();
   }
 }
