@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button, CircularProgress } from "@mui/material";
 import UploadIcon from "@mui/icons-material/Upload";
-import { read, utils } from "xlsx";
 import { usePopUp } from "../../context/PopUpContext";
+import { processAndValidateExcelFile } from "../../services/excel/ImportDataService";
 
 interface ImportButtonProps {
     onImportComplete: (data: any[]) => void;
@@ -29,53 +29,33 @@ const ImportButton: React.FC<ImportButtonProps> = ({
         const reader = new FileReader();
         reader.onload = (e) => {
             try {
-                const data = e.target?.result;
-                const workbook = read(data, {
-                    type: "array",
-                    cellDates: true,
-                    dateNF: "dd/mm/yyyy",
-                });
+                // Usar o serviço de importação para processar e validar o arquivo Excel
+                const fileData = e.target?.result as ArrayBuffer;
+                const { data: jsonData, validationResult } = processAndValidateExcelFile(
+                    fileData,
+                    validator
+                );
 
-                const firstSheetName = workbook.SheetNames[0];
-                if (!firstSheetName) {
-                    showMessage("Arquivo sem planilhas válidas", "error");
+                // Verificar resultados da validação
+                if (!validationResult.valid) {
+                    showMessage(
+                        `Erro na validação: ${validationResult.errors.join(", ")}`,
+                        "error"
+                    );
                     setLoading(false);
                     return;
-                }
-
-                const worksheet = workbook.Sheets[firstSheetName];
-
-                // Converter para JSON com formatação de datas
-                const jsonData = utils.sheet_to_json(worksheet, {
-                    raw: false, // Não retorna valores brutos
-                    dateNF: "dd/mm/yyyy", // Força a formatação de datas
-                });
-
-                if (jsonData.length === 0) {
-                    showMessage("O arquivo não contém dados válidos", "error");
-                    setLoading(false);
-                    return;
-                }
-
-                // Validar os dados, se um validador for fornecido
-                if (validator) {
-                    const validation = validator(jsonData);
-                    if (!validation.valid) {
-                        showMessage(
-                            `Erro na validação: ${validation.errors.join(", ")}`,
-                            "error"
-                        );
-                        setLoading(false);
-                        return;
-                    }
                 }
 
                 // Retornar os dados processados
                 onImportComplete(jsonData);
                 showMessage("Importação realizada com sucesso!", "success");
             } catch (error) {
-                console.error("Erro ao processar arquivo:", error);
-                showMessage("Erro ao processar o arquivo. Verifique o formato.", "error");
+                showMessage(
+                    error instanceof Error
+                        ? error.message
+                        : "Erro ao processar o arquivo. Verifique o formato.",
+                    "error"
+                );
             } finally {
                 setLoading(false);
                 // Limpar o input para permitir nova seleção do mesmo arquivo

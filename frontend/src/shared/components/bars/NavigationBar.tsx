@@ -56,7 +56,7 @@ export default function NavigationBar() {
         ...(isAdmin || isManager
             ? [
                   {
-                      label: "IMPORTAÇÃO E EXPORTAÇÃO",
+                      label: "IMPORTAR E EXPORTAR",
                       href: "/importacao-exportacao",
                       icon: <FileDownloadIcon />,
                   },
