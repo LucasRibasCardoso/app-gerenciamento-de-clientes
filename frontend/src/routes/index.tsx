@@ -3,6 +3,7 @@ import Home from "../pages/home/HomePage";
 import Login from "../pages/login/LoginPage";
 import Clients from "../pages/clients/ClientPage";
 import UserPage from "../pages/users/UserPage";
+import ExportImport from "../pages/export_import/ExportImport";
 
 export const AppRoutes = () => {
     return (
@@ -26,6 +27,10 @@ export const AppRoutes = () => {
             <Route
                 path="*"
                 element={<Navigate to="/login" />}
+            />
+            <Route
+                path="/importacao-exportacao"
+                element={<ExportImport />}
             />
         </Routes>
     );

@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import SupervisorAccountOutlinedIcon from "@mui/icons-material/SupervisorAccountOutlined";
@@ -38,7 +39,7 @@ const NavButton: React.FC<NavButtonProps> = ({ href, icon, label }) => (
 );
 
 export default function NavigationBar() {
-    const { isAdmin } = useAuth();
+    const { isAdmin, isManager } = useAuth();
 
     const navItems = [
         { label: "HOME", href: "/home", icon: <HomeOutlinedIcon /> },
@@ -49,6 +50,15 @@ export default function NavigationBar() {
                       label: "USUÁRIOS",
                       href: "/usuarios",
                       icon: <SupervisorAccountOutlinedIcon />,
+                  },
+              ]
+            : []),
+        ...(isAdmin || isManager
+            ? [
+                  {
+                      label: "IMPORTAÇÃO E EXPORTAÇÃO",
+                      href: "/importacao-exportacao",
+                      icon: <FileDownloadIcon />,
                   },
               ]
             : []),
