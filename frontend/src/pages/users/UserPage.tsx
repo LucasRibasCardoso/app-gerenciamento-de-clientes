@@ -1,28 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Box, Backdrop, CircularProgress, Modal } from "@mui/material";
 
 import Layout from "../../shared/layouts/Layout";
 import { ActionsBar } from "../../shared/components/bars/ActionsBar";
 import { useGetAllUsers, useDeleteUser } from "../../shared/hooks/UserHook";
 import { UsersTable } from "../../shared/components/tables";
-import { usePopUp } from "../../shared/context/PopUpContext";
 import { FormUser } from "../../shared/components/forms";
 
 export default function UserPage() {
     document.title = "Gerenciamento de Usuários";
 
-    const { showMessage } = usePopUp();
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
     // Hook para busca de usuários
-    const { data: users, isLoading, isError, error } = useGetAllUsers();
-    useEffect(() => {
-        if (isError && error) {
-            showMessage(error.message, "error");
-        }
-    }, [isError, error, showMessage]);
+    const { data: users, isLoading } = useGetAllUsers();
 
     // Hook para deletar usuário
     const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser();

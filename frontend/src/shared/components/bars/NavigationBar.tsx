@@ -9,6 +9,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import SupervisorAccountOutlinedIcon from "@mui/icons-material/SupervisorAccountOutlined";
+import DataUsageIcon from "@mui/icons-material/DataUsage";
 
 import { LogoutButton } from "../buttons";
 import { useAuth } from "../../hooks/AuthHook";
@@ -53,6 +54,7 @@ export default function NavigationBar() {
                   },
               ]
             : []),
+        { label: "DASHBOARD", href: "/dashboard", icon: <DataUsageIcon /> },
         ...(isAdmin || isManager
             ? [
                   {

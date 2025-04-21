@@ -103,6 +103,15 @@ export type LoginResponse = {
     token: string;
 };
 
+// Formato retornado ao buscar dados para o dashboard
+export type DashboardResponse = {
+    totalClients: number;
+    newClientsLast30Days: number;
+    clientsWithPassport: number;
+    clientsWithoutPassport: number;
+    clientsThatNeedToRenewPassport: ClientResponse[];
+};
+
 // Formato de erro padrão
 export type GenericError = {
     message: string;

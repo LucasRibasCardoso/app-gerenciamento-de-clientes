@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 import {
     ClientResponse,
@@ -47,7 +48,9 @@ const useGetAllClients = (filters?: {
     page?: number;
     size?: number;
 }) => {
-    return useQuery<PageResponse<ClientResponse>, GenericError>({
+    const { showMessage } = usePopUp();
+
+    const query = useQuery<PageResponse<ClientResponse>, GenericError>({
         queryKey: ["clients", filters],
         queryFn: async () => {
             const response = await findAllClients(filters);
@@ -59,10 +62,21 @@ const useGetAllClients = (filters?: {
             return response;
         },
     });
+
+    // Tratamento de erro dentro do hook
+    useEffect(() => {
+        if (query.isError && query.error) {
+            showMessage(query.error.message || "Erro ao carregar clientes.", "error");
+        }
+    }, [query.isError, query.error, showMessage]);
+
+    return query;
 };
 
 const useGetClientById = (clientId: number) => {
-    return useQuery<ClientResponse, GenericError, ClientResponse>({
+    const { showMessage } = usePopUp();
+
+    const query = useQuery<ClientResponse, GenericError, ClientResponse>({
         queryKey: ["client", clientId],
         queryFn: async ({ queryKey }) => {
             const [, id] = queryKey;
@@ -74,8 +88,20 @@ const useGetClientById = (clientId: number) => {
             }
             return response;
         },
-        enabled: !!clientId, // Só executa a query se clientId existir
+        enabled: !!clientId,
     });
+
+    // Tratamento de erro dentro do hook
+    useEffect(() => {
+        if (query.isError && query.error) {
+            showMessage(
+                query.error.message || "Erro ao carregar dados do cliente.",
+                "error"
+            );
+        }
+    }, [query.isError, query.error, showMessage]);
+
+    return query;
 };
 
 const useSaveUser = (onClose?: () => void) => {

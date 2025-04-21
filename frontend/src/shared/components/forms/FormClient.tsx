@@ -72,7 +72,7 @@ const FormClient: React.FC<ClientFormModalProps> = ({ onClose, isEditing, client
     const { mutate: updateClient, isPending: isUpdating } = useUpdateClient(onClose);
 
     // Busca os dados do cliente se estiver no modo de edição
-    const { data: selectedClient, isError, error } = useGetClientById(clientId!);
+    const { data: selectedClient } = useGetClientById(clientId!);
 
     // Preenche o formulário com os dados do cliente quando eles são carregados
     useEffect(() => {
@@ -80,9 +80,6 @@ const FormClient: React.FC<ClientFormModalProps> = ({ onClose, isEditing, client
             reset(selectedClient);
         }
     }, [selectedClient, isEditing, reset]);
-    if (isError) {
-        showMessage(error.message, "error");
-    }
 
     // Função para enviar os dados do formulário
     const onSubmit = (data: AddClientRequest | UpdateClientRequest) => {

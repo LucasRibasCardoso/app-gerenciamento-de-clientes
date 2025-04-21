@@ -74,7 +74,7 @@ const FormUser: React.FC<UserFormModalProps> = ({ onClose, isEditing, userId }) 
     const { mutate: updateUser, isPending: isUpdating } = useUpdateUser(onClose);
 
     // Hook para buscar usuário por ID se estiver no modo edição
-    const { data: selectedUser, isError, error } = useGetUserById(userId!);
+    const { data: selectedUser } = useGetUserById(userId!);
 
     // Preenche o formulário com os dados do usuário quando eles são carregados para edição
     useEffect(() => {
@@ -82,9 +82,6 @@ const FormUser: React.FC<UserFormModalProps> = ({ onClose, isEditing, userId }) 
             reset(selectedUser);
         }
     }, [selectedUser, isEditing, reset]);
-    if (isError) {
-        showMessage(error.message, "error");
-    }
 
     // Função para enviar os dados do formulário
     const onSubmit = (data: UserFormData) => {

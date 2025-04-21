@@ -3,7 +3,8 @@ import Home from "../pages/home/HomePage";
 import Login from "../pages/login/LoginPage";
 import Clients from "../pages/clients/ClientPage";
 import UserPage from "../pages/users/UserPage";
-import ExportImport from "../pages/export_import/ExportImport";
+import ExportImport from "../pages/export_import/ExportImportPage";
+import Dashboard from "../pages/dashboard/DashboardPage";
 
 export const AppRoutes = () => {
     return (
@@ -31,6 +32,10 @@ export const AppRoutes = () => {
             <Route
                 path="/importacao-exportacao"
                 element={<ExportImport />}
+            />
+            <Route
+                path="/dashboard"
+                element={<Dashboard />}
             />
         </Routes>
     );

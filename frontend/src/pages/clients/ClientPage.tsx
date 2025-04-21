@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Box, Backdrop, CircularProgress, Modal } from "@mui/material";
 
 import { useGetAllClients, useDeleteClient } from "../../shared/hooks/ClientHook";
@@ -6,12 +6,9 @@ import { ClientsTable } from "../../shared/components/tables";
 import { FunctionalityBar } from "../../shared/components/bars";
 import Layout from "../../shared/layouts/Layout";
 import { FormClient } from "../../shared/components/forms";
-import { usePopUp } from "../../shared/context/PopUpContext";
 
 export default function Clients() {
     document.title = "Clientes - Client Management";
-
-    const { showMessage } = usePopUp();
 
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [orderBy, setOrderBy] = useState<string>("");
@@ -25,23 +22,13 @@ export default function Clients() {
     const [editingClientId, setEditingClientId] = useState<number | null>(null);
 
     // Hook para busca de clientes e paginação
-    const {
-        data: clients,
-        isLoading,
-        isError,
-        error,
-    } = useGetAllClients({
+    const { data: clients, isLoading } = useGetAllClients({
         searchQuery,
         orderBy,
         orderDirection,
         page,
         size,
     });
-    useEffect(() => {
-        if (isError && error) {
-            showMessage(error.message, "error");
-        }
-    }, [isError, error, showMessage]);
 
     // Hook para deletar cliente
     const { mutate: deleteClient, isPending: isDeleting } = useDeleteClient();

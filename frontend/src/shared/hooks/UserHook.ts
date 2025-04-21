@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 import {
     findAllUsers,
@@ -41,8 +42,10 @@ const useDeleteUser = () => {
 };
 
 const useGetAllUsers = () => {
-    return useQuery<UserResponse[], GenericError>({
-        queryKey: ["users"], // Chave única para cache
+    const { showMessage } = usePopUp();
+
+    const query = useQuery<UserResponse[], GenericError>({
+        queryKey: ["users"],
         queryFn: async () => {
             const response = await findAllUsers();
 
@@ -53,10 +56,21 @@ const useGetAllUsers = () => {
         },
         initialData: [],
     });
+
+    // Tratamento de erro dentro do hook usando useEffect
+    useEffect(() => {
+        if (query.isError && query.error) {
+            showMessage(query.error.message || "Erro ao carregar usuários.", "error");
+        }
+    }, [query.isError, query.error, showMessage]);
+
+    return query;
 };
 
 const useGetUserById = (userId?: string | null) => {
-    return useQuery<UserResponse, GenericError, UserResponse>({
+    const { showMessage } = usePopUp();
+
+    const query = useQuery<UserResponse, GenericError, UserResponse>({
         queryKey: ["users", userId],
         queryFn: async ({ queryKey }) => {
             const [, id] = queryKey;
@@ -69,6 +83,18 @@ const useGetUserById = (userId?: string | null) => {
         },
         enabled: !!userId, // Só executa a query se userId existir
     });
+
+    // Tratamento de erro dentro do hook usando useEffect
+    useEffect(() => {
+        if (query.isError && query.error) {
+            showMessage(
+                query.error.message || "Erro ao carregar dados do usuário.",
+                "error"
+            );
+        }
+    }, [query.isError, query.error, showMessage]);
+
+    return query;
 };
 
 const useCreateUser = (onClose?: () => void) => {
