@@ -3,7 +3,7 @@ package com.agencia.backend.application.useCase.client;
 import com.agencia.backend.domain.entity.Client;
 import java.util.List;
 
-public interface FindDataForDashboardClientUseCase {
+public interface FindDataForDashboardUseCase {
   // Dashboard
   Long getTotalClients();
   Long getTotalNewClientsLast30Days();

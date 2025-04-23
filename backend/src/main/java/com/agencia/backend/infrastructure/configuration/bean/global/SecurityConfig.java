@@ -98,7 +98,9 @@ public class SecurityConfig {
         .requestMatchers(HttpMethod.DELETE, "/clients/**").hasAnyRole("ADMIN", "MANAGER")
 
         // Endpoints para leitura - disponíveis para todos os usuários autenticados
-        .requestMatchers(HttpMethod.GET, "/clients/**").hasAnyRole("USER", "ADMIN")
+        .requestMatchers(HttpMethod.GET, "/clients/**").hasAnyRole("USER", "ADMIN", "MANAGER")
+        .requestMatchers(HttpMethod.GET, "/dashboard/data").hasAnyRole("USER", "ADMIN", "MANAGER")
+
 
         // Qualquer outro endpoint requer autenticação
         .anyRequest().authenticated()

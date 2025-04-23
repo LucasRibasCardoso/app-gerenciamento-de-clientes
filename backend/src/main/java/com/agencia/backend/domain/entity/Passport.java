@@ -5,10 +5,10 @@ import java.time.LocalDate;
 
 public class Passport {
 
-  private final Long id;
-  private final String number;
-  private final LocalDate emissionDate;
-  private final LocalDate expirationDate;
+  private Long id;
+  private String number;
+  private LocalDate emissionDate;
+  private LocalDate expirationDate;
 
   public Passport(String number, LocalDate emissionDate, LocalDate expirationDate) {
     this(null, number, emissionDate, expirationDate);
@@ -56,6 +56,18 @@ public class Passport {
 
   public String getNumber() {
     return number;
+  }
+
+  public void setEmissionDate(LocalDate emissionDate) {
+    this.emissionDate = emissionDate;
+  }
+
+  public void setExpirationDate(LocalDate expirationDate) {
+    this.expirationDate = expirationDate;
+  }
+
+  public void setNumber(String number) {
+    this.number = number;
   }
 
 }

@@ -2,6 +2,8 @@ package com.agencia.backend.infrastructure.configuration.bean.client;
 
 import com.agencia.backend.application.services.implementation.ClientExistenceValidationServiceImp;
 import com.agencia.backend.application.services.implementation.ClientFieldUpdateServiceImp;
+import com.agencia.backend.application.useCase.client.FindDataForDashboardUseCase;
+import com.agencia.backend.application.useCase.client.implementation.FindDataForDashboardUseCaseImp;
 import com.agencia.backend.domain.repository.ClientRepository;
 import com.agencia.backend.application.services.ClientExistenceValidationService;
 import com.agencia.backend.application.services.ClientFieldUpdateService;
@@ -23,7 +25,10 @@ import org.springframework.context.annotation.Configuration;
 public class ClientUseCaseConfig {
 
   @Bean
-  public ClientExistenceValidationService clientExistenceValidationService(ClientRepository clientRepository, PassportRepository passportRepository) {
+  public ClientExistenceValidationService clientExistenceValidationService(
+      ClientRepository clientRepository,
+      PassportRepository passportRepository
+  ) {
     return new ClientExistenceValidationServiceImp(clientRepository, passportRepository);
   }
 
@@ -34,8 +39,8 @@ public class ClientUseCaseConfig {
 
   @Bean
   public CreateClientUseCase createClientUseCase(
-      ClientRepository clientRepository,
-      ClientExistenceValidationService clientExistenceValidationService) {
+      ClientRepository clientRepository, ClientExistenceValidationService clientExistenceValidationService
+  ) {
     return new CreateClientUseCaseImp(clientRepository, clientExistenceValidationService);
   }
 
@@ -59,15 +64,16 @@ public class ClientUseCaseConfig {
       ClientRepository clientRepository,
       FindClientByIdUseCase findClientByIdUseCase,
       ClientFieldUpdateService clientFieldUpdateService,
-      ClientExistenceValidationService clientExistenceValidationService)
-  {
-    return new UpdateClientUseCaseImp(
-        clientRepository,
-        findClientByIdUseCase,
-        clientFieldUpdateService,
+      ClientExistenceValidationService clientExistenceValidationService
+  ) {
+    return new UpdateClientUseCaseImp(clientRepository, findClientByIdUseCase, clientFieldUpdateService,
         clientExistenceValidationService
     );
   }
 
+  @Bean
+  public FindDataForDashboardUseCase findDataForDashboardUseCase(ClientRepository clientRepository) {
+    return new FindDataForDashboardUseCaseImp(clientRepository);
+  }
 
 }

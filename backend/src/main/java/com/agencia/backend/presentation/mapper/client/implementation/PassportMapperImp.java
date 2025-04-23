@@ -17,7 +17,16 @@ public class PassportMapperImp implements PassportMapper {
   @Override
   public Passport toDomain(PassportDTO dto) {
     if (dto == null) {
-      return new Passport(null, null, null);
+      return null;
+    }
+
+    // Verifica se todos os campos importantes são nulos
+    boolean allFieldsEmpty = (dto.number() == null || dto.number().trim().isEmpty()) &&
+                            dto.emissionDate() == null &&
+                            dto.expirationDate() == null;
+
+    if (allFieldsEmpty) {
+      return null;
     }
 
     return new Passport(
@@ -29,6 +38,10 @@ public class PassportMapperImp implements PassportMapper {
 
   @Override
   public PassportDTO toDTO(Passport domain) {
+    if (domain == null) {
+      return null;
+    }
+
     return new PassportDTO(
         domain.getNumber(),
         dateConverter.convertToString(domain.getEmissionDate()),
@@ -38,6 +51,10 @@ public class PassportMapperImp implements PassportMapper {
 
   @Override
   public PassportModel toModel(Passport domain) {
+    if (domain == null) {
+      return null;
+    }
+
     PassportModel model = new PassportModel(
         domain.getId(),
         domain.getNumber(),
@@ -49,6 +66,10 @@ public class PassportMapperImp implements PassportMapper {
 
   @Override
   public Passport toDomain(PassportModel model) {
+    if (model == null) {
+      return null;
+    }
+
     return new Passport(
         model.getId(),
         model.getPassportNumber(),

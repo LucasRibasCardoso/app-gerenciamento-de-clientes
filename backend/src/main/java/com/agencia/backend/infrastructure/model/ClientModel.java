@@ -8,8 +8,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +27,9 @@ public class ClientModel {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(nullable = false, updatable = false)
+  private LocalDateTime createdAt;
+
   // Dados principais do cliente
   @Column(nullable = false)
   private String completeName;
@@ -39,13 +44,13 @@ public class ClientModel {
   @Column(unique = true)
   private String email;
 
-  // Relacionamentos
+  // Modifique os relacionamentos para que aceitem null
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "passport_id")
+  @JoinColumn(name = "passport_id", nullable = true)
   private PassportModel passport;
 
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "address_id")
+  @JoinColumn(name = "address_id", nullable = true)
   private AddressModel address;
 
   public ClientModel(
@@ -66,6 +71,11 @@ public class ClientModel {
     this.email = email;
     this.passport = passport;
     this.address = address;
+  }
+
+  @PrePersist
+  public void prePersist() {
+    this.createdAt = LocalDateTime.now();
   }
 
 }

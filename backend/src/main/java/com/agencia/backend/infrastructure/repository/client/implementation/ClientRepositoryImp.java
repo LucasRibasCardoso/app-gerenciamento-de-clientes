@@ -6,7 +6,11 @@ import com.agencia.backend.infrastructure.model.ClientModel;
 import com.agencia.backend.infrastructure.repository.client.ClientJpaRepository;
 import com.agencia.backend.infrastructure.specifications.SpecificationBuilder;
 import com.agencia.backend.presentation.mapper.client.ClientMapper;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +43,8 @@ public class ClientRepositoryImp implements ClientRepository {
 
   @Override
   public Optional<Client> findById(Long id) {
-    return jpaRepository.findById(id).map(clientMapper::toDomain);
+    return jpaRepository.findById(id)
+        .map(clientMapper::toDomain);
   }
 
   @Override
@@ -71,6 +76,40 @@ public class ClientRepositoryImp implements ClientRepository {
   @Override
   public boolean existsById(Long id) {
     return jpaRepository.existsById(id);
+  }
+
+  @Override
+  public Long getTotalClients() {
+    return jpaRepository.count();
+  }
+
+  @Override
+  public Long getTotalNewClientsLast30Days() {
+    LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
+    return jpaRepository.countByCreatedAtGreaterThanEqual(thirtyDaysAgo);
+  }
+
+  @Override
+  public Long getTotalClientsWithPassport() {
+    return jpaRepository.countByPassportPassportNumberIsNotNull();
+  }
+
+  @Override
+  public Long getTotalClientsWithoutPassport() {
+    return jpaRepository.countByPassportPassportNumberIsNull();
+  }
+
+  @Override
+  public List<Client> getClientsThatNeedToRenewPassport() {
+    LocalDate oneYearFromNow = LocalDate.now().plusMonths(6);
+
+    List<ClientModel> clientsNeedingRenewal =
+        jpaRepository.findByPassportPassportNumberIsNotNullAndPassportExpirationDateLessThan(
+        oneYearFromNow);
+
+    return clientsNeedingRenewal.stream()
+        .map(clientMapper::toDomain)
+        .collect(Collectors.toList());
   }
 
 }

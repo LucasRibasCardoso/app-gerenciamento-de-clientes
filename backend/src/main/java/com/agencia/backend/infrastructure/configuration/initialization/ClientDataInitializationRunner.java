@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("dev")
 public class ClientDataInitializationRunner implements CommandLineRunner {
 
   private ClientRepository clientRepository;
@@ -32,8 +31,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
         LocalDate.of(1985, 7, 25),
         "(21) 99876-5432",
         "maria.oliveira@example.com",
-        new Passport("XY987654", LocalDate.of(2019, 8, 15), LocalDate.of(2029, 8, 15)),
-        new Address("23456-789", "Brasil", "RJ", "Rio de Janeiro", "Copacabana", "Avenida Atlântica", "Bloco B", "456")
+        new Passport(null, null, null),
+        new Address("12345-678", "Brasil", "RJ", "Rio de Janeiro", "Copacabana", "Avenida Atlântica", "Apto 501", "501")
     );
 
     Client client2 = new Client(
@@ -43,9 +42,9 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
         LocalDate.of(1987, 6, 20),
         "(41) 99987-6543",
         "eduardo.pereira@example.com",
-        new Passport("IJ456789", LocalDate.of(2020, 11, 12), LocalDate.of(2030, 11, 12)),
-        new Address("67890-234", "Brasil", "PR", "Curitiba", "Centro", "Rua XV de Novembro", "Loja 10", "101")
-    );
+        new Passport("AB123456", LocalDate.of(2020, 1, 15), LocalDate.of(2030, 1, 15)),
+        new Address("23456-789", "Brasil", "PR", "Curitiba", "Centro", "Rua XV de Novembro", "Sala 101", "101")
+        );
 
     Client client3 = new Client(
         null,
@@ -179,6 +178,32 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
         new Address("98765-432", "Brasil", "MG", "Belo Horizonte", "Lourdes", "Rua da Bahia", "Sala 101", "101")
     );
 
+    Client client15 = new Client(
+        null,
+        "Beatriz Cardoso",
+        "876.543.210-99",
+        LocalDate.of(1990, 5, 15),
+        "(21) 99123-4567",
+        "beatriz.cardoso@example.com",
+        new Passport("JK654321", LocalDate.of(2019, 6, 25),
+            LocalDate.now().plusMonths(5).minusDays(3)), // Expira em aproximadamente 5 meses
+        new Address("22222-333", "Brasil", "RJ", "Rio de Janeiro", "Ipanema",
+            "Rua Visconde de Pirajá", "Apto 701", "701")
+    );
+
+    Client client16 = new Client(
+        null,
+        "Leandro Vieira",
+        "765.432.109-88",
+        LocalDate.of(1988, 8, 30),
+        "(11) 98888-7777",
+        "leandro.vieira@example.com",
+        new Passport("PQ987654", LocalDate.of(2020, 2, 10),
+            LocalDate.now().plusMonths(5).plusDays(7)), // Expira em aproximadamente 5 meses
+        new Address("11111-222", "Brasil", "SP", "São Paulo", "Jardins",
+            "Alameda Santos", "Apto 1204", "1204")
+    );
+
 
     clientRepository.save(client1);
     clientRepository.save(client2);
@@ -194,7 +219,8 @@ public class ClientDataInitializationRunner implements CommandLineRunner {
     clientRepository.save(client12);
     clientRepository.save(client13);
     clientRepository.save(client14);
-
+    clientRepository.save(client15);
+    clientRepository.save(client16);
   }
 
 }
