@@ -15,7 +15,7 @@ export const useDashboardData = () => {
             if (isGenericError(response)) {
                 throw response;
             }
-
+            console.log("Dashboard data:", response);
             return response;
         },
         staleTime: 5 * 60 * 1000, // Cache válido por 5 minutos
