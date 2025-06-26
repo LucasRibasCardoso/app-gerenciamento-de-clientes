@@ -3,48 +3,47 @@ import AirplaneSVG from "../../shared/assets/images/airplane-around-world.svg";
 import { FormLogin } from "../../shared/components/forms";
 
 export default function Login() {
-  document.title = "Login - Client Management";
+	document.title = "Login - Client Management";
 
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        width: "100vw",
-        height: "100vh",
-      }}
-    >
-      <Box
-        sx={{
-          backgroundColor: "background.default",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "50%",
-          gap: "20px",
-        }}
-      >
-        <Typography variant="h1">Seja Bem Vindo</Typography>
-        <Typography variant="h2" textAlign={"center"}>
-          Gerencie sua agência com facilidade.
-          <br />
-          Faça login para começar.
-        </Typography>
-        <img src={AirplaneSVG} alt="imagem avião" />
-      </Box>
+	return (
+		<Box
+			sx={{
+				display: "flex",
+				width: "100vw",
+				height: "100vh",
+			}}
+		>
+			<Box
+				sx={{
+					backgroundColor: "background.default",
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+					justifyContent: "center",
+					width: "50%",
+					gap: "20px",
+				}}
+			>
+				<Typography variant="h1">Seja Bem Vindo</Typography>
+				<Typography variant="h2" textAlign={"center"}>
+					Gerencie seus clientes com facilidade.
+					<br />
+					Faça login para começar.
+				</Typography>
+				<img src={AirplaneSVG} alt="imagem avião" />
+			</Box>
 
-      <Box
-        sx={{
-          backgroundColor: "background.darkGreen",
-          display: "flex",
-          width: "50%",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <FormLogin/>
-      </Box>
-
-    </Box>
-  );
+			<Box
+				sx={{
+					backgroundColor: "background.darkGreen",
+					display: "flex",
+					width: "50%",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				<FormLogin />
+			</Box>
+		</Box>
+	);
 }
