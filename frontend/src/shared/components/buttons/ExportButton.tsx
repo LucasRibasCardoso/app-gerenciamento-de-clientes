@@ -14,9 +14,6 @@ const ExportButton = () => {
 
 	// Preparar dados para exportação
 	const prepareClientsForExport = () => {
-		if (clients?.data.length == 0) {
-			showMessage("Não há nenhum cadastro para exportar", "info");
-		}
 		return (
 			clients?.data.map((client) => ({
 				ID: client.id,
@@ -41,6 +38,11 @@ const ExportButton = () => {
 	};
 
 	const exportToExcel = () => {
+		if (prepareClientsForExport().length == 0) {
+			showMessage("Não há nenhum cadastro para exportar", "info");
+			return;
+		}
+
 		const worksheet = utils.json_to_sheet(prepareClientsForExport());
 		const workbook = utils.book_new();
 		utils.book_append_sheet(workbook, worksheet, "Dados");

@@ -1,0 +1,22 @@
+# Dependências
+node_modules
+
+# Arquivos de build (são gerados dentro do container)
+dist
+.vite
+
+# Logs
+npm-debug.log
+
+# Arquivos do Docker
+Dockerfile
+.dockerignore
+
+# Arquivos de ambiente local (importante!)
+.env
+.env.local
+.env.*.local
+
+# Git
+.git
+.gitignore
