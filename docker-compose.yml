@@ -1,0 +1,60 @@
+services:
+ # Serviço do Banco de Dados MySQL
+ db:
+  image: mysql:8.0
+  container_name: mysql_db
+  restart: unless-stopped
+  volumes:
+   - mysql_data:/var/lib/mysql
+  # Carrega as variáveis de ambiente a partir do arquivo .env na raiz
+  env_file: ./.env
+  environment:
+   # Essas variáveis são específicas da imagem do MySQL
+   MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+   MYSQL_DATABASE: ${MYSQL_DATABASE}
+  networks:
+   - meu-app-network
+
+ # Serviço do Backend Spring Boot
+ backend:
+  build:
+   context: ./backend
+  container_name: spring_backend
+  restart: unless-stopped
+  depends_on:
+   - db
+  env_file: ./.env
+  environment:
+   # Força o perfil de produção do Spring
+   - PROFILE_APP=${PROFILE_APP}
+   # A URL do MySQL aponta para o serviço 'db' na porta 3306
+   - MYSQL_URL=jdbc:mysql://db:3306/${MYSQL_DATABASE}?useSSL=false
+   - MYSQL_USER=root
+   - MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
+   # URL do cliente para configuração do CORS
+   - CLIENT_URL=http://localhost
+  networks:
+   - meu-app-network
+
+ # Serviço do Frontend React/Nginx
+ frontend:
+  build:
+   context: ./frontend
+  container_name: react_frontend
+  restart: unless-stopped
+  ports:
+   # Expõe a porta 80 do container na porta 80 da sua máquina
+   - "80:80"
+  depends_on:
+   - backend
+  networks:
+   - meu-app-network
+
+# Define um volume para persistir os dados do banco de dados
+volumes:
+ mysql_data:
+
+# Define uma rede customizada para os serviços
+networks:
+ meu-app-network:
+  driver: bridge

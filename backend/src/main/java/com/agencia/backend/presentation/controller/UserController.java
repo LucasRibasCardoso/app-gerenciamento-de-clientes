@@ -4,7 +4,6 @@ import com.agencia.backend.application.useCase.user.FindUserByIdUseCase;
 import com.agencia.backend.application.useCase.user.RegisterUserUseCase;
 import com.agencia.backend.application.useCase.user.UpdateUserUseCase;
 import com.agencia.backend.domain.entity.User;
-import com.agencia.backend.infrastructure.configuration.log4jConfig.ApplicationLogger;
 import com.agencia.backend.presentation.dto.user.UserRequestDTO;
 import com.agencia.backend.presentation.dto.user.UserResponseDTO;
 import com.agencia.backend.presentation.mapper.user.UserMapper;
@@ -32,7 +31,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/users")
 public class UserController {
 
-  private final ApplicationLogger applicationLogger;
   private final RegisterUserUseCase createUserUseCase;
   private final UserMapper userMapper;
   private final FindAllUserUseCase findAllUserUseCase;
@@ -42,7 +40,6 @@ public class UserController {
   private final UpdateUserUseCase updateUserUseCase;
 
   public UserController(
-      ApplicationLogger applicationLogger,
       RegisterUserUseCase createUserUseCase,
       UserMapper userMapper,
       FindAllUserUseCase findAllUserUseCase,
@@ -51,7 +48,6 @@ public class UserController {
       ValidateUserRequest validateUserRequest,
       UpdateUserUseCase updateUserUseCase
   ) {
-    this.applicationLogger = applicationLogger;
     this.createUserUseCase = createUserUseCase;
     this.userMapper = userMapper;
     this.findAllUserUseCase = findAllUserUseCase;
@@ -77,10 +73,6 @@ public class UserController {
         .path("/{id}")
         .buildAndExpand(userSaved.getId())
         .toUri();
-
-    // Adiciona log de criação de usuário
-    applicationLogger.logAction("CRIAÇÃO_USUÁRIO",
-        "Novo usuário criado: " + userSaved.getUsername() + " com role: " + userSaved.getRole());
 
     // Retorna a resposta
     return ResponseEntity.status(HttpStatus.CREATED)
@@ -138,10 +130,6 @@ public class UserController {
     // Atualiza o usuário
     User updatedUser = updateUserUseCase.update(UUID.fromString(id), userMapper.toDomain(dto));
 
-    // Adiciona log de atualização de usuário
-    applicationLogger.logAction("ATUALIZAÇÃO_USUÁRIO",
-        "Usuário atualizado: " + updatedUser.getUsername() + " com role: " + updatedUser.getRole());
-
     // Retorna a resposta
     return ResponseEntity.status(HttpStatus.OK)
         .body(userMapper.toDTO(updatedUser));
@@ -158,10 +146,6 @@ public class UserController {
 
     // Exclui o usuário
     deleteUserUseCase.deleteUser(UUID.fromString(id));
-
-    // Adiciona log de exclusão de usuário
-    applicationLogger.logAction("EXCLUSÃO_USUÁRIO",
-        "Usuário excluído: " + userToDelete.getUsername() + " (ID: " + id + ")");
 
     return ResponseEntity.noContent()
         .build();

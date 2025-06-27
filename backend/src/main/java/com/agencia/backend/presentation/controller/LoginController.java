@@ -1,7 +1,6 @@
 package com.agencia.backend.presentation.controller;
 
 import com.agencia.backend.infrastructure.configuration.jwt.JwtUtils;
-import com.agencia.backend.infrastructure.configuration.log4jConfig.ApplicationLogger;
 import com.agencia.backend.presentation.dto.user.LoginRequestDTO;
 import com.agencia.backend.presentation.dto.user.LoginResponseDTO;
 import com.agencia.backend.presentation.validators.user.ValidateUserRequest;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,18 +22,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class LoginController {
 
-  private final ApplicationLogger applicationLogger;
   private final ValidateUserRequest validateUserRequest;
   private final AuthenticationManager authenticationManager;
   private final JwtUtils jwtUtils;
 
   public LoginController(
-      ApplicationLogger applicationLogger,
       ValidateUserRequest validateUserRequest,
       AuthenticationManager authenticationManager,
       JwtUtils jwtUtils
   ) {
-    this.applicationLogger = applicationLogger;
     this.validateUserRequest = validateUserRequest;
     this.authenticationManager = authenticationManager;
     this.jwtUtils = jwtUtils;
@@ -57,12 +54,10 @@ public class LoginController {
     // Extrai a primeira (e única) autoridade como uma string
     String role = userDetails.getAuthorities().stream()
         .findFirst()
-        .map(item -> item.getAuthority())
+        .map(GrantedAuthority::getAuthority)
         .orElse("ROLE_USER"); // Valor padrão caso não tenha role
 
     LoginResponseDTO response = new LoginResponseDTO(userDetails.getUsername(), role, jwtToken);
-
-    applicationLogger.logLogin(dto.username());
 
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }

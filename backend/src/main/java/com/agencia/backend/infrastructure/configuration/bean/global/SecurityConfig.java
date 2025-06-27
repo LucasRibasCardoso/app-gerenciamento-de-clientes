@@ -4,6 +4,7 @@ import com.agencia.backend.infrastructure.configuration.jwt.AuthTokenFilter;
 import java.time.Duration;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,9 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+  @Value("${url.frontend}")
+  private String clientUrl;
+
   @Autowired
   private AuthenticationEntryPoint authenticationEntryPoint;
 
@@ -44,11 +48,12 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
     // Configuração de CORS
     http.cors(cors -> cors.configurationSource(request -> {
       var corsConfiguration = new CorsConfiguration();
 
-      corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173/"));
+      corsConfiguration.setAllowedOrigins(List.of(clientUrl));
 
       corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
@@ -90,7 +95,7 @@ public class SecurityConfig {
 
         // Endpoints somente para administradores
         .requestMatchers("/users/**").hasRole("ADMIN")
-        .requestMatchers("/h2-console/**").permitAll() // .hasRole("ADMIN")
+        .requestMatchers("/h2-console/**").permitAll()
 
         // Endpoints para administradores - controle granular
       .requestMatchers(HttpMethod.POST, "/clients/**").hasAnyRole("ADMIN", "MANAGER")

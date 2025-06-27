@@ -1,7 +1,7 @@
 # Dependências
 node_modules
 
-# Arquivos de build (são gerados dentro do container)
+# Arquivos de build 
 dist
 .vite
 
@@ -12,8 +12,7 @@ npm-debug.log
 Dockerfile
 .dockerignore
 
-# Arquivos de ambiente local (importante!)
-.env
+
 .env.local
 .env.*.local
 
