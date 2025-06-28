@@ -6,11 +6,13 @@ import com.agencia.backend.presentation.dto.error.ValidationErrorsResponse;
 import com.agencia.backend.domain.exceptions.global.DatabaseException;
 import jakarta.validation.ConstraintViolationException;
 import java.time.format.DateTimeParseException;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,15 +23,14 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ValidationErrorsResponse> handleValidationException(MethodArgumentNotValidException ex) {
 
-    Set<ValidationError> errors = ex.getBindingResult().getFieldErrors().stream()
-        .collect(Collectors.toMap(
-            error -> error.getField(), // Uso o nome do campo como chave
-            error -> new ValidationError(error.getField(), error.getDefaultMessage()),
-            (existing, replacement) -> existing, // Manter o primeiro erro em caso de conflito
-            LinkedHashMap::new // preservar a ordem original
-        ))
-        .values().stream()
-        .collect(Collectors.toSet());
+    Set<ValidationError> errors = new HashSet<>(ex.getBindingResult().getFieldErrors().stream()
+            .collect(Collectors.toMap(
+                    FieldError::getField, // Uso o nome do campo como chave
+                    error -> new ValidationError(error.getField(), error.getDefaultMessage()),
+                    (existing, replacement) -> existing, // Manter o primeiro erro em caso de conflito
+                    LinkedHashMap::new // preservar a ordem original
+            ))
+            .values());
 
     ValidationErrorsResponse response = new ValidationErrorsResponse(
         "Erro de validação nos campos enviados",
@@ -53,7 +54,6 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<GenericError> handleGenericException(Exception ex) {
-    ex.printStackTrace();
     GenericError error = new GenericError("Ocorreu um erro inesperado. Se persistir, reinicie o sistema.", HttpStatus.INTERNAL_SERVER_ERROR.value());
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
   }
