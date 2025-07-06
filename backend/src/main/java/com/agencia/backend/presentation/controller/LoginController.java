@@ -22,50 +22,50 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class LoginController {
 
-  private final ValidateUserRequest validateUserRequest;
-  private final AuthenticationManager authenticationManager;
-  private final JwtUtils jwtUtils;
+    private final ValidateUserRequest validateUserRequest;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
-  public LoginController(
-      ValidateUserRequest validateUserRequest,
-      AuthenticationManager authenticationManager,
-      JwtUtils jwtUtils
-  ) {
-    this.validateUserRequest = validateUserRequest;
-    this.authenticationManager = authenticationManager;
-    this.jwtUtils = jwtUtils;
-  }
+    public LoginController(
+            ValidateUserRequest validateUserRequest,
+            AuthenticationManager authenticationManager,
+            JwtUtils jwtUtils
+    ) {
+        this.validateUserRequest = validateUserRequest;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
+    }
 
-  @PostMapping("/login")
-  public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto) {
-    validateUserRequest.validateUsername(dto.username());
-    validateUserRequest.validatePassword(dto.password());
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto) {
+        validateUserRequest.validateUsername(dto.username());
+        validateUserRequest.validatePassword(dto.password());
 
-    Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(dto.username(), dto.password())
-    );
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(dto.username(), dto.password())
+        );
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-    String jwtToken = jwtUtils.generateToken(userDetails);
+        String jwtToken = jwtUtils.generateToken(userDetails);
 
-    // Extrai a primeira (e única) autoridade como uma string
-    String role = userDetails.getAuthorities().stream()
-        .findFirst()
-        .map(GrantedAuthority::getAuthority)
-        .orElse("ROLE_USER"); // Valor padrão caso não tenha role
+        // Extrai a primeira (e única) autoridade como uma string
+        String role = userDetails.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("ROLE_USER"); // Valor padrão caso não tenha role
 
-    LoginResponseDTO response = new LoginResponseDTO(userDetails.getUsername(), role, jwtToken);
+        LoginResponseDTO response = new LoginResponseDTO(userDetails.getUsername(), role, jwtToken);
 
-    return ResponseEntity.status(HttpStatus.OK).body(response);
-  }
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
-  @PostMapping("/logout")
-  public ResponseEntity<Void> logout() {
-    SecurityContextHolder.clearContext();
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        SecurityContextHolder.clearContext();
 
-    return ResponseEntity.noContent().build();
-  }
+        return ResponseEntity.noContent().build();
+    }
 }
