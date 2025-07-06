@@ -19,29 +19,29 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Order(1)
 public class UserExceptionHandler {
 
-  @ExceptionHandler(UserNotFoundException.class)
-  public ResponseEntity<GenericError> handleUserNotFoundException(UserNotFoundException ex) {
-    GenericError error = new GenericError(ex.getMessage(), HttpStatus.NOT_FOUND.value());
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-  }
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<GenericError> handleUserNotFoundException(UserNotFoundException ex) {
+        GenericError error = new GenericError(ex.getMessage(), HttpStatus.NOT_FOUND.value());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 
-  @ExceptionHandler({
-      UserAlreadyExistsException.class,
-      InvalidPasswordException.class,
-      InvalidUsernameException.class,
-      InvalidRoleException.class,
-      InvalidUUIDException.class,
-      SelfDeletionException.class
-  })
-  public ResponseEntity<GenericError> handlerUserBadRequest(Exception ex) {
-    GenericError error = new GenericError(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-  }
+    @ExceptionHandler({
+            UserAlreadyExistsException.class,
+            InvalidPasswordException.class,
+            InvalidUsernameException.class,
+            InvalidRoleException.class,
+            InvalidUUIDException.class,
+            SelfDeletionException.class
+    })
+    public ResponseEntity<GenericError> handlerUserBadRequest(Exception ex) {
+        GenericError error = new GenericError(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 
-  @ExceptionHandler(BadCredentialsException.class)
-  public ResponseEntity<GenericError> handleBadCredentialsException() {
-    GenericError error = new GenericError("Usuário ou senha inválidos.", HttpStatus.UNAUTHORIZED.value());
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-  }
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<GenericError> handleBadCredentialsException() {
+        GenericError error = new GenericError("Usuário ou senha inválidos.", HttpStatus.UNAUTHORIZED.value());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
 
 }

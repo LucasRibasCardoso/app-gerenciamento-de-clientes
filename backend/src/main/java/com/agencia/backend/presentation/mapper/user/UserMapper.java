@@ -7,9 +7,13 @@ import com.agencia.backend.presentation.dto.user.UserRequestDTO;
 import com.agencia.backend.presentation.dto.user.UserResponseDTO;
 
 public interface UserMapper {
-  UserModel toModel(User domain);
-  User toDomain(UserModel model);
-  UserDetailsImp toUserDetails(User domain);
-  UserResponseDTO toDTO(User domain);
-  User toDomain(UserRequestDTO dto);
+    UserModel toModel(User domain);
+
+    User toDomain(UserModel model);
+
+    UserDetailsImp toUserDetails(User domain);
+
+    UserResponseDTO toDTO(User domain);
+
+    User toDomain(UserRequestDTO dto);
 }

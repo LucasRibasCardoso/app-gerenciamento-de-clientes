@@ -8,74 +8,74 @@ import com.agencia.backend.presentation.utils.dateConverter.DateConverter;
 
 public class PassportMapperImp implements PassportMapper {
 
-  private final DateConverter dateConverter;
+    private final DateConverter dateConverter;
 
-  public PassportMapperImp(DateConverter dateConverter) {
-    this.dateConverter = dateConverter;
-  }
-
-  @Override
-  public Passport toDomain(PassportDTO dto) {
-    if (dto == null) {
-      return null;
+    public PassportMapperImp(DateConverter dateConverter) {
+        this.dateConverter = dateConverter;
     }
 
-    // Verifica se todos os campos importantes são nulos
-    boolean allFieldsEmpty = (dto.number() == null || dto.number().trim().isEmpty()) &&
-                            dto.emissionDate() == null &&
-                            dto.expirationDate() == null;
+    @Override
+    public Passport toDomain(PassportDTO dto) {
+        if (dto == null) {
+            return null;
+        }
 
-    if (allFieldsEmpty) {
-      return null;
+        // Verifica se todos os campos importantes são nulos
+        boolean allFieldsEmpty = (dto.number() == null || dto.number().trim().isEmpty()) &&
+                dto.emissionDate() == null &&
+                dto.expirationDate() == null;
+
+        if (allFieldsEmpty) {
+            return null;
+        }
+
+        return new Passport(
+                dto.number(),
+                dateConverter.convertToLocalDate(dto.emissionDate()),
+                dateConverter.convertToLocalDate(dto.expirationDate())
+        );
     }
 
-    return new Passport(
-        dto.number(),
-        dateConverter.convertToLocalDate(dto.emissionDate()),
-        dateConverter.convertToLocalDate(dto.expirationDate())
-    );
-  }
+    @Override
+    public PassportDTO toDTO(Passport domain) {
+        if (domain == null) {
+            return null;
+        }
 
-  @Override
-  public PassportDTO toDTO(Passport domain) {
-    if (domain == null) {
-      return null;
+        return new PassportDTO(
+                domain.getNumber(),
+                dateConverter.convertToString(domain.getEmissionDate()),
+                dateConverter.convertToString(domain.getExpirationDate())
+        );
     }
 
-    return new PassportDTO(
-        domain.getNumber(),
-        dateConverter.convertToString(domain.getEmissionDate()),
-        dateConverter.convertToString(domain.getExpirationDate())
-    );
-  }
+    @Override
+    public PassportModel toModel(Passport domain) {
+        if (domain == null) {
+            return null;
+        }
 
-  @Override
-  public PassportModel toModel(Passport domain) {
-    if (domain == null) {
-      return null;
+        PassportModel model = new PassportModel(
+                domain.getId(),
+                domain.getNumber(),
+                domain.getEmissionDate(),
+                domain.getExpirationDate()
+        );
+        return model;
     }
 
-    PassportModel model = new PassportModel(
-        domain.getId(),
-        domain.getNumber(),
-        domain.getEmissionDate(),
-        domain.getExpirationDate()
-    );
-    return model;
-  }
+    @Override
+    public Passport toDomain(PassportModel model) {
+        if (model == null) {
+            return null;
+        }
 
-  @Override
-  public Passport toDomain(PassportModel model) {
-    if (model == null) {
-      return null;
+        return new Passport(
+                model.getId(),
+                model.getPassportNumber(),
+                model.getEmissionDate(),
+                model.getExpirationDate()
+        );
     }
-
-    return new Passport(
-        model.getId(),
-        model.getPassportNumber(),
-        model.getEmissionDate(),
-        model.getExpirationDate()
-    );
-  }
 
 }

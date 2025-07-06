@@ -1,7 +1,7 @@
 package com.agencia.backend.domain.entity.enuns;
 
 public enum Role {
-  ADMIN,
-  USER,
-  MANAGER
+    ADMIN,
+    USER,
+    MANAGER
 }

@@ -1,4 +1,4 @@
 {
-    "java.compile.nullAnalysis.mode": "disabled",
-    "cSpell.language": "en"
+  "java.compile.nullAnalysis.mode": "disabled",
+  "cSpell.language": "en"
 }

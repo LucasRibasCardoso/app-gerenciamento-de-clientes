@@ -24,56 +24,56 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ClientUseCaseConfig {
 
-  @Bean
-  public ClientExistenceValidationService clientExistenceValidationService(
-      ClientRepository clientRepository,
-      PassportRepository passportRepository
-  ) {
-    return new ClientExistenceValidationServiceImp(clientRepository, passportRepository);
-  }
+    @Bean
+    public ClientExistenceValidationService clientExistenceValidationService(
+            ClientRepository clientRepository,
+            PassportRepository passportRepository
+    ) {
+        return new ClientExistenceValidationServiceImp(clientRepository, passportRepository);
+    }
 
-  @Bean
-  public ClientFieldUpdateService clientFieldUpdateService() {
-    return new ClientFieldUpdateServiceImp();
-  }
+    @Bean
+    public ClientFieldUpdateService clientFieldUpdateService() {
+        return new ClientFieldUpdateServiceImp();
+    }
 
-  @Bean
-  public CreateClientUseCase createClientUseCase(
-      ClientRepository clientRepository, ClientExistenceValidationService clientExistenceValidationService
-  ) {
-    return new CreateClientUseCaseImp(clientRepository, clientExistenceValidationService);
-  }
+    @Bean
+    public CreateClientUseCase createClientUseCase(
+            ClientRepository clientRepository, ClientExistenceValidationService clientExistenceValidationService
+    ) {
+        return new CreateClientUseCaseImp(clientRepository, clientExistenceValidationService);
+    }
 
-  @Bean
-  public FindAllClientUseCase findAllClientUseCase(ClientRepository clientRepository) {
-    return new FindAllClientUseCaseImp(clientRepository);
-  }
+    @Bean
+    public FindAllClientUseCase findAllClientUseCase(ClientRepository clientRepository) {
+        return new FindAllClientUseCaseImp(clientRepository);
+    }
 
-  @Bean
-  public FindClientByIdUseCase findClientByIdUseCase(ClientRepository clientRepository) {
-    return new FindClientByIdUseCaseImp(clientRepository);
-  }
+    @Bean
+    public FindClientByIdUseCase findClientByIdUseCase(ClientRepository clientRepository) {
+        return new FindClientByIdUseCaseImp(clientRepository);
+    }
 
-  @Bean
-  public DeleteClientUseCase deleteClientUseCase(ClientRepository clientRepository) {
-    return new DeleteClientUseCaseImp(clientRepository);
-  }
+    @Bean
+    public DeleteClientUseCase deleteClientUseCase(ClientRepository clientRepository) {
+        return new DeleteClientUseCaseImp(clientRepository);
+    }
 
-  @Bean
-  public UpdateClientUseCase updateClientUseCase(
-      ClientRepository clientRepository,
-      FindClientByIdUseCase findClientByIdUseCase,
-      ClientFieldUpdateService clientFieldUpdateService,
-      ClientExistenceValidationService clientExistenceValidationService
-  ) {
-    return new UpdateClientUseCaseImp(clientRepository, findClientByIdUseCase, clientFieldUpdateService,
-        clientExistenceValidationService
-    );
-  }
+    @Bean
+    public UpdateClientUseCase updateClientUseCase(
+            ClientRepository clientRepository,
+            FindClientByIdUseCase findClientByIdUseCase,
+            ClientFieldUpdateService clientFieldUpdateService,
+            ClientExistenceValidationService clientExistenceValidationService
+    ) {
+        return new UpdateClientUseCaseImp(clientRepository, findClientByIdUseCase, clientFieldUpdateService,
+                clientExistenceValidationService
+        );
+    }
 
-  @Bean
-  public FindDataForDashboardUseCase findDataForDashboardUseCase(ClientRepository clientRepository) {
-    return new FindDataForDashboardUseCaseImp(clientRepository);
-  }
+    @Bean
+    public FindDataForDashboardUseCase findDataForDashboardUseCase(ClientRepository clientRepository) {
+        return new FindDataForDashboardUseCaseImp(clientRepository);
+    }
 
 }

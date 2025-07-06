@@ -6,53 +6,53 @@ import com.agencia.backend.domain.exceptions.user.InvalidRoleException;
 import com.agencia.backend.domain.exceptions.user.InvalidUUIDException;
 import com.agencia.backend.domain.exceptions.user.InvalidUsernameException;
 import com.agencia.backend.presentation.validators.user.ValidateUserRequest;
+
 import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class ValidateUserRequestImp implements ValidateUserRequest {
 
-  private static final String SPECIAL_CHARACTER_PATTERN = "[^A-Za-z0-9]";
-  private static final String START_WITH_LETTER_PATTERN = "^[A-Za-z]";
+    private static final String SPECIAL_CHARACTER_PATTERN = "[^A-Za-z0-9]";
+    private static final String START_WITH_LETTER_PATTERN = "^[A-Za-z]";
 
-  @Override
-  public void validatePassword(String password) {
-    if (!Pattern.compile(SPECIAL_CHARACTER_PATTERN).matcher(password).find()) {
-      throw new InvalidPasswordException("A senha deve conter pelo menos um caractere especial.");
-    }
-  }
-
-  @Override
-  public void validateRole(String role) {
-    if (role == null || role.isEmpty()) {
-      throw new InvalidRoleException("A permissão não pode estar vazia ou nula.");
+    @Override
+    public void validatePassword(String password) {
+        if (!Pattern.compile(SPECIAL_CHARACTER_PATTERN).matcher(password).find()) {
+            throw new InvalidPasswordException("A senha deve conter pelo menos um caractere especial.");
+        }
     }
 
-    try {
-      Role.valueOf(role);
-    } catch (IllegalArgumentException e) {
-      throw new InvalidRoleException("Permissão inválida: " + role);
-    }
-  }
+    @Override
+    public void validateRole(String role) {
+        if (role == null || role.isEmpty()) {
+            throw new InvalidRoleException("A permissão não pode estar vazia ou nula.");
+        }
 
-  @Override
-  public void validateUsername(String username) {
-    if (!Pattern.compile(START_WITH_LETTER_PATTERN).matcher(username).find()) {
-      throw new InvalidUsernameException("O nome de usuário deve começar com uma letra.");
+        try {
+            Role.valueOf(role);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidRoleException("Permissão inválida: " + role);
+        }
     }
 
-    if (Pattern.compile(SPECIAL_CHARACTER_PATTERN).matcher(username).find()) {
-      throw new InvalidUsernameException("O nome de usuário não pode conter caracteres especiais.");
-    }
-  }
+    @Override
+    public void validateUsername(String username) {
+        if (!Pattern.compile(START_WITH_LETTER_PATTERN).matcher(username).find()) {
+            throw new InvalidUsernameException("O nome de usuário deve começar com uma letra.");
+        }
 
-  @Override
-  public void validateUUID(String input) {
-    try {
-      UUID.fromString(input);
+        if (Pattern.compile(SPECIAL_CHARACTER_PATTERN).matcher(username).find()) {
+            throw new InvalidUsernameException("O nome de usuário não pode conter caracteres especiais.");
+        }
     }
-    catch (IllegalArgumentException e) {
-      throw new InvalidUUIDException("O id do usuário fornecido não é válido.");
+
+    @Override
+    public void validateUUID(String input) {
+        try {
+            UUID.fromString(input);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidUUIDException("O id do usuário fornecido não é válido.");
+        }
     }
-  }
 
 }

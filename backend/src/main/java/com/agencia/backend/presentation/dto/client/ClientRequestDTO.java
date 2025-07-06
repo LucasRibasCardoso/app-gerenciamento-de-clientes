@@ -12,29 +12,29 @@ import org.hibernate.validator.constraints.br.CPF;
 
 public record ClientRequestDTO(
 
-    @NotBlank(message = "O nome completo é obrigatório")
-    @Size(max = 100, message = "O nome completo deve ter no máximo 100 caracteres")
-    String completeName,
+        @NotBlank(message = "O nome completo é obrigatório")
+        @Size(max = 100, message = "O nome completo deve ter no máximo 100 caracteres")
+        String completeName,
 
-    @CPF(message = "CPF inválido")
-    @NotBlank(message = "O CPF é obrigatório")
-    @Size(max = 14, message = "O CPF deve ter no máximo 14 caracteres")
-    String cpf,
+        @CPF(message = "CPF inválido")
+        @NotBlank(message = "O CPF é obrigatório")
+        @Size(max = 14, message = "O CPF deve ter no máximo 14 caracteres")
+        String cpf,
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @NotNull(message = "A data de nascimento é obrigatória")
-    @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$", message = "Data de nascimento deve estar no formato dd/MM/yyyy")
-    String birthDate,
+        @JsonFormat(pattern = "dd/MM/yyyy")
+        @NotNull(message = "A data de nascimento é obrigatória")
+        @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$", message = "Data de nascimento deve estar no formato dd/MM/yyyy")
+        String birthDate,
 
-    @Pattern(regexp = "\\(\\d{2}\\) \\d{4,5}-\\d{4}", message = "O telefone deve estar no formato (XX) XXXXX-XXXX")
-    @Size(max = 15, message = "O telefone deve ter no máximo 15 caracteres")
-    String phone,
+        @Pattern(regexp = "\\(\\d{2}\\) \\d{4,5}-\\d{4}", message = "O telefone deve estar no formato (XX) XXXXX-XXXX")
+        @Size(max = 15, message = "O telefone deve ter no máximo 15 caracteres")
+        String phone,
 
-    @Email(message = "E-mail inválido")
-    @Size(max = 100, message = "O e-mail deve ter no máximo 100 caracteres")
-    String email,
+        @Email(message = "E-mail inválido")
+        @Size(max = 100, message = "O e-mail deve ter no máximo 100 caracteres")
+        String email,
 
-    PassportDTO passport,
+        PassportDTO passport,
 
-    AddressDTO address)
-{}
+        AddressDTO address) {
+}

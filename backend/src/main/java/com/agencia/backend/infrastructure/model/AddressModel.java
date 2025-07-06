@@ -15,38 +15,38 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class AddressModel {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private String zipCode;
-  private String country;
-  private String state;
-  private String city;
-  private String neighborhood;
-  private String street;
-  private String complement;
-  private String residentialNumber;
+    private String zipCode;
+    private String country;
+    private String state;
+    private String city;
+    private String neighborhood;
+    private String street;
+    private String complement;
+    private String residentialNumber;
 
-  public AddressModel(
-      Long id,
-      String zipCode,
-      String country,
-      String state,
-      String city,
-      String neighborhood,
-      String street,
-      String complement,
-      String residentialNumber
-  ) {
-    this.id = id;
-    this.zipCode = zipCode;
-    this.country = country;
-    this.state = state;
-    this.city = city;
-    this.neighborhood = neighborhood;
-    this.street = street;
-    this.complement = complement;
-    this.residentialNumber = residentialNumber;
-  }
+    public AddressModel(
+            Long id,
+            String zipCode,
+            String country,
+            String state,
+            String city,
+            String neighborhood,
+            String street,
+            String complement,
+            String residentialNumber
+    ) {
+        this.id = id;
+        this.zipCode = zipCode;
+        this.country = country;
+        this.state = state;
+        this.city = city;
+        this.neighborhood = neighborhood;
+        this.street = street;
+        this.complement = complement;
+        this.residentialNumber = residentialNumber;
+    }
 }

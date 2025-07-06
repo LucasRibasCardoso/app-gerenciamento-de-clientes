@@ -7,23 +7,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class RegisterUserUseCaseImp implements RegisterUserUseCase {
 
-  private final UserRepository userRepository;
-  private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-  public RegisterUserUseCaseImp(
-      PasswordEncoder passwordEncoder,
-      UserRepository userRepository
-  ) {
-    this.passwordEncoder = passwordEncoder;
-    this.userRepository = userRepository;
-  }
+    public RegisterUserUseCaseImp(
+            PasswordEncoder passwordEncoder,
+            UserRepository userRepository
+    ) {
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+    }
 
-  @Override
-  public User register(User user) {
-    String encodedPassword = passwordEncoder.encode(user.getPassword());
+    @Override
+    public User register(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
 
-    User userWithEncodedPassword = new User(null, user.getUsername(), encodedPassword, user.getRole());
-    return userRepository.save(userWithEncodedPassword);
-  }
+        User userWithEncodedPassword = new User(null, user.getUsername(), encodedPassword, user.getRole());
+        return userRepository.save(userWithEncodedPassword);
+    }
 
 }

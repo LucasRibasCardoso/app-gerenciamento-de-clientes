@@ -13,21 +13,21 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 @Configuration
 public class JwtConfig {
 
-  @Bean
-  public JwtUtils jwtUtils() {
-    return new JwtUtilsImp();
-  }
+    @Bean
+    public JwtUtils jwtUtils() {
+        return new JwtUtilsImp();
+    }
 
-  @Bean
-  public AuthenticationEntryPoint authenticationEntryPoint(ObjectMapper objectMapper) {
-    return new AuthEntryPointJwtImp(objectMapper);
-  }
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint(ObjectMapper objectMapper) {
+        return new AuthEntryPointJwtImp(objectMapper);
+    }
 
-  @Bean
-  public AuthTokenFilter authenticationJwtTokenFilter(
-      JwtUtils jwtUtils, UserDetailsService userDetailsService
-  ) {
-    return new AuthTokenFilter(jwtUtils, userDetailsService);
-  }
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter(
+            JwtUtils jwtUtils, UserDetailsService userDetailsService
+    ) {
+        return new AuthTokenFilter(jwtUtils, userDetailsService);
+    }
 
 }

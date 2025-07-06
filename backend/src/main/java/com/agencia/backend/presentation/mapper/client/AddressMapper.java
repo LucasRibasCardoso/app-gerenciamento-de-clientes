@@ -5,8 +5,11 @@ import com.agencia.backend.infrastructure.model.AddressModel;
 import com.agencia.backend.presentation.dto.address.AddressDTO;
 
 public interface AddressMapper {
-  Address toDomain(AddressDTO dto);
-  AddressDTO toDTO(Address domain);
-  AddressModel toModel(Address domain);
-  Address toDomain(AddressModel model);
+    Address toDomain(AddressDTO dto);
+
+    AddressDTO toDTO(Address domain);
+
+    AddressModel toModel(Address domain);
+
+    Address toDomain(AddressModel model);
 }

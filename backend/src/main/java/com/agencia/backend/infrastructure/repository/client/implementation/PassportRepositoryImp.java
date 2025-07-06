@@ -7,14 +7,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class PassportRepositoryImp implements PassportRepository {
 
-  private final PassportJpaRepository jpaRepository;
+    private final PassportJpaRepository jpaRepository;
 
-  public PassportRepositoryImp(PassportJpaRepository jpaRepository) {
-    this.jpaRepository = jpaRepository;
-  }
+    public PassportRepositoryImp(PassportJpaRepository jpaRepository) {
+        this.jpaRepository = jpaRepository;
+    }
 
-  @Override
-  public boolean existsByPassportNumber(String passportNumber) {
-    return jpaRepository.existsByPassportNumber(passportNumber);
-  }
+    @Override
+    public boolean existsByPassportNumber(String passportNumber) {
+        return jpaRepository.existsByPassportNumber(passportNumber);
+    }
 }

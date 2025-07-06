@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class UrlValidatorConfig {
 
-  @Bean
-  public UrlParametersValidator requestValidator() {
-    return new UrlParametersValidatorImp();
-  }
+    @Bean
+    public UrlParametersValidator requestValidator() {
+        return new UrlParametersValidatorImp();
+    }
 }

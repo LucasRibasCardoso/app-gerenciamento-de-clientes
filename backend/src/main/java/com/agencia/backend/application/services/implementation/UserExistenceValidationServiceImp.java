@@ -6,17 +6,17 @@ import com.agencia.backend.domain.repository.UserRepository;
 
 public class UserExistenceValidationServiceImp implements UserExistenceValidationService {
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  public UserExistenceValidationServiceImp(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
-
-  @Override
-  public void validateUsername(String username) {
-    if (userRepository.existsByUsername(username)) {
-      throw new UserAlreadyExistsException("Username já está em uso! Tente outro.");
+    public UserExistenceValidationServiceImp(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
-  }
+
+    @Override
+    public void validateUsername(String username) {
+        if (userRepository.existsByUsername(username)) {
+            throw new UserAlreadyExistsException("Username já está em uso! Tente outro.");
+        }
+    }
 
 }

@@ -6,7 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import java.time.LocalDate;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,21 +19,21 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class PassportModel {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(unique = true)
-  private String passportNumber;
+    @Column(unique = true)
+    private String passportNumber;
 
-  private LocalDate emissionDate;
+    private LocalDate emissionDate;
 
-  private LocalDate expirationDate;
+    private LocalDate expirationDate;
 
-  public PassportModel(Long id, String passportNumber, LocalDate emissionDate, LocalDate expirationDate) {
-    this.id = id;
-    this.passportNumber = passportNumber;
-    this.emissionDate = emissionDate;
-    this.expirationDate = expirationDate;
-  }
+    public PassportModel(Long id, String passportNumber, LocalDate emissionDate, LocalDate expirationDate) {
+        this.id = id;
+        this.passportNumber = passportNumber;
+        this.emissionDate = emissionDate;
+        this.expirationDate = expirationDate;
+    }
 }

@@ -13,18 +13,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  */
 public class UserDetailsServiceImp implements UserDetailsService {
 
-  private final FindUserByUsernameUseCase findUserByUsernameUseCase;
-  private final UserMapper userMapper;
+    private final FindUserByUsernameUseCase findUserByUsernameUseCase;
+    private final UserMapper userMapper;
 
-  public UserDetailsServiceImp(FindUserByUsernameUseCase findUserByUsernameUseCase, UserMapper userMapper) {
-    this.findUserByUsernameUseCase = findUserByUsernameUseCase;
-    this.userMapper = userMapper;
-  }
+    public UserDetailsServiceImp(FindUserByUsernameUseCase findUserByUsernameUseCase, UserMapper userMapper) {
+        this.findUserByUsernameUseCase = findUserByUsernameUseCase;
+        this.userMapper = userMapper;
+    }
 
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = findUserByUsernameUseCase.getUser(username);
-    return userMapper.toUserDetails(user);
-  }
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = findUserByUsernameUseCase.getUser(username);
+        return userMapper.toUserDetails(user);
+    }
 
 }

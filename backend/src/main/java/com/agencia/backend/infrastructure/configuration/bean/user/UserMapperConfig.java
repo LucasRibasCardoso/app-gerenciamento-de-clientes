@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class UserMapperConfig {
 
-  @Bean
-  public UserMapper userMapper() {
-    return new UserMapperImp();
-  }
+    @Bean
+    public UserMapper userMapper() {
+        return new UserMapperImp();
+    }
 }

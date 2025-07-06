@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SpecificationConfig {
 
-  @Bean
-  public SpecificationBuilder<ClientModel> specificationBuilder() {
-    return new ClientSpecification();
-  }
+    @Bean
+    public SpecificationBuilder<ClientModel> specificationBuilder() {
+        return new ClientSpecification();
+    }
 }

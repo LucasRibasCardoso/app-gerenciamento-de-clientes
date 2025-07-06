@@ -10,12 +10,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @Configuration
 public class UserDetailsServiceConfig {
 
-  @Bean
-  public UserDetailsService userDetailsService(
-      FindUserByUsernameUseCase loadByUsernameUseCase,
-      UserMapper userMapper
-      ) {
-    return new UserDetailsServiceImp(loadByUsernameUseCase, userMapper);
-  }
+    @Bean
+    public UserDetailsService userDetailsService(
+            FindUserByUsernameUseCase loadByUsernameUseCase,
+            UserMapper userMapper
+    ) {
+        return new UserDetailsServiceImp(loadByUsernameUseCase, userMapper);
+    }
 
 }

@@ -7,15 +7,15 @@ import org.springframework.data.domain.Page;
 
 public class FindAllClientUseCaseImp implements FindAllClientUseCase {
 
-  private final ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
-  public FindAllClientUseCaseImp(ClientRepository clientRepository) {
-    this.clientRepository = clientRepository;
-  }
+    public FindAllClientUseCaseImp(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
-  @Override
-  public Page<Client> getClients(String search, String orderBy, String sortOrder, int page, int size) {
-    return clientRepository.findAll(search, orderBy, sortOrder, page, size);
-  }
+    @Override
+    public Page<Client> getClients(String search, String orderBy, String sortOrder, int page, int size) {
+        return clientRepository.findAll(search, orderBy, sortOrder, page, size);
+    }
 
 }

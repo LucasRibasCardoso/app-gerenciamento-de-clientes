@@ -24,54 +24,55 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class UserUseCaseConfig {
 
-  @Bean
-  public UserExistenceValidationService userExistenceValidationService(UserRepository userRepository) {
-    return new UserExistenceValidationServiceImp(userRepository) {};
-  }
+    @Bean
+    public UserExistenceValidationService userExistenceValidationService(UserRepository userRepository) {
+        return new UserExistenceValidationServiceImp(userRepository) {
+        };
+    }
 
-  @Bean
-  public UserFieldUpdateService userFieldUpdateService() {
-    return new UserFieldUpdateServiceImp();
-  }
+    @Bean
+    public UserFieldUpdateService userFieldUpdateService() {
+        return new UserFieldUpdateServiceImp();
+    }
 
-  @Bean
-  public FindUserByUsernameUseCase loadByUsernameUseCase(UserRepository userRepository) {
-    return new FindUserByUsernameUseCaseImp(userRepository);
-  }
+    @Bean
+    public FindUserByUsernameUseCase loadByUsernameUseCase(UserRepository userRepository) {
+        return new FindUserByUsernameUseCaseImp(userRepository);
+    }
 
-  @Bean
-  public FindAllUserUseCase findAllUserUseCase(UserRepository userRepository) {
-    return new FindAllUserUseCaseImp(userRepository);
-  }
+    @Bean
+    public FindAllUserUseCase findAllUserUseCase(UserRepository userRepository) {
+        return new FindAllUserUseCaseImp(userRepository);
+    }
 
-  @Bean
-  public RegisterUserUseCase registerUserUseCase(
-      PasswordEncoder passwordEncoder, UserRepository userRepository
-  ) {
-    return new RegisterUserUseCaseImp(passwordEncoder, userRepository);
-  }
+    @Bean
+    public RegisterUserUseCase registerUserUseCase(
+            PasswordEncoder passwordEncoder, UserRepository userRepository
+    ) {
+        return new RegisterUserUseCaseImp(passwordEncoder, userRepository);
+    }
 
-  @Bean
-  public DeleteUserUseCase deleteUserUseCase(UserRepository userRepository) {
-    return new DeleteUserUseCaseImp(userRepository);
-  }
+    @Bean
+    public DeleteUserUseCase deleteUserUseCase(UserRepository userRepository) {
+        return new DeleteUserUseCaseImp(userRepository);
+    }
 
-  @Bean
-  public FindUserByIdUseCase findUserByIdUseCase(UserRepository userRepository) {
-    return new FindUserByIdUseCaseImp(userRepository);
-  }
+    @Bean
+    public FindUserByIdUseCase findUserByIdUseCase(UserRepository userRepository) {
+        return new FindUserByIdUseCaseImp(userRepository);
+    }
 
-  @Bean
-  public UpdateUserUseCase updateUserUseCase(
-      UserRepository userRepository,
-      FindUserByIdUseCase findUserByIdUseCase,
-      UserFieldUpdateService userFieldUpdateService,
-      UserExistenceValidationService userExistenceValidationService
-  ) {
-    return new UpdateUserUseCaseImp(
-        userRepository,
-        findUserByIdUseCase,
-        userFieldUpdateService,
-        userExistenceValidationService);
-  }
+    @Bean
+    public UpdateUserUseCase updateUserUseCase(
+            UserRepository userRepository,
+            FindUserByIdUseCase findUserByIdUseCase,
+            UserFieldUpdateService userFieldUpdateService,
+            UserExistenceValidationService userExistenceValidationService
+    ) {
+        return new UpdateUserUseCaseImp(
+                userRepository,
+                findUserByIdUseCase,
+                userFieldUpdateService,
+                userExistenceValidationService);
+    }
 }

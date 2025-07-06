@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class UtilsConfig {
 
-  @Bean
-  public DateConverter dateConverter() {
-    return new DefaultDateConverter();
-  }
+    @Bean
+    public DateConverter dateConverter() {
+        return new DefaultDateConverter();
+    }
 
-  @Bean
-  public TextFormatter textFormatter() {
-    return new TitleCaseFormatting();
-  }
+    @Bean
+    public TextFormatter textFormatter() {
+        return new TitleCaseFormatting();
+    }
 }

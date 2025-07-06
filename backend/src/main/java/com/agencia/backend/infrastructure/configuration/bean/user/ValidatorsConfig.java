@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ValidatorsConfig {
 
-  @Bean
-  public ValidateUserRequest validateUserRequest() {
-    return new ValidateUserRequestImp();
-  }
+    @Bean
+    public ValidateUserRequest validateUserRequest() {
+        return new ValidateUserRequestImp();
+    }
 }

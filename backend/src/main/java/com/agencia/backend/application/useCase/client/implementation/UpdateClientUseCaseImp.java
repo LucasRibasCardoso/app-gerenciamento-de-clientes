@@ -9,39 +9,38 @@ import com.agencia.backend.application.useCase.client.UpdateClientUseCase;
 
 public class UpdateClientUseCaseImp implements UpdateClientUseCase {
 
-  private final ClientRepository clientRepository;
-  private final FindClientByIdUseCase findClientByIdUseCase;
-  private final ClientFieldUpdateService clientFieldUpdateService;
-  private final ClientExistenceValidationService clientExistenceValidationService;
+    private final ClientRepository clientRepository;
+    private final FindClientByIdUseCase findClientByIdUseCase;
+    private final ClientFieldUpdateService clientFieldUpdateService;
+    private final ClientExistenceValidationService clientExistenceValidationService;
 
-  public UpdateClientUseCaseImp(
-      ClientRepository clientRepository,
-      FindClientByIdUseCase findClientByIdUseCase,
-      ClientFieldUpdateService clientFieldUpdateService,
-      ClientExistenceValidationService clientExistenceValidationService
-  ) {
-    this.clientRepository = clientRepository;
-    this.findClientByIdUseCase = findClientByIdUseCase;
-    this.clientFieldUpdateService = clientFieldUpdateService;
-    this.clientExistenceValidationService = clientExistenceValidationService;
-  }
+    public UpdateClientUseCaseImp(
+            ClientRepository clientRepository,
+            FindClientByIdUseCase findClientByIdUseCase,
+            ClientFieldUpdateService clientFieldUpdateService,
+            ClientExistenceValidationService clientExistenceValidationService
+    ) {
+        this.clientRepository = clientRepository;
+        this.findClientByIdUseCase = findClientByIdUseCase;
+        this.clientFieldUpdateService = clientFieldUpdateService;
+        this.clientExistenceValidationService = clientExistenceValidationService;
+    }
 
-  @Override
-  public Client update(Long id, Client clientRequest) {
-    // Verifica se o já cliente existe
-    Client existingClient = findClientByIdUseCase.getClient(id);
+    @Override
+    public Client update(Long id, Client clientRequest) {
+        // Verifica se o já cliente existe
+        Client existingClient = findClientByIdUseCase.getClient(id);
 
-    // Verifica se o e-mail e o número de passaporte já estão cadastrados
-    clientExistenceValidationService.validateEmail(clientRequest);
-    clientExistenceValidationService.validatePassportNumber(clientRequest);
+        // Verifica se o e-mail e o número de passaporte já estão cadastrados
+        clientExistenceValidationService.validateEmail(clientRequest);
+        clientExistenceValidationService.validatePassportNumber(clientRequest);
 
-    // Atualiza o cliente com os novos valores
-    Client clientUpdated = clientFieldUpdateService.updateClient(existingClient, clientRequest);
+        // Atualiza o cliente com os novos valores
+        Client clientUpdated = clientFieldUpdateService.updateClient(existingClient, clientRequest);
 
-    // Salva o cliente atualizado no banco de dados
-    return clientRepository.save(clientUpdated);
-  }
-
+        // Salva o cliente atualizado no banco de dados
+        return clientRepository.save(clientUpdated);
+    }
 
 
 }

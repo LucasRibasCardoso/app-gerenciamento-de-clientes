@@ -14,23 +14,23 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MapperConfig {
 
-  @Bean
-  public AddressMapper addressMapper(TextFormatter textFormatter) {
-    return new AddressMapperImp(textFormatter);
-  }
+    @Bean
+    public AddressMapper addressMapper(TextFormatter textFormatter) {
+        return new AddressMapperImp(textFormatter);
+    }
 
-  @Bean
-  public PassportMapper passportMapper(DateConverter dateConverter) {
-    return new PassportMapperImp(dateConverter);
-  }
+    @Bean
+    public PassportMapper passportMapper(DateConverter dateConverter) {
+        return new PassportMapperImp(dateConverter);
+    }
 
-  @Bean
-  public ClientMapper clientMapper(
-      AddressMapper addressMapper,
-      PassportMapper passportMapper,
-      TextFormatter textFormatter,
-      DateConverter dateConverter
-  ) {
-    return new ClientMapperImp(addressMapper, passportMapper, textFormatter, dateConverter);
-  }
+    @Bean
+    public ClientMapper clientMapper(
+            AddressMapper addressMapper,
+            PassportMapper passportMapper,
+            TextFormatter textFormatter,
+            DateConverter dateConverter
+    ) {
+        return new ClientMapperImp(addressMapper, passportMapper, textFormatter, dateConverter);
+    }
 }
